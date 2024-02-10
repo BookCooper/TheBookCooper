@@ -4,6 +4,8 @@ services:
   db:
     image: postgres
     container_name: thebookcooper-db
+    expose:
+      - 5432:5432
     ports:
       - "5555:5432" # Map host port 5555 to container port 5432
     environment:
@@ -13,7 +15,16 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d/
-    restart: unless-stopped
+    restart: always
+  app:
+   build: .
+   environment:
+      - POSTGRES_DB: thebookcooper
+      - POSTGRES_USER: BCdev
+      - POSTGRES_PASSWORD: password
+    depends_on:
+      - db
+
 
 volumes:
   db-data: 
