@@ -1,6 +1,7 @@
-package jdbc;
+package com.thebookcooper.dao;
 
-import jdbc.util.DataAccessObject;
+import com.thebookcooper.model.User;
+import com.thebookcooper.util.DataAccessObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

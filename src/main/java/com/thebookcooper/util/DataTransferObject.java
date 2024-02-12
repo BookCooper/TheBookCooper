@@ -1,4 +1,4 @@
-package jdbc.util;
+package com.thebookcooper.util;
 
 public interface DataTransferObject {
 

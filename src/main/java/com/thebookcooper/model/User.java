@@ -1,6 +1,6 @@
-package jdbc;
+package com.thebookcooper.model;
 
-import jdbc.util.DataTransferObject;
+import com.thebookcooper.util.DataTransferObject;
 import java.sql.Timestamp;
 
 public class User implements DataTransferObject {

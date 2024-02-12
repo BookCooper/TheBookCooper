@@ -1,4 +1,4 @@
-package jdbc;
+package com.thebookcooper.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
