@@ -26,7 +26,8 @@ import java.util.List;
 @RestController
 public class TheBookCooperApplication {
 
-    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("localhost", 5555, "thebookcooper", "BCdev", "password");
+    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432,
+            "thebookcooper", "BCdev", "password");
 
     @GetMapping("/users/count")
     public String countUsers() {
