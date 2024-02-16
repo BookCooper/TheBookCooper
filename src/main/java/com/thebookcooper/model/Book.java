@@ -32,13 +32,14 @@ public class Book implements DataTransferObject {
         this.title = title;
     }
 
+    public Date getPublishDate() { return publishDate; }
     public void setDate(Date publishDate) {
         this.publishDate = publishDate;
     }
 
-    public int getIsbn() { return isbn; }
+    public int getISBN() { return isbn; }
 
-    public void setIsbn(int isbn) {
+    public void setISBN(int isbn) {
         this.isbn = isbn;
     }
 
