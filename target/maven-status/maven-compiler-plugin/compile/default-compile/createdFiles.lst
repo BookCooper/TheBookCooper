@@ -1,7 +1,0 @@
-com/thebookcooper/util/DataAccessObject.class
-com/thebookcooper/dao/UserDAO.class
-com/thebookcooper/model/User.class
-com/thebookcooper/controller/UserController.class
-com/thebookcooper/util/DataTransferObject.class
-com/thebookcooper/TheBookCooperApplication.class
-com/thebookcooper/dao/DatabaseConnectionManager.class
