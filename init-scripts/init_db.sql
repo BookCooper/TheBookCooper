@@ -1,69 +1,69 @@
 
 CREATE TABLE IF NOT EXISTS users (
-  user_id SERIAL PRIMARY KEY,
-  user_name VARCHAR(255) NOT NULL,
+  userId SERIAL PRIMARY KEY,
+  userName VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,  -- Should be hashed
   email VARCHAR(255) UNIQUE NOT NULL,
-  b_bucks_balance DECIMAL(10, 2) DEFAULT 0,
-  creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  last_login TIMESTAMP WITH TIME ZONE
+  bBucksBalance DECIMAL(10, 2) DEFAULT 0,
+  creationDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  lastLogin TIMESTAMP WITH TIME ZONE
 );
 
-CREATE TABLE IF NOT EXISTS book_info (
-  book_id SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS bookInfo (
+  bookId SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
-  isbn VARCHAR(255) UNIQUE,
-  publish_date DATE,
+  isbn INT UNIQUE,
+  publishDate DATE,
   author VARCHAR(255),
   genre VARCHAR(255),
-  book_status VARCHAR(50)
+  bookStatus VARCHAR(50)
 );
 
-CREATE TABLE IF NOT EXISTS book_listings (
-  listing_id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL REFERENCES users(user_id),
+CREATE TABLE IF NOT EXISTS bookListings (
+  listingId SERIAL PRIMARY KEY,
+  userId INT NOT NULL REFERENCES users(userId),
   price DECIMAL(10, 2) NOT NULL,
-  book_id INT NOT NULL REFERENCES book_info(book_id),
-  listing_status VARCHAR(50),
-  list_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  bookId INT NOT NULL REFERENCES bookInfo(bookId),
+  listingStatus VARCHAR(50),
+  listDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS book_transactions (
-  transaction_id SERIAL PRIMARY KEY,
-  buyer_id INT REFERENCES users(user_id),
-  seller_id INT REFERENCES users(user_id),
-  transaction_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  listing_id INT NOT NULL REFERENCES book_listings(listing_id),
-  transaction_price DECIMAL(10, 2) NOT NULL,
-  transaction_status VARCHAR(50)
+CREATE TABLE IF NOT EXISTS bookTransactions (
+  transactionId SERIAL PRIMARY KEY,
+  buyerId INT REFERENCES users(userId),
+  sellerId INT REFERENCES users(userId),
+  transactionDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  listingId INT NOT NULL REFERENCES bookListings(listingId),
+  transactionPrice DECIMAL(10, 2) NOT NULL,
+  transactionStatus VARCHAR(50)
 );
 
-CREATE TABLE IF NOT EXISTS book_searches (
-  search_id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(user_id),
-  search_query TEXT,
-  search_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS bookSearches (
+  searchId SERIAL PRIMARY KEY,
+  userId INT REFERENCES users(userId),
+  searchQuery TEXT,
+  searchDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS store (
-  store_id SERIAL PRIMARY KEY,
+  storeId SERIAL PRIMARY KEY,
   item VARCHAR(255) NOT NULL,
-  item_price DECIMAL(10, 2) NOT NULL,
-  special_offer TEXT,
-  item_description TEXT
+  itemPrice DECIMAL(10, 2) NOT NULL,
+  specialOffer TEXT,
+  itemDescription TEXT
 );
 
-CREATE TABLE IF NOT EXISTS point_transactions (
-  bb_transaction_id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(user_id),
-  transaction_type VARCHAR(50),
+CREATE TABLE IF NOT EXISTS pointTransactions (
+  bbTransactionId SERIAL PRIMARY KEY,
+  userId INT REFERENCES users(userId),
+  transactionType VARCHAR(50),
   amount DECIMAL(10, 2) NOT NULL,
-  transaction_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  current_balance DECIMAL(10, 2)
+  transactionDate TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  currentBalance DECIMAL(10, 2)
 );
 
-CREATE TABLE IF NOT EXISTS book_tags (
-  tag_id SERIAL PRIMARY KEY,
-  tag_name VARCHAR(255) NOT NULL,
-  book_id INT REFERENCES book_info(book_id)
+CREATE TABLE IF NOT EXISTS bookTags (
+  tagId SERIAL PRIMARY KEY,
+  tagName VARCHAR(255) NOT NULL,
+  bookId INT REFERENCES bookInfo(bookId)
 );
