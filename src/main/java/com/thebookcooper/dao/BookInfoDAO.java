@@ -1,6 +1,6 @@
 package com.thebookcooper.dao;
 
-import com.thebookcooper.model.Book;
+import com.thebookcooper.model.*;
 import com.thebookcooper.util.DataAccessObject;
 
 import java.sql.*;
@@ -8,15 +8,16 @@ import java.sql.*;
 
 public class BookInfoDAO extends DataAccessObject<Book> {
 
-    private static final String GET_ONE = "SELECT user_id, user_name, password, email, b_bucks_balance, creation_date, last_login " +
-            "FROM users WHERE user_id=?";
+    private static final String GET_ONE = "SELECT book_id, title, isbn, publish_date, author, genre, book_status " +
+            "FROM book_info WHERE book_id=?";
 
-    private static final String INSERT = "INSERT INTO users (user_name, password, email, b_bucks_balance, creation_date, last_login) " +
+    private static final String INSERT = "INSERT INTO book_info (title, isbn, publish_date, author, genre, book_status) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
     public BookInfoDAO(Connection connection) {
         super(connection);
     }
+
 
     @Override
     public Book findById(long id) {
@@ -25,42 +26,42 @@ public class BookInfoDAO extends DataAccessObject<Book> {
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                user.setUserId(rs.getLong("user_id"));
-                user.setUserName(rs.getString("user_name"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setBBucksBalance(rs.getDouble("b_bucks_balance"));
-                user.setCreationDate(rs.getTimestamp("creation_date"));
-                user.setLastLogin(rs.getTimestamp("last_login"));
+                book.setBookId(rs.getLong("book_id"));
+                book.setTitle(rs.getString("title"));
+                book.setISBN(rs.getInt("isbn"));
+                book.setPublishDate(rs.getDate("publish_date"));
+                book.setAuthor(rs.getString("author"));
+                book.setGenre(rs.getString("genre"));
+                book.setBookStatus(rs.getString("book_status"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return user;
+        return book;
     }
 
     @Override
-    public User create(User dto) {
+    public Book create(Book dto) {
         try (PreparedStatement statement = this.connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, dto.getUserName());
-            statement.setString(2, dto.getPassword());
-            statement.setString(3, dto.getEmail());
-            statement.setDouble(4, dto.getBBucksBalance());
-            statement.setTimestamp(5, dto.getCreationDate());
-            statement.setTimestamp(6, dto.getLastLogin());
+            statement.setString(1, dto.getTitle());
+            statement.setInt(2, dto.getISBN());
+            statement.setDate(3, dto.getPublishDate());
+            statement.setString(4, dto.getAuthor());
+            statement.setString(5, dto.getGenre());
+            statement.setString(6, dto.getBookStatus());
 
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
+                throw new SQLException("Creating book failed, no rows affected.");
             }
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    dto.setUserId(generatedKeys.getLong(1));
+                    dto.setBookId(generatedKeys.getLong(1));
                 } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new SQLException("Creating book failed, no ID obtained.");
                 }
             }
             return dto;

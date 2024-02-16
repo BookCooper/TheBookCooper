@@ -9,34 +9,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Map;
+
+import com.thebookcooper.model.*;
+import com.thebookcooper.dao.*;
 
 @RestController
 public class BookInfoController {
 
-    @PostMapping("/users/create")
-    public User createBook(@RequestBody String json) throws JsonProcessingException {
+    @PostMapping("/books/create")
+    public Book createBook(@RequestBody String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map inputMap = objectMapper.readValue(json, Map.class);
 
         DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
-        User newUser = new User();
+        Book newBook = new Book();
     
         try{ 
             Connection connection = dcm.getConnection();
-            UserDAO userDAO = new UserDAO(connection);
-            newUser.setUserName((String) inputMap.get("userName"));
-            newUser.setPassword((String) inputMap.get("password"));
-            newUser.setEmail((String) inputMap.get("email"));
-            newUser.setBBucksBalance((double) inputMap.get("bBucksBalance"));
-            newUser.setCreationDate(new Timestamp(System.currentTimeMillis()));
-            newUser.setLastLogin(new Timestamp(System.currentTimeMillis()));
-            return userDAO.create(newUser);
+            BookInfoDAO bookDAO = new BookInfoDAO(connection);
+
+            //get inputs from user and assign them to a new object
+            newBook.setTitle((String) inputMap.get("title"));
+            newBook.setISBN((int) inputMap.get("isbn"));
+            newBook.setPublishDate(new Date((long)inputMap.get("publishDate")));
+            newBook.setAuthor((String) inputMap.get("author"));
+            newBook.setGenre((String) inputMap.get("genre"));
+            newBook.setBookStatus((String) inputMap.get("bookStatus"));
+
+            //calls create function from dao/BookInfoDAO to insert listing
+            return bookDAO.create(newBook);
+
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to create the user", e);
+            throw new RuntimeException("Failed to create the book", e);
         }
     }
 }

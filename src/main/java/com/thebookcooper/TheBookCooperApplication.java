@@ -28,6 +28,20 @@ public class TheBookCooperApplication {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432,
             "thebookcooper", "BCdev", "password");
+    @GetMapping("/books/count")
+    public String countBooks() {
+        try (Connection connection = dcm.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_info")) {
+            if (resultSet.next()) {
+                return "Number of books: " + resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error retrieving book count";
+        }
+        return "No books found";
+    }
 
     @GetMapping("/users/count")
     public String countUsers() {

@@ -33,7 +33,7 @@ public class Book implements DataTransferObject {
     }
 
     public Date getPublishDate() { return publishDate; }
-    public void setDate(Date publishDate) {
+    public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
 
@@ -60,6 +60,8 @@ public class Book implements DataTransferObject {
     public void setBookStatus(String bookStatus) {
         this.bookStatus = bookStatus;
     }
+
+
 
     @Override
     public String toString() {
