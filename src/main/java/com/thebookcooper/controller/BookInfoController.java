@@ -15,6 +15,8 @@ import java.util.Map;
 import com.thebookcooper.model.*;
 import com.thebookcooper.dao.*;
 
+import java.time.LocalDate;
+
 @RestController
 public class BookInfoController {
 
@@ -26,15 +28,15 @@ public class BookInfoController {
         DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
         Book newBook = new Book();
-    
-        try{ 
+
+        try {
             Connection connection = dcm.getConnection();
             BookInfoDAO bookDAO = new BookInfoDAO(connection);
 
             //get inputs from user and assign them to a new object
             newBook.setTitle((String) inputMap.get("title"));
             newBook.setISBN((int) inputMap.get("isbn"));
-            newBook.setPublishDate(new Date((long)inputMap.get("publishDate")));
+            newBook.setPublishDate(Date.valueOf(LocalDate.now()));
             newBook.setAuthor((String) inputMap.get("author"));
             newBook.setGenre((String) inputMap.get("genre"));
             newBook.setBookStatus((String) inputMap.get("bookStatus"));

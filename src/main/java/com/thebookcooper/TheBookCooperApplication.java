@@ -1,12 +1,8 @@
 package com.thebookcooper;
 
-import com.thebookcooper.dao.DatabaseConnectionManager;
-import com.thebookcooper.dao.UserDAO;
-import com.thebookcooper.model.User;
-import com.thebookcooper.util.DataAccessObject;
-import com.thebookcooper.util.DataTransferObject;
-
-
+import com.thebookcooper.dao.*;
+import com.thebookcooper.model.*;
+import com.thebookcooper.util.*;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,6 +24,7 @@ public class TheBookCooperApplication {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432,
             "thebookcooper", "BCdev", "password");
+
     @GetMapping("/books/count")
     public String countBooks() {
         try (Connection connection = dcm.getConnection();

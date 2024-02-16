@@ -33,6 +33,7 @@ public class Book implements DataTransferObject {
     }
 
     public Date getPublishDate() { return publishDate; }
+
     public void setPublishDate(Date publishDate) {
         this.publishDate = publishDate;
     }
