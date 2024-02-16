@@ -40,7 +40,6 @@ public class BookInfoController {
             newBook.setPublishDate(Date.valueOf((String) inputMap.get("publishDate"))); //date has to be of form "YYYY-MM-DD"
             newBook.setAuthor((String) inputMap.get("author"));
             newBook.setGenre((String) inputMap.get("genre"));
-            newBook.setBookStatus((String) inputMap.get("bookStatus"));
 
             //calls create function from dao/BookInfoDAO to insert listing
             return bookDAO.create(newBook);

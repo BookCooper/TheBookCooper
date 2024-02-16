@@ -8,11 +8,11 @@ import java.sql.*;
 
 public class BookInfoDAO extends DataAccessObject<Book> {
 
-    private static final String GET_ONE = "SELECT book_id, title, isbn, publish_date, author, genre, book_status " +
+    private static final String GET_ONE = "SELECT book_id, title, isbn, publish_date, author, genre" +
             "FROM book_info WHERE book_id=?";
 
-    private static final String INSERT = "INSERT INTO book_info (title, isbn, publish_date, author, genre, book_status) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO book_info (title, isbn, publish_date, author, genre) " +
+            "VALUES (?, ?, ?, ?, ?)";
 
     public BookInfoDAO(Connection connection) {
         super(connection);
@@ -32,7 +32,6 @@ public class BookInfoDAO extends DataAccessObject<Book> {
                 book.setPublishDate(rs.getDate("publish_date"));
                 book.setAuthor(rs.getString("author"));
                 book.setGenre(rs.getString("genre"));
-                book.setBookStatus(rs.getString("book_status"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,7 +48,6 @@ public class BookInfoDAO extends DataAccessObject<Book> {
             statement.setDate(3, dto.getPublishDate());
             statement.setString(4, dto.getAuthor());
             statement.setString(5, dto.getGenre());
-            statement.setString(6, dto.getBookStatus());
 
             int affectedRows = statement.executeUpdate();
 

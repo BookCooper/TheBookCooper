@@ -12,11 +12,10 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS book_info (
   book_id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
-  isbn INT NOT NULL,
+  isbn INT NOT NULL UNIQUE,
   publish_date DATE,
   author VARCHAR(255),
-  genre VARCHAR(255),
-  book_status VARCHAR(50)
+  genre VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS book_listings (
