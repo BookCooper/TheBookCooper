@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class BookInfoDAO extends DataAccessObject<Book> {
 
-    private static final String GET_ONE = "SELECT book_id, title, isbn, publish_date, author, genre" +
+    private static final String GET_ONE = "SELECT book_id, title, isbn, publish_date, author, genre " +
             "FROM book_info WHERE book_id=?";
 
     private static final String INSERT = "INSERT INTO book_info (title, isbn, publish_date, author, genre) " +
