@@ -40,26 +40,11 @@ public class TheBookCooperApplication {
         return "No books found";
     }
 
-    @GetMapping("/users/count")
-    public String countUsers() {
-        try (Connection connection = dcm.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM users")) {
-            if (resultSet.next()) {
-                return "Number of users: " + resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error retrieving user count";
-        }
-        return "No users found";
-    }
-
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable("id") int id) {
+    @GetMapping("/books/{id}")
+    public Book getBookById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
-            UserDAO userDAO = new UserDAO(connection);
-            return userDAO.findById(id);
+            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+            return infoDAO.findById(id);
         } catch (SQLException e) {
             e.printStackTrace();
             // Consider creating and returning a custom error object or message
