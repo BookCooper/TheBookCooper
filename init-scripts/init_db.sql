@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS book_info (
   isbn INT NOT NULL UNIQUE,
   publish_date DATE,
   author VARCHAR(255),
-  genre VARCHAR(255)
+  genre VARCHAR(255),
+  book_condition VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS book_listings (
