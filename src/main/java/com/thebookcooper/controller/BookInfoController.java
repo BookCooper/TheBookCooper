@@ -2,14 +2,18 @@ package com.thebookcooper.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thebookcooper.dao.DatabaseConnectionManager;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.Map;
 
 import com.thebookcooper.model.*;
@@ -20,12 +24,12 @@ import java.time.LocalDate;
 @RestController
 public class BookInfoController {
 
+    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
+
     @PostMapping("/books/create")
     public Book createBook(@RequestBody String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map inputMap = objectMapper.readValue(json, Map.class);
-
-        DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
         Book newBook = new Book();
 
@@ -50,5 +54,32 @@ public class BookInfoController {
             e.printStackTrace();
             throw new RuntimeException("Failed to create the book", e);
         }
+    }
+
+    @GetMapping("/books/count")
+    public String countBooks() {
+        try (Connection connection = dcm.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_info")) {
+            if (resultSet.next()) {
+                return "Number of books: " + resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error retrieving book count";
+        }
+        return "No books found";
+    }
+
+    @GetMapping("/books/{id}")
+    public Book getBookById(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+            return infoDAO.findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider creating and returning a custom error object or message
+        }
+        return null; // Or return an appropriate response/entity indicating not found or error
     }
 }
