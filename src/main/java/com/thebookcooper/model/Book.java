@@ -1,10 +1,9 @@
 package com.thebookcooper.model;
 
-import com.thebookcooper.util.DataTransferObject;
-
+import com.thebookcooper.util.BookDTO;
 import java.sql.Date;
 
-public class Book implements DataTransferObject {
+public class Book implements BookDTO {
 
     private long bookId;
     private String title;

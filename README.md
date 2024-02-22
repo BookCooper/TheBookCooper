@@ -28,4 +28,40 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     ```bash
     docker exec -it thebookcooper-db psql -U BCdev -l
     psql -h localhost -p 5555 -U BCdev -d thebookcooper
+
+4. Go to postman and test the following:
+
+    In the Post request, check following URL based on your local database:
+    ```bash
+    http://localhost:8080/users/create
+
+    use this json file in the body raw:
+    {
+        "userName": "test",
+        "password": "password",
+        "email": "test@gmail.com",
+        "bBucksBalance": 1000.0
+    }
+
+
+    http://localhost:8080/books/create
+
+    use this json file in the body raw:
+            {
+        "title": "Everything you need to know about software engineering",
+        "isbn": 23493290,
+        "publishDate": "2024-02-22",
+        "author": "Chris Hong",
+        "genre": "Amaaaazing",
+        "bookCondition": "New",
+        "price": 999.99
+        }
+    ```
+
+    In the Get request, check following URL based on your local database:
+    ```bash
+    http://localhost:8080/users/count
+    http://localhost:8080/users/{id}
+    http://localhost:8080/books/count
+    http://localhost:8080/books/{id}
     ```
