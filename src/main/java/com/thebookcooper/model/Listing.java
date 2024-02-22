@@ -1,15 +1,14 @@
 package com.thebookcooper.model;
 
-import com.thebookcooper.util.DataTransferObject;
+import com.thebookcooper.util.ListingsDTO;
 
 import java.sql.Timestamp;
 
-public class Listings implements DataTransferObject {
+public class Listing implements ListingsDTO {
 
     private long listingId;
     private long userId; //user that listed the book
     private long bookId;
-    private int price;
     private String listingStatus;
     private Timestamp listingDate;
 
@@ -38,10 +37,6 @@ public class Listings implements DataTransferObject {
         this.bookId = bookId;
     }
 
-    public int getPrice() { return price; }
-
-    public void setPrice(int price) { this.price = price; }
-
     public String getListingStatus() { return listingStatus; }
 
     public void setListingStatus(String listingStatus) {
@@ -61,7 +56,6 @@ public class Listings implements DataTransferObject {
                 "ListingId=" + listingId +
                 ", userId=" + userId + '\'' +
                 ", bookId=" + bookId + '\'' +
-                ", price=" + price + '\'' +
                 ", listingStatus=" + listingStatus +
                 ", listingDate=" + listingDate +
                 '}';

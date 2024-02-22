@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS book_listings (
   user_id INT NOT NULL REFERENCES users(user_id),
   book_id INT NOT NULL REFERENCES book_info(book_id),
   listing_status VARCHAR(50),
-  list_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  listing_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS book_transactions (

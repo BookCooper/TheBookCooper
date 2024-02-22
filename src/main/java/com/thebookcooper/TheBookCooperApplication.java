@@ -80,6 +80,33 @@ public class TheBookCooperApplication {
         return null; // Or return an appropriate response/entity indicating not found or error
     }
 
+    @GetMapping("/listings/count")
+    public String countListings() {
+        try (Connection connection = dcm.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_listings")) {
+            if (resultSet.next()) {
+                return "Number of listings: " + resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error retrieving book count";
+        }
+        return "No listings found";
+    }
+
+    @GetMapping("/listings/{id}")
+    public Listing getListingById(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            ListingsDAO listingDAO = new ListingsDAO(connection);
+            return listingDAO.findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider creating and returning a custom error object or message
+        }
+        return null; // Or return an appropriate response/entity indicating not found or error
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(TheBookCooperApplication.class, args);
     }
