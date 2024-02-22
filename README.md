@@ -31,37 +31,47 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
 4. Go to postman and test the following:
 
-    In the Post request, check following URL based on your local database:
-    ```bash
-    http://localhost:8080/users/create
+    In the Post request, check the following URLs based on your local database:
 
-    use this json file in the body raw:
-    {
-        "userName": "test",
-        "password": "password",
-        "email": "test@gmail.com",
-        "bBucksBalance": 1000.0
-    }
-
-
-    http://localhost:8080/books/create
-
-    use this json file in the body raw:
+    - Create a new user:
+        - URL: http://localhost:8080/users/create
+        - Body (raw JSON):
+            ```json
             {
-        "title": "Everything you need to know about software engineering",
-        "isbn": 23493290,
-        "publishDate": "2024-02-22",
-        "author": "Chris Hong",
-        "genre": "Amaaaazing",
-        "bookCondition": "New",
-        "price": 999.99
-        }
-    ```
+                    "userName": "test",
+                    "password": "password",
+                    "email": "test@gmail.com",
+                    "bBucksBalance": 1000.0
+            }
+            ```
 
-    In the Get request, check following URL based on your local database:
-    ```bash
-    http://localhost:8080/users/count
-    http://localhost:8080/users/{id}
-    http://localhost:8080/books/count
-    http://localhost:8080/books/{id}
-    ```
+    - Create a new book:
+        - URL: http://localhost:8080/books/create
+        - Body (raw JSON):
+            ```json
+            {
+                    "title": "Everything you need to know about software engineering",
+                    "isbn": 23493290,
+                    "publishDate": "2024-02-22",
+                    "author": "Chris Hong",
+                    "genre": "Amaaaazing",
+                    "bookCondition": "New",
+                    "price": 999.99
+            }
+            ```
+
+
+    In the Get request, check the following URLs based on your local database:
+
+    - Count users:
+        - URL: http://localhost:8080/users/count
+
+    - Get user by ID:
+        - URL: http://localhost:8080/users/{id}
+
+    - Count books:
+        - URL: http://localhost:8080/books/count
+
+    - Get book by ID:
+        - URL: http://localhost:8080/books/{id}
+
