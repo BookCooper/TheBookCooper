@@ -16,13 +16,13 @@ CREATE TABLE IF NOT EXISTS book_info (
   publish_date DATE,
   author VARCHAR(255),
   genre VARCHAR(255),
-  book_condition VARCHAR(255)
+  book_condition VARCHAR(255),
+  price NUMERIC(10, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS book_listings (
   listing_id SERIAL PRIMARY KEY,
   user_id INT NOT NULL REFERENCES users(user_id),
-  price DECIMAL(10, 2) NOT NULL,
   book_id INT NOT NULL REFERENCES book_info(book_id),
   listing_status VARCHAR(50),
   list_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

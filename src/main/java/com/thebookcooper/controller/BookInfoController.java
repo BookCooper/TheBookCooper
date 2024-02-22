@@ -41,6 +41,7 @@ public class BookInfoController {
             newBook.setAuthor((String) inputMap.get("author"));
             newBook.setGenre((String) inputMap.get("genre"));
             newBook.setBookCondition((String) inputMap.get("bookCondition"));
+            newBook.setPrice((double) inputMap.get("price"));
 
             //calls create function from dao/BookInfoDAO to insert listing
             return bookDAO.create(newBook);

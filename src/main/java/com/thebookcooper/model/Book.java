@@ -13,6 +13,7 @@ public class Book implements DataTransferObject {
     private String author;
     private String genre;
     private String book_condition;
+    private double price;
 
     @Override
     public long getBookId() {
@@ -59,6 +60,10 @@ public class Book implements DataTransferObject {
 
     public void setBookCondition(String book_condition) { this.book_condition = book_condition; }
 
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) { this.price = price; }
+
     @Override
     public String toString() {
         return "Book{" +
@@ -69,6 +74,7 @@ public class Book implements DataTransferObject {
                 ", author=" + author +
                 ", genre=" + genre +
                 ", condition=" + book_condition +
+                ", price=" + price +
                 '}';
     }
 }
