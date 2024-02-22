@@ -1,10 +1,9 @@
 package com.thebookcooper.model;
 
-import com.thebookcooper.util.DataTransferObject;
-
+import com.thebookcooper.util.BookDTO;
 import java.sql.Date;
 
-public class Book implements DataTransferObject {
+public class Book implements BookDTO {
 
     private long bookId;
     private String title;
@@ -12,6 +11,8 @@ public class Book implements DataTransferObject {
     private Date publishDate;
     private String author;
     private String genre;
+    private String book_condition;
+    private double price;
 
     @Override
     public long getBookId() {
@@ -54,6 +55,14 @@ public class Book implements DataTransferObject {
         this.genre = genre;
     }
 
+    public String getBookCondition() { return book_condition; }
+
+    public void setBookCondition(String book_condition) { this.book_condition = book_condition; }
+
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) { this.price = price; }
+
     @Override
     public String toString() {
         return "Book{" +
@@ -63,6 +72,8 @@ public class Book implements DataTransferObject {
                 ", publish date='" + publishDate + '\'' +
                 ", author=" + author +
                 ", genre=" + genre +
+                ", condition=" + book_condition +
+                ", price=" + price +
                 '}';
     }
 }

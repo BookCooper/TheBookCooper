@@ -7,7 +7,7 @@ services:
     expose:
       - "5432"
     ports:
-      - "5432:5432" # Map host port 5555 to container port 5432
+      - "5555:5432" # Map host port 5555 to container port 5432
     environment:
       POSTGRES_DB: thebookcooper
       POSTGRES_USER: BCdev

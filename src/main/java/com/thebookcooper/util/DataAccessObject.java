@@ -2,7 +2,7 @@ package com.thebookcooper.util;
 
 import java.sql.*;
 
-public abstract class DataAccessObject <T extends DataTransferObject> {
+public abstract class DataAccessObject <T> {
 
     protected final Connection connection;
 
