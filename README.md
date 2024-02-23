@@ -38,10 +38,22 @@ The project goal is to create a simple marketplace for book lovers, while not ha
         - Body (raw JSON):
             ```json
             {
-                    "userName": "test",
-                    "password": "password",
-                    "email": "test@gmail.com",
-                    "bBucksBalance": 1000.0
+                "userName": "test",
+                "password": "password",
+                "email": "test@gmail.com",
+                "bBucksBalance": 1000.0
+            }
+            ```
+            
+    - Update a user:
+        - URL: http://localhost:8080/users/update/{id}
+        - Body (raw JSON):
+            ```json
+            {
+                "userName": "tester",
+                "password": "passwords",
+                "email": "tester@gmail.com",
+                "bBucksBalance": 100000.0
             }
             ```
 
@@ -50,13 +62,28 @@ The project goal is to create a simple marketplace for book lovers, while not ha
         - Body (raw JSON):
             ```json
             {
-                    "title": "Everything you need to know about software engineering",
-                    "isbn": 23493290,
-                    "publishDate": "2024-02-22",
-                    "author": "Chris Hong",
-                    "genre": "Amaaaazing",
-                    "bookCondition": "New",
-                    "price": 999.99
+                "title": "Everything you need to know about software engineering",
+                "isbn": 23493290,
+                "publishDate": "2024-02-22",
+                "author": "Chris Hong",
+                "genre": "Amaaaazing",
+                "bookCondition": "New",
+                "price": 999.99
+            }
+            ```
+
+    - Update a book:
+        - URL: http://localhost:8080/books/update/{id}
+        - Body (raw JSON):
+            ```json
+            {
+                "title": "Everything you dont need to know about software engineering",
+                "isbn": 11111111,
+                "publishDate": "2020-02-20",
+                "author": "Christopher Hong",
+                "genre": "Cool",
+                "bookCondition": "Old",
+                "price": 999999.99
             }
             ```
 
@@ -69,9 +96,15 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     - Get user by ID:
         - URL: http://localhost:8080/users/{id}
 
+    - Delete user by ID:
+        - URL: http://localhost:8080/users/delete/{id}
+
     - Count books:
         - URL: http://localhost:8080/books/count
 
     - Get book by ID:
         - URL: http://localhost:8080/books/{id}
+
+    - Delete book by ID:
+        - URL: http://localhost:8080/books/delete/{id}
 

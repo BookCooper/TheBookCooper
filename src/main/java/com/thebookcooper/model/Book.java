@@ -43,6 +43,7 @@ public class Book implements BookDTO {
         this.isbn = isbn;
     }
 
+
     public String getAuthor() { return author; }
 
     public void setAuthor(String author) {
