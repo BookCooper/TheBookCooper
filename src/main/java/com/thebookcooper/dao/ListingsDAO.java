@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class ListingsDAO extends DataAccessObject<Listing> {
 
-    private static final String GET_ONE = "SELECT listinghttp://localhost:8080/books/create_id, user_id, book_id, listing_status, listing_date " +
+    private static final String GET_ONE = "SELECT listing_id, user_id, book_id, listing_status, listing_date " +
             "FROM book_listings WHERE listing_id=?";
 
     private static final String INSERT = "INSERT INTO book_listings (user_id, book_id, listing_status, listing_date) " +
@@ -31,7 +31,7 @@ public class ListingsDAO extends DataAccessObject<Listing> {
                 listing.setUserId(rs.getLong("user_id"));
                 listing.setBookId(rs.getLong("book_id"));
                 listing.setListingStatus(rs.getString("listing_status"));
-                listing.setListingDate(rs.getTimestamp("listing_id"));
+                listing.setListingDate(rs.getTimestamp("listing_date"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
