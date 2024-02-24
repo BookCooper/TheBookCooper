@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.Map;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 import com.thebookcooper.model.*;
 import com.thebookcooper.dao.*;
@@ -19,13 +24,13 @@ import java.sql.Timestamp;
 
 @RestController
 public class ListingsController {
-
+    
+    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
+    
     @PostMapping("/listings/create")
     public Listing createListing(@RequestBody String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map inputMap = objectMapper.readValue(json, Map.class);
-
-        DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
         Listing newListing = new Listing();
 
@@ -38,7 +43,6 @@ public class ListingsController {
             newListing.setListingStatus((String) inputMap.get("listingStatus"));
             newListing.setListingDate(new Timestamp(System.currentTimeMillis()));
             
-
             //calls create function from dao/ListingsDAO to insert listing
             return listDAO.create(newListing);
 

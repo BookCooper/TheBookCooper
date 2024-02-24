@@ -7,7 +7,7 @@ public class Book implements BookDTO {
 
     private long bookId;
     private String title;
-    private int isbn;
+    private long isbn;
     private Date publishDate;
     private String author;
     private String genre;
@@ -37,9 +37,9 @@ public class Book implements BookDTO {
         this.publishDate = publishDate;
     }
 
-    public int getISBN() { return isbn; }
+    public long getISBN() { return isbn; }
 
-    public void setISBN(int isbn) {
+    public void setISBN(long isbn) {
         this.isbn = isbn;
     }
 
