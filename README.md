@@ -45,17 +45,6 @@ The project goal is to create a simple marketplace for book lovers, while not ha
             }
             ```
             
-    - Update a user:
-        - URL: http://localhost:8080/users/update/{id}
-        - Body (raw JSON):
-            ```json
-            {
-                "userName": "tester",
-                "password": "passwords",
-                "email": "tester@gmail.com",
-                "bBucksBalance": 100000.0
-            }
-            ```
 
     - Create a new book:
         - URL: http://localhost:8080/books/create
@@ -63,7 +52,7 @@ The project goal is to create a simple marketplace for book lovers, while not ha
             ```json
             {
                 "title": "Everything you need to know about software engineering",
-                "isbn": 23493290,
+                "isbn": 12345678901,
                 "publishDate": "2024-02-22",
                 "author": "Chris Hong",
                 "genre": "Amaaaazing",
@@ -71,6 +60,19 @@ The project goal is to create a simple marketplace for book lovers, while not ha
                 "price": 999.99
             }
             ```
+
+    - Create a new listing (make sure that the userId and bookId exist in the users and book_listings table though or else you'll get an error):
+        - URL: http://localhost:8080/listings/create
+        - Body (raw JSON):
+            ```json
+            {
+                "bookId": 1,
+                "userId": 1,
+                "listingStatus": "new"
+            }
+            ```
+
+    In the Put request, check the following URLs based on your local database:
 
     - Update a book:
         - URL: http://localhost:8080/books/update/{id}
@@ -87,6 +89,27 @@ The project goal is to create a simple marketplace for book lovers, while not ha
             }
             ```
 
+    - Update a user:
+        - URL: http://localhost:8080/users/update/{id}
+        - Body (raw JSON):
+            ```json
+            {
+                "userName": "tester",
+                "password": "passwords",
+                "email": "tester@gmail.com",
+                "bBucksBalance": 100000.0
+            }
+            ```
+    - Update a listing:
+        - URL: http://localhost:8080/listings/update/{id}
+        - Body (raw JSON):
+            ```json
+            {
+                "bookId": 2,
+                "userId": 2,
+                "listingStatus": "old"
+            }
+            ```
 
     In the Get request, check the following URLs based on your local database:
 
@@ -96,15 +119,27 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     - Get user by ID:
         - URL: http://localhost:8080/users/{id}
 
-    - Delete user by ID:
-        - URL: http://localhost:8080/users/delete/{id}
-
     - Count books:
         - URL: http://localhost:8080/books/count
 
     - Get book by ID:
         - URL: http://localhost:8080/books/{id}
 
-    - Delete book by ID:
+    - Count listings:
+        - URL: http://localhost:8080/listings/count
+    
+    - Get listing by ID:
+        - URL: http://localhost:8080/listings/{id}
+
+    In the delete request, check the following URLs based on your local database:
+
+    - Delete user by ID (Make sure that the userId is not in the book_listings table):
+        - URL: http://localhost:8080/users/delete/{id}
+
+    - Delete book by ID (Make sure that the bookId is not in the book_listings table):
         - URL: http://localhost:8080/books/delete/{id}
 
+    - Delete listing by ID:
+        - URL: http://localhost:8080/listings/delete/{id}
+
+    

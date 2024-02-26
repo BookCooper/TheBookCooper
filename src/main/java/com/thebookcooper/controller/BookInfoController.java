@@ -3,9 +3,11 @@ package com.thebookcooper.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,13 +41,21 @@ public class BookInfoController {
 
             //get inputs from user and assign them to a new object
             newBook.setTitle((String) inputMap.get("title"));
-            newBook.setISBN((long) inputMap.get("isbn"));
             //newBook.setPublishDate(Date.valueOf(LocalDate.now())); <-- set the date to be the current day
             newBook.setPublishDate(Date.valueOf((String) inputMap.get("publishDate"))); //date has to be of form "YYYY-MM-DD"
             newBook.setAuthor((String) inputMap.get("author"));
             newBook.setGenre((String) inputMap.get("genre"));
             newBook.setBookCondition((String) inputMap.get("bookCondition"));
             newBook.setPrice((double) inputMap.get("price"));
+
+            Object isbnObject = inputMap.get("isbn");
+            if (isbnObject instanceof Integer) {
+                newBook.setISBN(((Integer) isbnObject).longValue()); // Convert Integer to Long
+            } else if (isbnObject instanceof Long) {
+                newBook.setISBN((Long) isbnObject);
+            } else {
+                throw new IllegalArgumentException("ISBN must be a number");
+            }
 
             //calls create function from dao/BookInfoDAO to insert listing
             return bookDAO.create(newBook);
@@ -83,7 +93,7 @@ public class BookInfoController {
         return null; // Or return an appropriate response/entity indicating not found or error
     }
 
-    @PostMapping("/books/update/{id}")
+    @PutMapping("/books/update/{id}")
     public Book updateBook(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map inputMap = objectMapper.readValue(json, Map.class);
@@ -111,7 +121,7 @@ public class BookInfoController {
         }
     }
 
-    @GetMapping("/books/delete/{id}")
+    @DeleteMapping("/books/delete/{id}")
     public String deleteBook(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             BookInfoDAO infoDAO = new BookInfoDAO(connection);
