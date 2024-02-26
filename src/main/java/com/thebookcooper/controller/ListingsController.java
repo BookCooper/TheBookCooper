@@ -73,6 +73,7 @@ public class ListingsController {
         Map inputMap = objectMapper.readValue(json, Map.class);
 
         Listing updatedListing = new Listing();
+
         try {
             Connection connection = dcm.getConnection();
             ListingsDAO listDAO = new ListingsDAO(connection);
@@ -90,7 +91,7 @@ public class ListingsController {
         }
     }
 
-    @GetMapping("/users/delete/{id}")
+    @GetMapping("/listings/delete/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             ListingsDAO listDAO = new ListingsDAO(connection);
