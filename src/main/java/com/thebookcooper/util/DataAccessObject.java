@@ -14,4 +14,6 @@ public abstract class DataAccessObject <T> {
 
     public abstract T findById(long id);
     public abstract T create(T dto);
+    public abstract T update(T dto); 
+    public abstract void delete(long id);
 }

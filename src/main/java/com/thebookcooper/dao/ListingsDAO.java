@@ -13,6 +13,10 @@ public class ListingsDAO extends DataAccessObject<Listing> {
 
     private static final String INSERT = "INSERT INTO book_listings (user_id, book_id, listing_status, listing_date) " +
             "VALUES (?, ?, ?, ?)";
+    
+    private static final String UPDATE = "UPDATE book_listings SET user_id=?, book_id=?, listing_status=?, listing_date=? WHERE listing_id=?";
+
+    private static final String DELETE = "DELETE FROM book_listings WHERE listing_id=?";
 
     public ListingsDAO(Connection connection) {
         super(connection);
@@ -68,6 +72,48 @@ public class ListingsDAO extends DataAccessObject<Listing> {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Listing update(Listing dto) {
+        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE, Statement.RETURN_GENERATED_KEYS)) {
+            
+            statement.setLong(1, dto.getUserId());
+            statement.setLong(2, dto.getBookId());
+            statement.setString(3, dto.getListingStatus());
+            statement.setTimestamp(4, dto.getListingDate());
+            statement.setLong(5, dto.getListingId()); 
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Updating listing failed, no rows affected.");
+            }
+
+            return dto;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(long id) {
+        try (PreparedStatement statement = this.connection.prepareStatement(DELETE, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setLong(1, id);
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Deleting listing failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
 
 

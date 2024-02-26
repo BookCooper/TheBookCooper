@@ -67,6 +67,41 @@ public class ListingsController {
         return "No listings found";
     }
 
+    @PostMapping("/listings/update/{id}")
+    public Listing updateListing(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map inputMap = objectMapper.readValue(json, Map.class);
+
+        Listing updatedListing = new Listing();
+        try {
+            Connection connection = dcm.getConnection();
+            ListingsDAO listDAO = new ListingsDAO(connection);
+
+            updatedListing.setUserId((int) inputMap.get("userId"));
+            updatedListing.setBookId((int) inputMap.get("bookId"));
+            updatedListing.setListingStatus((String) inputMap.get("listingStatus"));
+            updatedListing.setListingDate(new Timestamp(System.currentTimeMillis()));
+
+            return listDAO.update(updatedListing);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to update the listing", e);
+        }
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            ListingsDAO listDAO = new ListingsDAO(connection);
+            listDAO.delete(id);
+            return "Listing with id " + id + " has been deleted";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error deleting listing with id " + id;
+        }
+    }
+
     @GetMapping("/listings/{id}")
     public Listing getListingById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
