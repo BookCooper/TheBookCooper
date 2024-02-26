@@ -14,6 +14,10 @@ public class BookInfoDAO extends DataAccessObject<Book> {
     private static final String INSERT = "INSERT INTO book_info (title, isbn, publish_date, author, genre, book_condition, price) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+    private static final String UPDATE = "UPDATE book_info SET title= ?, isbn= ?, publish_date= ?, author= ?, genre= ?, book_condition= ?, price= ? WHERE book_id= ?";
+
+    private static final String DELETE = "DELETE FROM book_info WHERE book_id= ?";
+
     public BookInfoDAO(Connection connection) {
         super(connection);
     }
@@ -72,9 +76,44 @@ public class BookInfoDAO extends DataAccessObject<Book> {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Book update(Book dto) {
+        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, dto.getTitle());
+            statement.setInt(2, dto.getISBN());
+            statement.setDate(3, dto.getPublishDate());
+            statement.setString(4, dto.getAuthor());
+            statement.setString(5, dto.getGenre());
+            statement.setString(6, dto.getBookCondition());
+            statement.setDouble(7, dto.getPrice());
+            statement.setLong(8, dto.getBookId());
+            
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Updating book failed, no rows affected.");
+            }
+            return dto;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(long id) {
+        try (PreparedStatement statement = this.connection.prepareStatement(DELETE, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setLong(1, id);
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Deleting book failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 }
-
-
-
-
-

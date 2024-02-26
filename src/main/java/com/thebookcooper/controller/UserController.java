@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable("id") int id) {
+    public User getUserById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             UserDAO userDAO = new UserDAO(connection);
             return userDAO.findById(id);
@@ -72,5 +72,39 @@ public class UserController {
             // Consider creating and returning a custom error object or message
         }
         return null; // Or return an appropriate response/entity indicating not found or error
+    }
+
+    @PostMapping("/users/update/{id}")
+    public User updateUser(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map inputMap = objectMapper.readValue(json, Map.class);
+
+        User updatedUser = new User();
+        try {
+            Connection connection = dcm.getConnection();
+            UserDAO userDAO = new UserDAO(connection);
+            updatedUser.setUserId(id);
+            updatedUser.setUserName((String) inputMap.get("userName"));
+            updatedUser.setPassword((String) inputMap.get("password"));
+            updatedUser.setEmail((String) inputMap.get("email"));
+            updatedUser.setBBucksBalance((double) inputMap.get("bBucksBalance"));
+            updatedUser.setLastLogin(new Timestamp(System.currentTimeMillis()));
+            return userDAO.update(updatedUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to update the user", e);
+        }
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            UserDAO userDAO = new UserDAO(connection);
+            userDAO.delete(id);
+            return "User with id " + id + " has been deleted";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error deleting user with id " + id;
+        }
     }
 }

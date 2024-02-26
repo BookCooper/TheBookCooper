@@ -18,6 +18,10 @@ public class UserDAO extends DataAccessObject<User> {
     private static final String INSERT = "INSERT INTO users (user_name, password, email, b_bucks_balance, creation_date, last_login) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
+    private static final String UPDATE = "UPDATE users SET user_name=?, password=?, email=?, b_bucks_balance=?, last_login=? WHERE user_id=?";
+
+    private static final String DELETE = "DELETE FROM users WHERE user_id=?";
+
     public UserDAO(Connection connection) {
         super(connection);
     }
@@ -73,6 +77,47 @@ public class UserDAO extends DataAccessObject<User> {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public User update(User dto) {
+        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, dto.getUserName());
+            statement.setString(2, dto.getPassword());
+            statement.setString(3, dto.getEmail());
+            statement.setDouble(4, dto.getBBucksBalance());
+            statement.setTimestamp(5, dto.getLastLogin());
+            statement.setLong(6, dto.getUserId());
+            
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Updating user failed, no rows affected.");
+            }
+
+            return dto;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(long id) {
+        try (PreparedStatement statement = this.connection.prepareStatement(DELETE, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setLong(1, id);
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Deleting user failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
 }
 
 

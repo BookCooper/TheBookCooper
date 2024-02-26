@@ -82,4 +82,44 @@ public class BookInfoController {
         }
         return null; // Or return an appropriate response/entity indicating not found or error
     }
+
+    @PostMapping("/books/update/{id}")
+    public Book updateBook(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map inputMap = objectMapper.readValue(json, Map.class);
+
+        Book updatedBook = new Book();
+        try {
+            Connection connection = dcm.getConnection();
+            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+
+            //get inputs from user and assign them to a new object
+            updatedBook.setBookId(id);
+            updatedBook.setTitle((String) inputMap.get("title"));
+            updatedBook.setISBN((int) inputMap.get("isbn"));
+            updatedBook.setPublishDate(Date.valueOf((String) inputMap.get("publishDate"))); //date has to be of form "YYYY-MM-DD"
+            updatedBook.setAuthor((String) inputMap.get("author"));
+            updatedBook.setGenre((String) inputMap.get("genre"));
+            updatedBook.setBookCondition((String) inputMap.get("bookCondition"));
+            updatedBook.setPrice((double) inputMap.get("price"));
+
+            //calls update function from dao/BookInfoDAO to update listing
+            return infoDAO.update(updatedBook);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to update the book", e);
+        }
+    }
+
+    @GetMapping("/books/delete/{id}")
+    public String deleteBook(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+            infoDAO.delete(id);
+            return "Book deleted";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete the book", e);
+        }
+    }
 }
