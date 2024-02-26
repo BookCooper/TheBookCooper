@@ -20,6 +20,7 @@ import java.util.List;
 
 @SpringBootApplication
 public class TheBookCooperApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(TheBookCooperApplication.class, args);
     }

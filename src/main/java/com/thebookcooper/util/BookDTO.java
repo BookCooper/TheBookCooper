@@ -4,7 +4,7 @@ public interface BookDTO {
 
     long getBookId();
     String getTitle();
-    int getISBN();
+    long getISBN();
     String getAuthor();
     String getGenre();
     String getBookCondition();

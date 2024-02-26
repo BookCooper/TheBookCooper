@@ -32,7 +32,7 @@ public class BookInfoDAO extends DataAccessObject<Book> {
             while (rs.next()) {
                 book.setBookId(rs.getLong("book_id"));
                 book.setTitle(rs.getString("title"));
-                book.setISBN(rs.getInt("isbn"));
+                book.setISBN(rs.getLong("isbn"));
                 book.setPublishDate(rs.getDate("publish_date"));
                 book.setAuthor(rs.getString("author"));
                 book.setGenre(rs.getString("genre"));
@@ -50,7 +50,7 @@ public class BookInfoDAO extends DataAccessObject<Book> {
     public Book create(Book dto) {
         try (PreparedStatement statement = this.connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, dto.getTitle());
-            statement.setInt(2, dto.getISBN());
+            statement.setLong(2, dto.getISBN());
             statement.setDate(3, dto.getPublishDate());
             statement.setString(4, dto.getAuthor());
             statement.setString(5, dto.getGenre());
@@ -81,7 +81,7 @@ public class BookInfoDAO extends DataAccessObject<Book> {
     public Book update(Book dto) {
         try (PreparedStatement statement = this.connection.prepareStatement(UPDATE, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, dto.getTitle());
-            statement.setInt(2, dto.getISBN());
+            statement.setLong(2, dto.getISBN());
             statement.setDate(3, dto.getPublishDate());
             statement.setString(4, dto.getAuthor());
             statement.setString(5, dto.getGenre());

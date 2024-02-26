@@ -39,7 +39,7 @@ public class BookInfoController {
 
             //get inputs from user and assign them to a new object
             newBook.setTitle((String) inputMap.get("title"));
-            newBook.setISBN((int) inputMap.get("isbn"));
+            newBook.setISBN((long) inputMap.get("isbn"));
             //newBook.setPublishDate(Date.valueOf(LocalDate.now())); <-- set the date to be the current day
             newBook.setPublishDate(Date.valueOf((String) inputMap.get("publishDate"))); //date has to be of form "YYYY-MM-DD"
             newBook.setAuthor((String) inputMap.get("author"));

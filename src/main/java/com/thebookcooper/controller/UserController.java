@@ -76,7 +76,7 @@ public class UserController {
 
     @PostMapping("/users/update/{id}")
     public User updateUser(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+       ObjectMapper objectMapper = new ObjectMapper();
         Map inputMap = objectMapper.readValue(json, Map.class);
 
         User updatedUser = new User();
