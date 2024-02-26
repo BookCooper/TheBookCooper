@@ -13,7 +13,7 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     Make sure docker is installed and then run the following command:
    ```bash
-   docker-compose up
+   docker compose up --build
    ```
 3. Connect to the PostgreSQL server using dbeaver or any other SQL client
     Information to connect to the database:
