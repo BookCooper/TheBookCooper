@@ -78,6 +78,7 @@ public class ListingsController {
             Connection connection = dcm.getConnection();
             ListingsDAO listDAO = new ListingsDAO(connection);
 
+            updatedListing.setListingId(id);
             updatedListing.setUserId((int) inputMap.get("userId"));
             updatedListing.setBookId((int) inputMap.get("bookId"));
             updatedListing.setListingStatus((String) inputMap.get("listingStatus"));

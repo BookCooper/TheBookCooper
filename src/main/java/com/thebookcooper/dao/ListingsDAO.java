@@ -15,6 +15,7 @@ public class ListingsDAO extends DataAccessObject<Listing> {
             "VALUES (?, ?, ?, ?)";
     
     private static final String UPDATE = "UPDATE book_listings SET user_id=?, book_id=?, listing_status=?, listing_date=? WHERE listing_id=?";
+    //private static final String UPDATE = "UPDATE users SET user_name=?, password=?, email=?, b_bucks_balance=?, last_login=? WHERE user_id=?";
 
     private static final String DELETE = "DELETE FROM book_listings WHERE listing_id=?";
 
