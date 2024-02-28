@@ -1,7 +1,10 @@
 package com.thebookcooper.controller;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,13 +36,11 @@ public class BookInfoController {
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
     @PostMapping("/books/create")
-    public Book createBook(@RequestBody String json) throws JsonProcessingException {
+    public ResponseEntity<?> createBook(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
-        Map inputMap = objectMapper.readValue(json, Map.class);
-
-        Book newBook = new Book();
-
         try {
+            Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+            Book newBook = new Book();
             Connection connection = dcm.getConnection();
             BookInfoDAO bookDAO = new BookInfoDAO(connection);
 
@@ -46,8 +51,9 @@ public class BookInfoController {
             newBook.setAuthor((String) inputMap.get("author"));
             newBook.setGenre((String) inputMap.get("genre"));
             newBook.setBookCondition((String) inputMap.get("bookCondition"));
-            newBook.setPrice((double) inputMap.get("price"));
+            newBook.setPrice(Double.parseDouble(inputMap.get("price").toString()));
 
+            // Handle ISBN conversion from Integer or Long to Long
             Object isbnObject = inputMap.get("isbn");
             if (isbnObject instanceof Integer) {
                 newBook.setISBN(((Integer) isbnObject).longValue()); // Convert Integer to Long
@@ -56,80 +62,106 @@ public class BookInfoController {
             } else {
                 throw new IllegalArgumentException("ISBN must be a number");
             }
-
+            
             //calls create function from dao/BookInfoDAO to insert listing
-            return bookDAO.create(newBook);
-
+            Book createdBook = bookDAO.create(newBook);
+            return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Invalid JSON input", HttpStatus.BAD_REQUEST);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to create the book", e);
+            return new ResponseEntity<>("Failed to create the book", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
+
     @GetMapping("/books/count")
-    public String countBooks() {
+    public ResponseEntity<?> countBooks() {
         try (Connection connection = dcm.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_info")) {
             if (resultSet.next()) {
-                return "Number of books: " + resultSet.getInt(1);
+                return new ResponseEntity<>("Number of books: " + resultSet.getInt(1), HttpStatus.OK);
             }
+            return new ResponseEntity<>("No books found", HttpStatus.NOT_FOUND);
         } catch (SQLException e) {
             e.printStackTrace();
-            return "Error retrieving book count";
+            return new ResponseEntity<>("Error retrieving book count", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return "No books found";
     }
 
     @GetMapping("/books/{id}")
-    public Book getBookById(@PathVariable("id") long id) {
+    public ResponseEntity<?> getBookById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             BookInfoDAO infoDAO = new BookInfoDAO(connection);
-            return infoDAO.findById(id);
+            Book book = infoDAO.findById(id);
+            if (book != null) {
+                return new ResponseEntity<>(book, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Consider creating and returning a custom error object or message
+            return new ResponseEntity<>("Error retrieving book", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null; // Or return an appropriate response/entity indicating not found or error
     }
 
-    @PutMapping("/books/update/{id}")
-    public Book updateBook(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map inputMap = objectMapper.readValue(json, Map.class);
 
-        Book updatedBook = new Book();
+    @PutMapping("/books/update/{id}")
+    public ResponseEntity<?> updateBook(@PathVariable("id") long id, @RequestBody String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
+            Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
             Connection connection = dcm.getConnection();
             BookInfoDAO infoDAO = new BookInfoDAO(connection);
+            Book updatedBook = new Book();
 
             //get inputs from user and assign them to a new object
             updatedBook.setBookId(id);
             updatedBook.setTitle((String) inputMap.get("title"));
-            updatedBook.setISBN((int) inputMap.get("isbn"));
+            //updatedBook.setPublishDate(Date.valueOf(LocalDate.now())); <-- set the date to be the current day
             updatedBook.setPublishDate(Date.valueOf((String) inputMap.get("publishDate"))); //date has to be of form "YYYY-MM-DD"
             updatedBook.setAuthor((String) inputMap.get("author"));
             updatedBook.setGenre((String) inputMap.get("genre"));
             updatedBook.setBookCondition((String) inputMap.get("bookCondition"));
-            updatedBook.setPrice((double) inputMap.get("price"));
+            updatedBook.setPrice(Double.parseDouble(inputMap.get("price").toString()));
 
-            //calls update function from dao/BookInfoDAO to update listing
-            return infoDAO.update(updatedBook);
+            // Handle ISBN conversion from Integer or Long to Long
+            Object isbnObject = inputMap.get("isbn");
+            if (isbnObject instanceof Integer) {
+                updatedBook.setISBN(((Integer) isbnObject).longValue()); // Convert Integer to Long
+            } else if (isbnObject instanceof Long) {
+                updatedBook.setISBN((Long) isbnObject);
+            } else {
+                throw new IllegalArgumentException("ISBN must be a number");
+            }
+            
+            //calls create function from dao/BookInfoDAO to insert listing
+            Book book = infoDAO.update(updatedBook);
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Invalid JSON input", HttpStatus.BAD_REQUEST);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to update the book", e);
+            return new ResponseEntity<>("Failed to update the book", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/books/delete/{id}")
-    public String deleteBook(@PathVariable("id") long id) {
+    public ResponseEntity<?> deleteBook(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             BookInfoDAO infoDAO = new BookInfoDAO(connection);
             infoDAO.delete(id);
-            return "Book deleted";
+            return new ResponseEntity<>("Book with ID " + id + " deleted successfully", HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to delete the book", e);
+            return new ResponseEntity<>("Failed to delete the book", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

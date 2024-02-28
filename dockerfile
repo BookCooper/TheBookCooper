@@ -1,7 +1,7 @@
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 COPY . /ECE366_Project
 WORKDIR /ECE366_Project
-RUN mvn -e package
+RUN mvn -e package 
 
 
 ENV POSTGRES_DB=thebookcooper

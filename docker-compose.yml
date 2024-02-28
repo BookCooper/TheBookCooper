@@ -19,6 +19,7 @@ services:
 
   app:
     build: .
+    container_name: thebookcooper-app
     environment:
       POSTGRES_DB: thebookcooper
       POSTGRES_USER: BCdev
