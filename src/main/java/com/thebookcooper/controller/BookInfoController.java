@@ -23,10 +23,83 @@ import com.thebookcooper.dao.*;
 
 import java.time.LocalDate;
 
+//stuff for price
+import java.io.*;
+import java.net.*; 
+
 @RestController
 public class BookInfoController {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
+    
+    //GET HTTP request to a specific url
+    public static String getHTML(String urlToRead) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        URI uri = new URI(urlToRead);
+        URL url = uri.toURL();
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            for (String line; (line = reader.readLine()) != null; ) {
+                result.append(line);
+            }
+        }
+        return result.toString();
+    }
+
+    private double findPrice(Book book) {
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String req; 
+
+        //if the isbn of the book is unknown try to find it given title using google books API
+        if(!book.getISBN()) {
+            
+            //String title = book.getTitle();
+            //String author = book.getAuthor(); 
+
+            try {
+                req = "https://www.googleapis.com/books/v1/volumes?q=" +
+                      "intitle:" + book.getTitle() +       // search by title of book
+                      "+inauthor:" + book.getAuthor() +    // search by author of book
+                      "&key=AIzaSyCxVGv72jNMy6IVrxHmml5_HLGXi8T0SpU"; //api key
+                
+                Map inputMap = objectMapper.readValue(getHTML(req), Map.class);
+                Map volumeInfo = (Map) inputMap.get("volumeInfo");
+                List<Map<String, String>> identifiers = (List<Map<String, String>>) volumeInfo.get("industryIdentifiers");
+
+                // Loop through the identifiers and set the ISBN-13 number
+                for (Map<String, String> identifier : identifiers) {
+                    String type = identifier.get("type");
+                    if ("ISBN_13".equals(type)) {
+                        String isbn13 = identifier.get("identifier");
+
+                        // You may want to handle NumberFormatException in case the identifier is not a valid long value
+                        try {
+                            long isbn = Long.parseLong(isbn13);
+                            book.setISBN(isbn);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Invalid ISBN format: " + isbn13);
+                        }
+                    }
+                }
+            }
+            catch(/*doesn't exist error?*/) {}
+        }
+        
+        //now that we have ISBN, find price using BooksRun API
+        req = "https://booksrun.com/api/v3/price/buy/" + book.getISBN() + 
+              "?key=0helymen654k0w3dk43z";
+
+
+        
+
+        
+
+    }
 
     @PostMapping("/books/create")
     public Book createBook(@RequestBody String json) throws JsonProcessingException {
