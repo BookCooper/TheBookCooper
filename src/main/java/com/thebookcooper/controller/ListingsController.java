@@ -4,9 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -67,7 +68,7 @@ public class ListingsController {
         return "No listings found";
     }
 
-    @PostMapping("/listings/update/{id}")
+    @PutMapping("/listings/update/{id}")
     public Listing updateListing(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Map inputMap = objectMapper.readValue(json, Map.class);
@@ -92,7 +93,7 @@ public class ListingsController {
         }
     }
 
-    @GetMapping("/listings/delete/{id}")
+    @DeleteMapping("/listings/delete/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             ListingsDAO listDAO = new ListingsDAO(connection);
