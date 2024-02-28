@@ -6,9 +6,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+
+import java.sql.*;
 import java.util.Map;
 
 import com.thebookcooper.model.User;
@@ -16,11 +15,12 @@ import com.thebookcooper.dao.UserDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
+@RequestMapping("/users") // Base path
 public class UserController {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
-    @GetMapping("/users/count")
+    @GetMapping("/count")
     public ResponseEntity<?> countUsers() {
         try (Connection connection = dcm.getConnection();
              Statement statement = connection.createStatement();
@@ -35,7 +35,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             UserDAO userDAO = new UserDAO(connection);
@@ -51,7 +51,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -80,7 +80,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -109,7 +109,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             UserDAO userDAO = new UserDAO(connection);

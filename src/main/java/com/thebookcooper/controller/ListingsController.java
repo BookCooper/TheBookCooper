@@ -6,9 +6,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+
+import java.sql.*;
 import java.util.Map;
 
 import com.thebookcooper.model.Listing;
@@ -16,11 +15,12 @@ import com.thebookcooper.dao.ListingsDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
+@RequestMapping("/listings")
 public class ListingsController {
     
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
     
-    @GetMapping("/listings/count")
+    @GetMapping("/count")
     public ResponseEntity<?> countListings() {
         try (Connection connection = dcm.getConnection();
              Statement statement = connection.createStatement();
@@ -35,7 +35,7 @@ public class ListingsController {
         }
     }
     
-    @GetMapping("/listings/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getListingById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             ListingsDAO listingDAO = new ListingsDAO(connection);
@@ -51,7 +51,7 @@ public class ListingsController {
         }
     }
     
-    @PostMapping("/listings/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createListing(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -78,7 +78,7 @@ public class ListingsController {
         }
     }
 
-    @PutMapping("/listings/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateListing(@PathVariable("id") long id, @RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -106,7 +106,7 @@ public class ListingsController {
         }
     }
 
-    @DeleteMapping("/listings/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteListing(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             ListingsDAO listDAO = new ListingsDAO(connection);

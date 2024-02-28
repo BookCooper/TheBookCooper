@@ -6,13 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -31,11 +25,12 @@ import com.thebookcooper.dao.*;
 import java.time.LocalDate;
 
 @RestController
+@RequestMapping("/books") // Base path
 public class BookInfoController {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
-    @GetMapping("/books/count")
+    @GetMapping("/count")
     public ResponseEntity<?> countBooks() {
         try (Connection connection = dcm.getConnection();
              Statement statement = connection.createStatement();
@@ -50,7 +45,7 @@ public class BookInfoController {
         }
     }
 
-    @GetMapping("/books/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getBookById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             BookInfoDAO infoDAO = new BookInfoDAO(connection);
@@ -66,7 +61,7 @@ public class BookInfoController {
         }
     }
 
-    @PostMapping("/books/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createBook(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -108,7 +103,7 @@ public class BookInfoController {
         }
     }
 
-    @PutMapping("/books/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateBook(@PathVariable("id") long id, @RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
