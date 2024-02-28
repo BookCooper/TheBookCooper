@@ -35,6 +35,37 @@ public class BookInfoController {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
+    @GetMapping("/books/count")
+    public ResponseEntity<?> countBooks() {
+        try (Connection connection = dcm.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_info")) {
+            if (resultSet.next()) {
+                return new ResponseEntity<>("Number of books: " + resultSet.getInt(1), HttpStatus.OK);
+            }
+            return new ResponseEntity<>("No books found", HttpStatus.NOT_FOUND);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error retrieving book count", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/books/{id}")
+    public ResponseEntity<?> getBookById(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+            Book book = infoDAO.findById(id);
+            if (book != null) {
+                return new ResponseEntity<>(book, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error retrieving book", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/books/create")
     public ResponseEntity<?> createBook(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -76,39 +107,6 @@ public class BookInfoController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
-    @GetMapping("/books/count")
-    public ResponseEntity<?> countBooks() {
-        try (Connection connection = dcm.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_info")) {
-            if (resultSet.next()) {
-                return new ResponseEntity<>("Number of books: " + resultSet.getInt(1), HttpStatus.OK);
-            }
-            return new ResponseEntity<>("No books found", HttpStatus.NOT_FOUND);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Error retrieving book count", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/books/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable("id") long id) {
-        try (Connection connection = dcm.getConnection()) {
-            BookInfoDAO infoDAO = new BookInfoDAO(connection);
-            Book book = infoDAO.findById(id);
-            if (book != null) {
-                return new ResponseEntity<>(book, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Error retrieving book", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 
     @PutMapping("/books/update/{id}")
     public ResponseEntity<?> updateBook(@PathVariable("id") long id, @RequestBody String json) {
