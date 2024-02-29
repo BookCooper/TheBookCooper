@@ -58,38 +58,39 @@ public class BookInfoController {
         
         ObjectMapper objectMapper = new ObjectMapper();
         String req; 
+        
+        String title = book.getTitle(); 
+        String author = book.getAuthor(); 
 
         // if the isbn of the book is unknown try to find it given title using google books API
         // for now just have the default be zero if ISBN is unknown
         // can add in checks later to see if user ISBN value is valid (i.e. 13 digits long, starts with 973)
         if(book.getISBN() <= COMPARE) {
-
+            
             try {
                 req = "https://www.googleapis.com/books/v1/volumes?q=" +
-                      "intitle:" + book.getTitle() +       // search by title of book
-                      "+inauthor:" + book.getAuthor() +    // search by author of book
+                      "intitle:" + title.replaceAll(" ", "+") +       // search by title of book
+                      "+inauthor:" + author.replaceAll(" ", "+") +    // search by author of book
                       "&key=AIzaSyCxVGv72jNMy6IVrxHmml5_HLGXi8T0SpU"; //api key
-                
-                Map inputMap = objectMapper.readValue(getHTML(req), Map.class);
-                Map volumeInfo = (Map) inputMap.get("volumeInfo");
-                List<Map<String, String>> identifiers = (List<Map<String, String>>) volumeInfo.get("industryIdentifiers");
 
-                // Loop through the identifiers and set the ISBN-13 number
-                for (Map<String, String> identifier : identifiers) {
-                    if ("ISBN_13".equals(identifier.get("type"))) { 
-                        try {
+                Map<String, Object> inputMap = objectMapper.readValue(getHTML(req), Map.class);
+
+                List<Map<String, Object>> items = (List<Map<String, Object>>) inputMap.get("items");
+                if (items != null && !items.isEmpty()) {
+                    Map<String, Object> volumeInfo = (Map<String, Object>) items.get(0).get("volumeInfo");
+                    List<Map<String, String>> identifiers = (List<Map<String, String>>) volumeInfo.get("industryIdentifiers");
+
+                    for (Map<String, String> identifier : identifiers) {
+                        if ("ISBN_13".equals(identifier.get("type"))) {
                             long isbn = Long.parseLong(identifier.get("identifier"));
                             book.setISBN(isbn);
-                            System.out.println("ISBN set to " + isbn);
-                        }
-                        catch (NumberFormatException e) {
-                            System.err.println("Invalid ISBN format");
+                            System.err.println("ISBN set to " + isbn);
+                            break; // No need to continue looping if we found the ISBN-13
                         }
                     }
                 }
-            }
+            } 
             catch (Exception e) {
-                // Handle exceptions that occur during API call or JSON processing
                 e.printStackTrace();
             }
         }
