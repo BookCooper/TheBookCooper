@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 
 import com.thebookcooper.model.BookTransaction;
@@ -17,7 +18,7 @@ import com.thebookcooper.dao.BookTransactionDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
-@RequestMapping("/transactions") // Base path for transactions
+@RequestMapping("/book-transactions") // Base path for transactions
 public class BookTransactionController {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");

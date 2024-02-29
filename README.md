@@ -34,12 +34,12 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     # API Documentation
 
-    This documentation provides a comprehensive guide to the API endpoints, categorized by resource classes. For easier navigation, use the hyperlinks below to jump to a specific class section.
-
     - [User Operations](#user-operations)
     - [Book Operations](#book-operations)
     - [Listing Operations](#listing-operations)
     - [Book Tag Operations](#book-tag-operations)
+    - [Book Transaction Operations](#book-transaction-operations)
+    - [Store Item Operations](#store-item-operations)
 
     ## User Operations
 
@@ -149,6 +149,8 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     - **PUT** `http://localhost:8080/listings/update/{id}`
 
+    Make sure the `bookId` and `userId` refer to existing records.
+
     ```json
     {
         "bookId": 2,
@@ -207,9 +209,13 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     ## Book Transaction Operations
 
+    Make sure that the referenced `buyerId` and `sellerId` exist in the `users` table (userIds), and the `listingId` exists in the `book_listings` table.
+
     ### Creating a New Book Transaction
 
     - **POST** `http://localhost:8080/transactions/create`
+
+    Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
 
     ```json
     {
@@ -233,6 +239,8 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     - **PUT** `http://localhost:8080/transactions/update/{id}`
 
+    Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
+
     ```json
     {
         "buyerId": 1,
@@ -246,3 +254,43 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     ### Deleting a Book Transaction by ID
 
     - **DELETE** `http://localhost:8080/transactions/delete/{id}`
+
+    ## Store Item Operations
+
+    ### Creating a New Store Item
+
+    - **POST** `http://localhost:8080/store-items/create`
+
+    ```json
+    {
+        "item": "CooperCombo",
+        "item_price": 79.99,
+        "special_offer": "Get 10% more B-Bucks when you purchase this item!",
+        "item_description": "A special combo pack for Cooper students."
+    }
+    ```
+
+    ### Getting a Store Item by ID
+
+    - **GET** `http://localhost:8080/store-items/{id}`
+
+    ### Getting Store Items Count
+
+    - **GET** `http://localhost:8080/store-items/count`
+
+    ### Updating a Store Item
+
+    - **PUT** `http://localhost:8080/store-items/update/{id}`
+
+    ```json
+    {
+        "item": "SuperCooperCombo",
+        "item_price": 89.99,
+        "special_offer": "Get 20% more B-Bucks when you purchase this item!",
+        "item_description": "A super combo pack for Cooper students."
+    }
+    ```
+
+    ### Deleting a Store Item by ID
+
+    - **DELETE** `http://localhost:8080/store-items/delete/{id}`
