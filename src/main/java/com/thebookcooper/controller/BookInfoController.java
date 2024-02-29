@@ -54,6 +54,8 @@ public class BookInfoController {
     }
     
     // currently finds the price and ISBN number, but could maybe extend it to find author, publisher and everything else
+    // can possibly split this up into multiple function in the future
+    //      such as one for updating its price, updating isbn, etc., all seperately
     private Book findISBNPrice(Book book) {
         
         ObjectMapper objectMapper = new ObjectMapper();
@@ -69,8 +71,8 @@ public class BookInfoController {
             
             try {
                 req = "https://www.googleapis.com/books/v1/volumes?q=" +
-                      "intitle:" + title.replaceAll(" ", "+") +       // search by title of book
-                      "+inauthor:" + author.replaceAll(" ", "+") +    // search by author of book
+                      "intitle:" + title.replaceAll(" ", "+") +       // search by title of book replacing spaces with +
+                      "+inauthor:" + author.replaceAll(" ", "+") +    // search by author of book replacing spcaces with +
                       "&key=AIzaSyCxVGv72jNMy6IVrxHmml5_HLGXi8T0SpU"; //api key
 
                 Map<String, Object> inputMap = objectMapper.readValue(getHTML(req), Map.class);
@@ -104,30 +106,36 @@ public class BookInfoController {
 
             try {
                 Map inputMap = objectMapper.readValue(getHTML(req), Map.class);
+                Map result = (Map) inputMap.get("result");
+                Map offers = (Map) result.get("offers");
+                Map booksrun = (Map) offers.get("booksrun");
 
-                Map offers = (Map) inputMap.get("result"); //going into the results category
-                Map booksrun = (Map) offers.get("offers"); //going into the booksrun category
-
-                // get book condition
+                // Check if "new" price exists
                 if(book.getBookCondition().equals("new")) {
+                    
+                    Map newPrice = (Map) booksrun.get("new");
                     try {
-                        Map newPrice = (Map) booksrun.get("new");
-                        book.setPrice((double) newPrice.get("price")); // get new price from json
-                    }
-                    catch (NumberFormatException e) {
-                        book.setPrice(0);  //set book price to zero if not found (has to be manual entry)
-                        throw new IllegalArgumentException("New price for book not found");
+                        double newPriceValue = (double) newPrice.get("price");
+                        book.setPrice(newPriceValue);
+                    } catch (NumberFormatException | ClassCastException e) {
+                        book.setPrice(0.0);
+                        throw new IllegalArgumentException("New price for book not found or invalid format");
                     }
                 }
-                else {
+                // check if used price exists
+                else if(book.getBookCondition().equals("used")){
+                    Map usedPrice = (Map) booksrun.get("used");
                     try {
-                        Map usedPrice = (Map) booksrun.get("used");
-                        book.setPrice((double) usedPrice.get("price")); // get new price from json
+                        double usedPriceValue = (double) usedPrice.get("price");
+                        book.setPrice(usedPriceValue);
+                    } catch (NumberFormatException | ClassCastException e) {
+                        book.setPrice(0.0);
+                        throw new IllegalArgumentException("Used price for book not found or invalid format");
                     }
-                    catch (NumberFormatException e) {
-                        book.setPrice(0);  //set book price to zero if not found (has to be manual entry)
-                        throw new IllegalArgumentException("Used price for book not found");
-                    }
+                }
+                // If neither "new" nor "used" price exists, set the price to 0.0
+                else {
+                    book.setPrice(0.0);
                 }
             }
             catch (Exception e) {
