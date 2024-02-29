@@ -40,6 +40,8 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     - [Book Tag Operations](#book-tag-operations)
     - [Book Transaction Operations](#book-transaction-operations)
     - [Store Item Operations](#store-item-operations)
+    - [Point Transaction Operations](#point-transaction-operations)
+    - [Book Search Operations](#book-search-operations)
 
     ## User Operations
 
@@ -294,3 +296,87 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     ### Deleting a Store Item by ID
 
     - **DELETE** `http://localhost:8080/store-items/delete/{id}`
+
+    ## Point Transaction Operations
+
+    Ensure that the `userId` referenced exists in the `users` table for all operations.
+
+    ### Creating a New Point Transaction
+
+    - **POST** `http://localhost:8080/point-transactions/create`
+
+    ```json
+    {
+        "userId": 1,
+        "transactionType": "Purchase",
+        "amount": 100.00,
+        "currentBalance": 900.00
+    }
+    ```
+
+    ### Getting a Point Transaction by ID
+
+    - **GET** `http://localhost:8080/point-transactions/{id}`
+
+    ### Counting Point Transactions
+
+    - **GET** `http://localhost:8080/point-transactions/count`
+
+    ### Updating a Point Transaction
+
+    - **PUT** `http://localhost:8080/point-transactions/update/{id}`
+
+    Make sure the `userId` refers to an existing record.
+
+    ```json
+    {
+        "userId": 1,
+        "transactionType": "Refund",
+        "amount": 50.00,
+        "currentBalance": 950.00
+    }
+    ```
+
+    ### Deleting a Point Transaction by ID
+
+    - **DELETE** `http://localhost:8080/point-transactions/delete/{id}`
+
+    ## Book Search Operations
+
+    Before performing book search operations, make sure the `userId` referenced exists in the `users` table.
+
+    ### Creating a New Book Search
+
+    - **POST** `http://localhost:8080/book-searches/create`
+
+    ```json
+    {
+        "userId": 1,
+        "searchQuery": "Data Structures and Algorithms"
+    }
+    ```
+
+    ### Getting a Book Search by ID
+
+    - **GET** `http://localhost:8080/book-searches/{id}`
+
+    ### Counting Book Searches
+
+    - **GET** `http://localhost:8080/book-searches/count`
+
+    ### Updating a Book Search
+
+    - **PUT** `http://localhost:8080/book-searches/update/{id}`
+
+    Ensure the `userId` refers to an existing record.
+
+    ```json
+    {
+        "userId": 1,
+        "searchQuery": "Introduction to Software Engineering"
+    }
+    ```
+
+    ### Deleting a Book Search by ID
+
+    - **DELETE** `http://localhost:8080/book-searches/delete/{id}`
