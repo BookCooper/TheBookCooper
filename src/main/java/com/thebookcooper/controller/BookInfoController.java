@@ -25,10 +25,13 @@ import java.time.LocalDate;
 
 //stuff for price
 import java.io.*;
-import java.net.*; 
+import java.net.*;
+import java.util.*;
 
 @RestController
 public class BookInfoController {
+
+    private static final long COMPARE = 9730000000000L;
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
     
@@ -49,17 +52,17 @@ public class BookInfoController {
         }
         return result.toString();
     }
-
-    private double findPrice(Book book) {
+    
+    // currently finds the price and ISBN number, but could maybe extend it to find author, publisher and everything else
+    private Book findISBNPrice(Book book) {
         
         ObjectMapper objectMapper = new ObjectMapper();
         String req; 
 
-        //if the isbn of the book is unknown try to find it given title using google books API
-        if(!book.getISBN()) {
-            
-            //String title = book.getTitle();
-            //String author = book.getAuthor(); 
+        // if the isbn of the book is unknown try to find it given title using google books API
+        // for now just have the default be zero if ISBN is unknown
+        // can add in checks later to see if user ISBN value is valid (i.e. 13 digits long, starts with 973)
+        if(book.getISBN() <= COMPARE) {
 
             try {
                 req = "https://www.googleapis.com/books/v1/volumes?q=" +
@@ -73,32 +76,67 @@ public class BookInfoController {
 
                 // Loop through the identifiers and set the ISBN-13 number
                 for (Map<String, String> identifier : identifiers) {
-                    String type = identifier.get("type");
-                    if ("ISBN_13".equals(type)) {
-                        String isbn13 = identifier.get("identifier");
-
-                        // You may want to handle NumberFormatException in case the identifier is not a valid long value
+                    if ("ISBN_13".equals(identifier.get("type"))) { 
                         try {
-                            long isbn = Long.parseLong(isbn13);
+                            long isbn = Long.parseLong(identifier.get("identifier"));
                             book.setISBN(isbn);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid ISBN format: " + isbn13);
+                            System.out.println("ISBN set to " + isbn);
+                        }
+                        catch (NumberFormatException e) {
+                            System.err.println("Invalid ISBN format");
                         }
                     }
                 }
             }
-            catch(/*doesn't exist error?*/) {}
+            catch (Exception e) {
+                // Handle exceptions that occur during API call or JSON processing
+                e.printStackTrace();
+            }
         }
         
-        //now that we have ISBN, find price using BooksRun API
-        req = "https://booksrun.com/api/v3/price/buy/" + book.getISBN() + 
-              "?key=0helymen654k0w3dk43z";
+        // get price if no price is given
+        if(book.getPrice() == 0) {
+        
+            // now that we have ISBN, find price using BooksRun API
+            req = "https://booksrun.com/api/v3/price/buy/" + book.getISBN() + 
+                "?key=0helymen654k0w3dk43z";
 
+            try {
+                Map inputMap = objectMapper.readValue(getHTML(req), Map.class);
 
+                Map offers = (Map) inputMap.get("result"); //going into the results category
+                Map booksrun = (Map) offers.get("offers"); //going into the booksrun category
+
+                // get book condition
+                if(book.getBookCondition().equals("new")) {
+                    try {
+                        Map newPrice = (Map) booksrun.get("new");
+                        book.setPrice((double) newPrice.get("price")); // get new price from json
+                    }
+                    catch (NumberFormatException e) {
+                        book.setPrice(0);  //set book price to zero if not found (has to be manual entry)
+                        throw new IllegalArgumentException("New price for book not found");
+                    }
+                }
+                else {
+                    try {
+                        Map usedPrice = (Map) booksrun.get("used");
+                        book.setPrice((double) usedPrice.get("price")); // get new price from json
+                    }
+                    catch (NumberFormatException e) {
+                        book.setPrice(0);  //set book price to zero if not found (has to be manual entry)
+                        throw new IllegalArgumentException("Used price for book not found");
+                    }
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         
 
-        
-
+        // return the updated book
+        return book;
     }
 
     @PostMapping("/books/create")
@@ -129,9 +167,12 @@ public class BookInfoController {
             } else {
                 throw new IllegalArgumentException("ISBN must be a number");
             }
+            
+            // update the book with isbn and price if not given
+            Book updatedBook = findISBNPrice(newBook);
 
             //calls create function from dao/BookInfoDAO to insert listing
-            return bookDAO.create(newBook);
+            return bookDAO.create(updatedBook);
 
         } catch (SQLException e) {
             e.printStackTrace();
