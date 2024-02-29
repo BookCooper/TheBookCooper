@@ -31,11 +31,12 @@ import java.util.*;
 @RestController
 public class BookInfoController {
 
-    private static final long COMPARE = 9730000000000L;
+    private static final long COMPARE = 9780000000000L;
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
     
-    //GET HTTP request to a specific url
+    // GET HTTP request to a specific url
+    // returns a json file as a string
     public static String getHTML(String urlToRead) throws Exception {
 
         StringBuilder result = new StringBuilder();
@@ -65,15 +66,14 @@ public class BookInfoController {
         String author = book.getAuthor(); 
 
         // if the isbn of the book is unknown try to find it given title using google books API
-        // for now just have the default be zero if ISBN is unknown
-        // can add in checks later to see if user ISBN value is valid (i.e. 13 digits long, starts with 973)
+        // if the isbn is <= 978 with 10 zeros
         if(book.getISBN() <= COMPARE) {
             
             try {
                 req = "https://www.googleapis.com/books/v1/volumes?q=" +
                       "intitle:" + title.replaceAll(" ", "+") +       // search by title of book replacing spaces with +
                       "+inauthor:" + author.replaceAll(" ", "+") +    // search by author of book replacing spcaces with +
-                      "&key=AIzaSyCxVGv72jNMy6IVrxHmml5_HLGXi8T0SpU"; //api key
+                      "&key=AIzaSyCxVGv72jNMy6IVrxHmml5_HLGXi8T0SpU"; // api key (can we hide this on github? does it matter?)
 
                 Map<String, Object> inputMap = objectMapper.readValue(getHTML(req), Map.class);
 
@@ -86,8 +86,7 @@ public class BookInfoController {
                         if ("ISBN_13".equals(identifier.get("type"))) {
                             long isbn = Long.parseLong(identifier.get("identifier"));
                             book.setISBN(isbn);
-                            System.err.println("ISBN set to " + isbn);
-                            break; // No need to continue looping if we found the ISBN-13
+                            break; 
                         }
                     }
                 }
@@ -109,6 +108,9 @@ public class BookInfoController {
                 Map result = (Map) inputMap.get("result");
                 Map offers = (Map) result.get("offers");
                 Map booksrun = (Map) offers.get("booksrun");
+
+                // can potentially add logic to make it so that if used doesn't exist
+                // then it'll set the price to the new price and vice versa
 
                 // Check if "new" price exists
                 if(book.getBookCondition().equals("new")) {
@@ -133,7 +135,7 @@ public class BookInfoController {
                         throw new IllegalArgumentException("Used price for book not found or invalid format");
                     }
                 }
-                // If neither "new" nor "used" price exists, set the price to 0.0
+                // if neither "new" nor "used" price exists, set the price to 0.0
                 else {
                     book.setPrice(0.0);
                 }
@@ -143,8 +145,6 @@ public class BookInfoController {
             }
         }
         
-
-        // return the updated book
         return book;
     }
 
@@ -192,7 +192,7 @@ public class BookInfoController {
     @GetMapping("/books/count")
     public String countBooks() {
         try (Connection connection = dcm.getConnection();
-             Statement statement = connection.createStatement();
+             Statement statement = connection.createStatement();b
              ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_info")) {
             if (resultSet.next()) {
                 return "Number of books: " + resultSet.getInt(1);
