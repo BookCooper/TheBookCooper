@@ -205,3 +205,44 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     - **DELETE** `http://localhost:8080/booktags/delete/{id}`
 
+    ## Book Transaction Operations
+
+    ### Creating a New Book Transaction
+
+    - **POST** `http://localhost:8080/transactions/create`
+
+    ```json
+    {
+        "buyerId": 1,
+        "sellerId": 2,
+        "listingId": 1,
+        "transactionPrice": 250.00,
+        "transactionStatus": "completed"
+    }
+    ```
+
+    ### Getting a Book Transaction by ID
+
+    - **GET** `http://localhost:8080/transactions/{id}`
+
+    ### Getting Book Transactions Count
+
+    - **GET** `http://localhost:8080/transactions/count`
+
+    ### Updating a Book Transaction
+
+    - **PUT** `http://localhost:8080/transactions/update/{id}`
+
+    ```json
+    {
+        "buyerId": 1,
+        "sellerId": 2,
+        "listingId": 1,
+        "transactionPrice": 300.00,
+        "transactionStatus": "completed"
+    }
+    ```
+
+    ### Deleting a Book Transaction by ID
+
+    - **DELETE** `http://localhost:8080/transactions/delete/{id}`
