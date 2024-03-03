@@ -29,117 +29,354 @@ The project goal is to create a simple marketplace for book lovers, while not ha
     docker exec -it thebookcooper-db psql -U BCdev -l
     psql -h localhost -p 5555 -U BCdev -d thebookcooper
 
-4. Go to postman and test the following:
 
-    In the Post request, check the following URLs based on your local database:
+4. Go to postman and test the following API endpoints:
 
-    - Create a new user:
-        - URL: http://localhost:8080/users/create
-        - Body (raw JSON):
-            ```json
-            {
-                "userName": "test",
-                "password": "password",
-                "email": "test@gmail.com",
-                "bBucksBalance": 1000.0
-            }
-            ```
-            
+    # API Documentation
 
-    - Create a new book:
-        - URL: http://localhost:8080/books/create
-        - Body (raw JSON):
-            ```json
-            {
-                "title": "Everything you need to know about software engineering",
-                "isbn": 12345678901,
-                "publishDate": "2024-02-22",
-                "author": "Chris Hong",
-                "genre": "Amaaaazing",
-                "bookCondition": "New",
-                "price": 999.99
-            }
-            ```
+    - [User Operations](#user-operations)
+    - [Book Operations](#book-operations)
+    - [Listing Operations](#listing-operations)
+    - [Book Tag Operations](#book-tag-operations)
+    - [Book Transaction Operations](#book-transaction-operations)
+    - [Store Item Operations](#store-item-operations)
+    - [Point Transaction Operations](#point-transaction-operations)
+    - [Book Search Operations](#book-search-operations)
 
-    - Create a new listing (make sure that the userId and bookId exist in the users and book_listings table though or else you'll get an error):
-        - URL: http://localhost:8080/listings/create
-        - Body (raw JSON):
-            ```json
-            {
-                "bookId": 1,
-                "userId": 1,
-                "listingStatus": "new"
-            }
-            ```
+    ## User Operations
 
-    In the Put request, check the following URLs based on your local database:
+    ### Creating a New User
 
-    - Update a book:
-        - URL: http://localhost:8080/books/update/{id}
-        - Body (raw JSON):
-            ```json
-            {
-                "title": "Everything you dont need to know about software engineering",
-                "isbn": 11111111,
-                "publishDate": "2020-02-20",
-                "author": "Christopher Hong",
-                "genre": "Cool",
-                "bookCondition": "Old",
-                "price": 999999.99
-            }
-            ```
+    - **POST** `http://localhost:8080/users/create`
 
-    - Update a user:
-        - URL: http://localhost:8080/users/update/{id}
-        - Body (raw JSON):
-            ```json
-            {
-                "userName": "tester",
-                "password": "passwords",
-                "email": "tester@gmail.com",
-                "bBucksBalance": 100000.0
-            }
-            ```
-    - Update a listing:
-        - URL: http://localhost:8080/listings/update/{id}
-        - Body (raw JSON):
-            ```json
-            {
-                "bookId": 2,
-                "userId": 2,
-                "listingStatus": "old"
-            }
-            ```
+    ```json
+    {
+        "userName": "test",
+        "password": "password",
+        "email": "test@gmail.com",
+        "bBucksBalance": 1000.0
+    }
+    ```
 
-    In the Get request, check the following URLs based on your local database:
+    ### Updating a User
 
-    - Count users:
-        - URL: http://localhost:8080/users/count
+    - **PUT** `http://localhost:8080/users/update/{id}`
 
-    - Get user by ID:
-        - URL: http://localhost:8080/users/{id}
+    ```json
+    {
+        "userName": "tester",
+        "password": "passwords",
+        "email": "tester@gmail.com",
+        "bBucksBalance": 100000.0
+    }
+    ```
 
-    - Count books:
-        - URL: http://localhost:8080/books/count
+    ### Counting Users
 
-    - Get book by ID:
-        - URL: http://localhost:8080/books/{id}
+    - **GET** `http://localhost:8080/users/count`
 
-    - Count listings:
-        - URL: http://localhost:8080/listings/count
-    
-    - Get listing by ID:
-        - URL: http://localhost:8080/listings/{id}
+    ### Getting a User by ID
 
-    In the delete request, check the following URLs based on your local database:
+    - **GET** `http://localhost:8080/users/{id}`
 
-    - Delete user by ID (Make sure that the userId is not in the book_listings table):
-        - URL: http://localhost:8080/users/delete/{id}
+    ### Deleting a User by ID
 
-    - Delete book by ID (Make sure that the bookId is not in the book_listings table):
-        - URL: http://localhost:8080/books/delete/{id}
+    - **DELETE** `http://localhost:8080/users/delete/{id}`
 
-    - Delete listing by ID:
-        - URL: http://localhost:8080/listings/delete/{id}
+    Make sure that the `userId` is not in the `book_listings` table before deletion.
 
-    
+    ## Book Operations
+
+    ### Creating a New Book
+
+    - **POST** `http://localhost:8080/books/create`
+
+    ```json
+    {
+        "title": "Everything you need to know about software engineering",
+        "isbn": 12345678901,
+        "publishDate": "2024-02-22",
+        "author": "Chris Hong",
+        "genre": "Amaaaazing",
+        "bookCondition": "New",
+        "price": 999.99
+    }
+    ```
+
+    ### Updating a Book
+
+    - **PUT** `http://localhost:8080/books/update/{id}`
+
+    ```json
+    {
+        "title": "Everything you dont need to know about software engineering",
+        "isbn": 11111111,
+        "publishDate": "2020-02-20",
+        "author": "Christopher Hong",
+        "genre": "Cool",
+        "bookCondition": "Old",
+        "price": 999999.99
+    }
+    ```
+
+    ### Counting Books
+
+    - **GET** `http://localhost:8080/books/count`
+
+    ### Getting a Book by ID
+
+    - **GET** `http://localhost:8080/books/{id}`
+
+    ### Deleting a Book by ID
+
+    - **DELETE** `http://localhost:8080/books/delete/{id}`
+
+    Make sure that the `bookId` is not in the `book_listings` table before deletion.
+
+    ## Listing Operations
+
+    ### Creating a New Listing
+
+    - **POST** `http://localhost:8080/listings/create`
+
+    ```json
+    {
+        "bookId": 1,
+        "userId": 1,
+        "listingStatus": "new"
+    }
+    ```
+
+    ### Updating a Listing
+
+    - **PUT** `http://localhost:8080/listings/update/{id}`
+
+    Make sure the `bookId` and `userId` refer to existing records.
+
+    ```json
+    {
+        "bookId": 2,
+        "userId": 2,
+        "listingStatus": "old"
+    }
+    ```
+
+    ### Counting Listings
+
+    - **GET** `http://localhost:8080/listings/count`
+
+    ### Getting a Listing by ID
+
+    - **GET** `http://localhost:8080/listings/{id}`
+
+    ### Deleting a Listing by ID
+
+    - **DELETE** `http://localhost:8080/listings/delete/{id}`
+
+    ## Book Tag Operations
+
+    ### Creating a New Book Tag
+
+    - **POST** `http://localhost:8080/booktags/create`
+
+    ```json
+    {
+        "tagName": "Science Fiction",
+        "bookId": 1
+    }
+    ```
+
+    ### Getting a Book Tag by ID
+
+    - **GET** `http://localhost:8080/booktags/{id}`
+
+    ### Getting Book Tags Count
+
+    - **GET** `http://localhost:8080/booktags/count`
+
+    ### Updating a Book Tag
+
+    - **PUT** `http://localhost:8080/booktags/update/{id}`
+
+    ```json
+    {
+        "tagName": "Fantasy",
+        "bookId": 2
+    }
+    ```
+
+    ### Deleting a Book Tag by ID
+
+    - **DELETE** `http://localhost:8080/booktags/delete/{id}`
+
+    ## Book Transaction Operations
+
+    Make sure that the referenced `buyerId` and `sellerId` exist in the `users` table (userIds), and the `listingId` exists in the `book_listings` table.
+
+    ### Creating a New Book Transaction
+
+    - **POST** `http://localhost:8080/transactions/create`
+
+    Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
+
+    ```json
+    {
+        "buyerId": 1,
+        "sellerId": 2,
+        "listingId": 1,
+        "transactionPrice": 250.00,
+        "transactionStatus": "completed"
+    }
+    ```
+
+    ### Getting a Book Transaction by ID
+
+    - **GET** `http://localhost:8080/transactions/{id}`
+
+    ### Getting Book Transactions Count
+
+    - **GET** `http://localhost:8080/transactions/count`
+
+    ### Updating a Book Transaction
+
+    - **PUT** `http://localhost:8080/transactions/update/{id}`
+
+    Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
+
+    ```json
+    {
+        "buyerId": 1,
+        "sellerId": 2,
+        "listingId": 1,
+        "transactionPrice": 300.00,
+        "transactionStatus": "completed"
+    }
+    ```
+
+    ### Deleting a Book Transaction by ID
+
+    - **DELETE** `http://localhost:8080/transactions/delete/{id}`
+
+    ## Store Item Operations
+
+    ### Creating a New Store Item
+
+    - **POST** `http://localhost:8080/store-items/create`
+
+    ```json
+    {
+        "item": "CooperCombo",
+        "item_price": 79.99,
+        "special_offer": "Get 10% more B-Bucks when you purchase this item!",
+        "item_description": "A special combo pack for Cooper students."
+    }
+    ```
+
+    ### Getting a Store Item by ID
+
+    - **GET** `http://localhost:8080/store-items/{id}`
+
+    ### Getting Store Items Count
+
+    - **GET** `http://localhost:8080/store-items/count`
+
+    ### Updating a Store Item
+
+    - **PUT** `http://localhost:8080/store-items/update/{id}`
+
+    ```json
+    {
+        "item": "SuperCooperCombo",
+        "item_price": 89.99,
+        "special_offer": "Get 20% more B-Bucks when you purchase this item!",
+        "item_description": "A super combo pack for Cooper students."
+    }
+    ```
+
+    ### Deleting a Store Item by ID
+
+    - **DELETE** `http://localhost:8080/store-items/delete/{id}`
+
+    ## Point Transaction Operations
+
+    Ensure that the `userId` referenced exists in the `users` table for all operations.
+
+    ### Creating a New Point Transaction
+
+    - **POST** `http://localhost:8080/point-transactions/create`
+
+    ```json
+    {
+        "userId": 1,
+        "transactionType": "Purchase",
+        "amount": 100.00,
+        "currentBalance": 900.00
+    }
+    ```
+
+    ### Getting a Point Transaction by ID
+
+    - **GET** `http://localhost:8080/point-transactions/{id}`
+
+    ### Counting Point Transactions
+
+    - **GET** `http://localhost:8080/point-transactions/count`
+
+    ### Updating a Point Transaction
+
+    - **PUT** `http://localhost:8080/point-transactions/update/{id}`
+
+    Make sure the `userId` refers to an existing record.
+
+    ```json
+    {
+        "userId": 1,
+        "transactionType": "Refund",
+        "amount": 50.00,
+        "currentBalance": 950.00
+    }
+    ```
+
+    ### Deleting a Point Transaction by ID
+
+    - **DELETE** `http://localhost:8080/point-transactions/delete/{id}`
+
+    ## Book Search Operations
+
+    Before performing book search operations, make sure the `userId` referenced exists in the `users` table.
+
+    ### Creating a New Book Search
+
+    - **POST** `http://localhost:8080/book-searches/create`
+
+    ```json
+    {
+        "userId": 1,
+        "searchQuery": "Data Structures and Algorithms"
+    }
+    ```
+
+    ### Getting a Book Search by ID
+
+    - **GET** `http://localhost:8080/book-searches/{id}`
+
+    ### Counting Book Searches
+
+    - **GET** `http://localhost:8080/book-searches/count`
+
+    ### Updating a Book Search
+
+    - **PUT** `http://localhost:8080/book-searches/update/{id}`
+
+    Ensure the `userId` refers to an existing record.
+
+    ```json
+    {
+        "userId": 1,
+        "searchQuery": "Introduction to Software Engineering"
+    }
+    ```
+
+    ### Deleting a Book Search by ID
+
+    - **DELETE** `http://localhost:8080/book-searches/delete/{id}`

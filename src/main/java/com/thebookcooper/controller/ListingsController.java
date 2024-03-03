@@ -2,119 +2,119 @@ package com.thebookcooper.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thebookcooper.dao.DatabaseConnectionManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.*;
 import java.util.Map;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
-import com.thebookcooper.model.*;
-import com.thebookcooper.dao.*;
-
-import java.sql.Timestamp;
+import com.thebookcooper.model.Listing;
+import com.thebookcooper.dao.ListingsDAO;
+import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
+@RequestMapping("/listings")
 public class ListingsController {
     
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
     
-    @PostMapping("/listings/create")
-    public Listing createListing(@RequestBody String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map inputMap = objectMapper.readValue(json, Map.class);
-
-        Listing newListing = new Listing();
-
-        try {
-            Connection connection = dcm.getConnection();
-            ListingsDAO listDAO = new ListingsDAO(connection);
-
-            newListing.setUserId((int) inputMap.get("userId"));
-            newListing.setBookId((int) inputMap.get("bookId"));
-            newListing.setListingStatus((String) inputMap.get("listingStatus"));
-            newListing.setListingDate(new Timestamp(System.currentTimeMillis()));
-            
-            //calls create function from dao/ListingsDAO to insert listing
-            return listDAO.create(newListing);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to create the listing", e);
-        }
-    }
-
-    @GetMapping("/listings/count")
-    public String countListings() {
+    @GetMapping("/count")
+    public ResponseEntity<?> countListings() {
         try (Connection connection = dcm.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM book_listings")) {
             if (resultSet.next()) {
-                return "Number of listings: " + resultSet.getInt(1);
+                return new ResponseEntity<>("Number of listings: " + resultSet.getInt(1), HttpStatus.OK);
+            }
+            return new ResponseEntity<>("No listings found", HttpStatus.NOT_FOUND);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error retrieving listing count", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getListingById(@PathVariable("id") long id) {
+        try (Connection connection = dcm.getConnection()) {
+            ListingsDAO listingDAO = new ListingsDAO(connection);
+            Listing listing = listingDAO.findById(id);
+            if (listing != null) {
+                return new ResponseEntity<>(listing, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Listing not found", HttpStatus.NOT_FOUND);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return "Error retrieving book count";
+            return new ResponseEntity<>("Error retrieving listing", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return "No listings found";
     }
-
-    @PutMapping("/listings/update/{id}")
-    public Listing updateListing(@PathVariable("id") long id, @RequestBody String json) throws JsonProcessingException {
+    
+    @PostMapping("/create")
+    public ResponseEntity<?> createListing(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
-        Map inputMap = objectMapper.readValue(json, Map.class);
-
-        Listing updatedListing = new Listing();
-
         try {
+            Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+            Listing newListing = new Listing();
             Connection connection = dcm.getConnection();
             ListingsDAO listDAO = new ListingsDAO(connection);
 
+            newListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
+            newListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
+            newListing.setListingStatus((String) inputMap.get("listingStatus"));
+            newListing.setListingDate(new Timestamp(System.currentTimeMillis()));
+            
+            Listing createdListing = listDAO.create(newListing);
+            return new ResponseEntity<>(createdListing, HttpStatus.CREATED);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Invalid JSON input", HttpStatus.BAD_REQUEST);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to create the listing", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Invalid number format for userID or bookID", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateListing(@PathVariable("id") long id, @RequestBody String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+            Connection connection = dcm.getConnection();
+            ListingsDAO listDAO = new ListingsDAO(connection);
+
+            Listing updatedListing = new Listing();
             updatedListing.setListingId(id);
-            updatedListing.setUserId((int) inputMap.get("userId"));
-            updatedListing.setBookId((int) inputMap.get("bookId"));
+            updatedListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
+            updatedListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
             updatedListing.setListingStatus((String) inputMap.get("listingStatus"));
             updatedListing.setListingDate(new Timestamp(System.currentTimeMillis()));
 
-            return listDAO.update(updatedListing);
-
+            Listing updated = listDAO.update(updatedListing);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Invalid JSON input", HttpStatus.BAD_REQUEST);
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to update the listing", e);
+            return new ResponseEntity<>("Failed to update the listing", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Invalid number format for userID or bookID", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("/listings/delete/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteListing(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
             ListingsDAO listDAO = new ListingsDAO(connection);
             listDAO.delete(id);
-            return "Listing with id " + id + " has been deleted";
+            return new ResponseEntity<>("Listing with id " + id + " has been deleted", HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();
-            return "Error deleting listing with id " + id;
+            return new ResponseEntity<>("Error deleting listing with id " + id, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/listings/{id}")
-    public Listing getListingById(@PathVariable("id") long id) {
-        try (Connection connection = dcm.getConnection()) {
-            ListingsDAO listingDAO = new ListingsDAO(connection);
-            return listingDAO.findById(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Consider creating and returning a custom error object or message
-        }
-        return null; // Or return an appropriate response/entity indicating not found or error
-    }
-
 }
