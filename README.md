@@ -102,6 +102,8 @@ The project goal is to create a simple marketplace for book lovers, while not ha
         "price": 999.99
     }
     ```
+    
+    `note: A book with a valid ISBN number and price can be left blank and will be autofilled` 
 
     ### Updating a Book
 
@@ -215,7 +217,7 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     ### Creating a New Book Transaction
 
-    - **POST** `http://localhost:8080/transactions/create`
+    - **POST** `http://localhost:8080/book-transactions/create`
 
     Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
 
@@ -231,15 +233,15 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     ### Getting a Book Transaction by ID
 
-    - **GET** `http://localhost:8080/transactions/{id}`
+    - **GET** `http://localhost:8080/book-transactions/{id}`
 
     ### Getting Book Transactions Count
 
-    - **GET** `http://localhost:8080/transactions/count`
+    - **GET** `http://localhost:8080/book-transactions/count`
 
     ### Updating a Book Transaction
 
-    - **PUT** `http://localhost:8080/transactions/update/{id}`
+    - **PUT** `http://localhost:8080/book-transactions/update/{id}`
 
     Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
 
@@ -255,7 +257,7 @@ The project goal is to create a simple marketplace for book lovers, while not ha
 
     ### Deleting a Book Transaction by ID
 
-    - **DELETE** `http://localhost:8080/transactions/delete/{id}`
+    - **DELETE** `http://localhost:8080/book-transactions/delete/{id}`
 
     ## Store Item Operations
 
