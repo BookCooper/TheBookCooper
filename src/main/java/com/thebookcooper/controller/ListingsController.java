@@ -98,6 +98,8 @@ public class ListingsController {
             newListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
             newListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
             newListing.setListingStatus((String) inputMap.get("listingStatus"));
+            newListing.setBookCondition((String) inputMap.get("bookCondition"));
+            newListing.setPrice(Double.parseDouble(inputMap.get("price").toString()));
             newListing.setListingDate(new Timestamp(System.currentTimeMillis()));
             
             Listing createdListing = listDAO.create(newListing);
@@ -127,6 +129,8 @@ public class ListingsController {
             updatedListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
             updatedListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
             updatedListing.setListingStatus((String) inputMap.get("listingStatus"));
+            updatedListing.setBookCondition((String) inputMap.get("bookCondition"));
+            updatedListing.setPrice(Double.parseDouble(inputMap.get("price").toString()));
             updatedListing.setListingDate(new Timestamp(System.currentTimeMillis()));
 
             Listing updated = listDAO.update(updatedListing);

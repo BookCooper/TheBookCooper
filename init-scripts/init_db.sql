@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS book_listings (
   user_id INT NOT NULL REFERENCES users(user_id),
   book_id INT NOT NULL REFERENCES book_info(book_id),
   listing_status VARCHAR(50),
+  book_condition VARCHAR(255),
+  price NUMERIC(10, 2) NOT NULL,
   listing_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -9,8 +9,10 @@ public class Listing implements ListingsDTO {
     private long listingId;
     private long userId; //user that listed the book
     private long bookId;
+    private double price;
     private String listingStatus;
     private Timestamp listingDate;
+    private String book_condition;
 
     @Override
     public long getListingId() {
@@ -49,6 +51,14 @@ public class Listing implements ListingsDTO {
         this.listingDate = listingDate;
     }
 
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) { this.price = price; }
+
+    public String getBookCondition() { return book_condition; }
+
+    public void setBookCondition(String book_condition) { this.book_condition = book_condition; }
+
 
     @Override
     public String toString() {
@@ -58,6 +68,8 @@ public class Listing implements ListingsDTO {
                 ", bookId=" + bookId + '\'' +
                 ", listingStatus=" + listingStatus +
                 ", listingDate=" + listingDate +
+                ", price=" + price +
+                ", condition=" + book_condition +
                 '}';
     }
 }

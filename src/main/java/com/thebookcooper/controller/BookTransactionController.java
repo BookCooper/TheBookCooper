@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.*;
 
 import com.thebookcooper.model.BookTransaction;
 import com.thebookcooper.model.PointTransaction;
@@ -69,7 +70,9 @@ public class BookTransactionController {
             BookTransactionDAO transactionDAO = new BookTransactionDAO(connection);
             UserDAO userDAO = new UserDAO(connection);
             PointTransactionDAO pointTransactionDAO = new PointTransactionDAO(connection);
+            
 
+            // we don't necessairly need transaction price; it's in the listing
             long buyerId = Long.parseLong(inputMap.get("buyerId").toString());
             double transactionPrice = Double.parseDouble(inputMap.get("transactionPrice").toString());
             String transactionStatus = (String) inputMap.get("transactionStatus");
@@ -87,7 +90,28 @@ public class BookTransactionController {
             // Get buyer's current balance
             User buyer = userDAO.findById(buyerId);
             java.math.BigDecimal currentBalance = pointTransactionDAO.fetchCurrentBalanceByUserId(buyerId);
-            java.math.BigDecimal updatedBalance = currentBalance;
+            
+            String trans_string = String.valueOf(transactionPrice);
+            
+
+            double curBal = Double.parseDouble(trans_string);
+            //Double.parseDouble(inputMap.get("price").toString()))
+            //
+            double newnewBalance;
+            
+            if(currentBalance.doubleValue() >= transactionPrice) {
+                newnewBalance = currentBalance.doubleValue() - transactionPrice;
+            }
+            else {
+                responseEntity = new ResponseEntity<>("Insufficient Balance. Failed to process the transaction.", HttpStatus.INTERNAL_SERVER_ERROR);
+                return responseEntity; 
+            }
+            
+            String newnew_string = String.valueOf(newnewBalance);
+
+            java.math.BigDecimal updatedBalance = new java.math.BigDecimal(newnew_string);
+            
+            //updatedBalance = java.math.BigDecimal(updatedBalance)
 
             String pointTransactionType = "";
             if ("purchase completed".equalsIgnoreCase(transactionStatus)) {
@@ -99,7 +123,7 @@ public class BookTransactionController {
             }
 
             // Update the buyer's balance 
-            buyer.setBBucksBalance(updatedBalance.doubleValue());
+            buyer.setBBucksBalance(newnewBalance);
             userDAO.update(buyer);
 
             // Create a new point transaction 
@@ -108,6 +132,7 @@ public class BookTransactionController {
             pointTransaction.setTransactionType(pointTransactionType);
             pointTransaction.setAmount(java.math.BigDecimal.valueOf(transactionPrice));
             pointTransaction.setCurrentBalance(updatedBalance);
+            pointTransaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
             PointTransaction createdPointTransaction = pointTransactionDAO.create(pointTransaction);
 
             // Return the transactions and the user
@@ -127,6 +152,9 @@ public class BookTransactionController {
     public ResponseEntity<?> updateTransaction(@PathVariable("id") long id, @RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+
+            //want to get the transaction of the specific id rather than just overwrite it
+
             Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
             Connection connection = dcm.getConnection();
             BookTransactionDAO transactionDAO = new BookTransactionDAO(connection);
@@ -138,6 +166,7 @@ public class BookTransactionController {
             updatedTransaction.setListingId(Long.parseLong(inputMap.get("listingId").toString()));
             updatedTransaction.setTransactionPrice(Double.parseDouble(inputMap.get("transactionPrice").toString()));
             updatedTransaction.setTransactionStatus((String) inputMap.get("transactionStatus"));
+            updatedTransaction.setTransactionDate(new java.sql.Timestamp(System.currentTimeMillis()));
 
             BookTransaction transaction = transactionDAO.update(updatedTransaction);
             return new ResponseEntity<>(transaction, HttpStatus.OK);

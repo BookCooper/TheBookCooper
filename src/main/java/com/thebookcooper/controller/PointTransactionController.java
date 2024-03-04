@@ -56,6 +56,8 @@ public class PointTransactionController {
             return new ResponseEntity<>("Error retrieving point transaction", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    //should probably reference store-item to buy the B-Buck package
 
     @PostMapping("/create")
     public ResponseEntity<?> createPointTransaction(@RequestBody String json) {
