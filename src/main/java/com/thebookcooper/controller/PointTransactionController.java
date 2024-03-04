@@ -15,6 +15,8 @@ import java.util.Map;
 
 import com.thebookcooper.model.PointTransaction;
 import com.thebookcooper.dao.PointTransactionDAO;
+import com.thebookcooper.dao.UserDAO;
+import com.thebookcooper.model.User;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
@@ -54,22 +56,45 @@ public class PointTransactionController {
             return new ResponseEntity<>("Error retrieving point transaction", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    //should probably reference store-item to buy the B-Buck package
 
     @PostMapping("/create")
     public ResponseEntity<?> createPointTransaction(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
-            PointTransaction newTransaction = new PointTransaction();
             Connection connection = dcm.getConnection();
             PointTransactionDAO transactionDAO = new PointTransactionDAO(connection);
-
-            newTransaction.setUserId(Long.parseLong(inputMap.get("userId").toString()));
-            newTransaction.setTransactionType((String) inputMap.get("transactionType"));
+            UserDAO userDAO = new UserDAO(connection);
+    
+            long userId = Long.parseLong(inputMap.get("userId").toString());
+            String transactionType = (String) inputMap.get("transactionType");
+            java.math.BigDecimal amount = new java.math.BigDecimal(inputMap.get("amount").toString());
+    
+            // Fetch the latest balance for the user
+            User user = userDAO.findById(userId);
+            java.math.BigDecimal currentBalance = java.math.BigDecimal.valueOf(user.getBBucksBalance());
+    
+            // Calculate the new balance based on the transaction type
+            if ("Purchase".equals(transactionType)) {
+                currentBalance = currentBalance.subtract(amount);
+            } else if ("Deposit".equals(transactionType)) {
+                currentBalance = currentBalance.add(amount);
+            }
+    
+            // Update the user's balance in the User table
+            user.setBBucksBalance(currentBalance.doubleValue());
+            userDAO.update(user);
+    
+            // Create the point transaction with the updated balance
+            PointTransaction newTransaction = new PointTransaction();
+            newTransaction.setUserId(userId);
+            newTransaction.setTransactionType(transactionType);
+            newTransaction.setAmount(amount);
+            newTransaction.setCurrentBalance(currentBalance);
             newTransaction.setTransactionDate(new java.sql.Timestamp(System.currentTimeMillis()));
-            newTransaction.setAmount(new java.math.BigDecimal(inputMap.get("amount").toString()));
-            newTransaction.setCurrentBalance(new java.math.BigDecimal(inputMap.get("currentBalance").toString()));
-
+    
             PointTransaction createdTransaction = transactionDAO.create(newTransaction);
             return new ResponseEntity<>(createdTransaction, HttpStatus.CREATED);
         } catch (JsonProcessingException e) {

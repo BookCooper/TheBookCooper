@@ -4,381 +4,145 @@ Our project is titled _The BookCooper - Virtual Book Exchange Platform_. Our tea
 
 The project goal is to create a simple marketplace for book lovers, while not having to purchase a new book everytime and get no value for their old purchases. Here users have the ability to earn points for sending in undesired books, and then use points to purchase new ones. These points, called Book Bucks (B-Bucks for short) can also be purchased with real money. This Facebook-like online marketplace exchange is tailored made for all types of books. _The BookCooper_ will start small, being an exclusive marketplace for Cooper affiliated individuals, though will eventually reach to every book lover in the world!
 
-## Steps
-1. **Clone the Repository**
-   ```bash
-   git clone <repository-url>
-    ```
-2. Start the PostgreSQL server
+Creating a comprehensive README for your demo will guide users through the process of setting up and running the demo, ensuring they understand how to interact with your application. Below is a template for your README that you can customize as needed:
 
-    Make sure docker is installed and then run the following command:
+---
+
+# The Book Cooper Demo
+
+Welcome to the Book Cooper demo! This demo showcases the process of creating books and users, searching for textbooks, and simulating the purchase of textbooks using a virtual currency called B-Bucks. Follow the steps below to get started.
+
+## Application Set Up
+
    ```bash
    docker compose up --build
    ```
-3. Connect to the PostgreSQL server using dbeaver or any other SQL client
-    Information to connect to the database:
-    ```bash
-    Host: localhost
-    Port: 5555
-    Database: thebookcooper
-    User: BCdev
-    Password: password
-    ```
-    If it doesnt work double check that database is created:
-    ```bash
-    docker exec -it thebookcooper-db psql -U BCdev -l
-    psql -h localhost -p 5555 -U BCdev -d thebookcooper
 
+### Prefill the Database
 
-4. Go to postman and test the following API endpoints:
+- **POST** `http://localhost:8080/books/create`
 
-    # API Documentation
+```json
+{
+  "title": "Advanced Programming in the UNIX Environment, 3rd Edition",
+  "publishDate": "2013-05-24",
+  "author": "Stevens, W. Richard & Rago, Stephen A.",
+  "genre": "Computer Science",
+  "bookCondition": "new",
+  "isbn": 9780321637734,
+  "price": 0 
+}
+```
 
-    - [User Operations](#user-operations)
-    - [Book Operations](#book-operations)
-    - [Listing Operations](#listing-operations)
-    - [Book Tag Operations](#book-tag-operations)
-    - [Book Transaction Operations](#book-transaction-operations)
-    - [Store Item Operations](#store-item-operations)
-    - [Point Transaction Operations](#point-transaction-operations)
-    - [Book Search Operations](#book-search-operations)
+- **POST** `http://localhost:8080/users/create`
 
-    ## User Operations
+```json
+{
+  "userName": "SuperDev",
+  "password": "password",
+  "email": "thebookcooper@gmail.com",
+  "bBucksBalance": 10000000.0
+}
 
-    ### Creating a New User
+```
 
-    - **POST** `http://localhost:8080/users/create`
+### Scenario: User Buys a Textbook
 
-    ```json
-    {
-        "userName": "test",
-        "password": "password",
-        "email": "test@gmail.com",
-        "bBucksBalance": 1000.0
-    }
-    ```
+#### 1. Create a User
 
-    ### Updating a User
+- **POST** `http://localhost:8080/users/create`
 
-    - **PUT** `http://localhost:8080/users/update/{id}`
+```json
+{
+  "userName": "IneedOS",
+  "password": "password",
+  "email": "test@gmail.com",
+  "bBucksBalance": 10.0
+}
 
-    ```json
-    {
-        "userName": "tester",
-        "password": "passwords",
-        "email": "tester@gmail.com",
-        "bBucksBalance": 100000.0
-    }
-    ```
+```
+To reflect the updated functionality of automatically updating the current balance when a user buys B-Bucks, you can update the README section for buying B-Bucks as follows:
 
-    ### Counting Users
+---
 
-    - **GET** `http://localhost:8080/users/count`
+#### 2. Create a Store Item for B-Bucks
 
-    ### Getting a User by ID
+- **POST** `http://localhost:8080/store-items/create`
 
-    - **GET** `http://localhost:8080/users/{id}`
+```json
+{
+  "item": "5000 B-Bucks",
+  "item_price": 40.00, // in USD
+  "special_offer": "Bonus B-Bucks with every purchase!",
+  "item_description": "Get 1000 B-Bucks extra for buying this pack! Use B-Bucks to buy books!"
+}
+```
 
-    ### Deleting a User by ID
+#### 3. Create a listing for the Operating Systems Textbook
 
-    - **DELETE** `http://localhost:8080/users/delete/{id}`
+- **POST** `http://localhost:8080/listings/create`
 
-    Make sure that the `userId` is not in the `book_listings` table before deletion.
+```json
+{
+  "sellerId": 2,
+  "bookId": 1,
+  "price": 5000.00, // in B-Bucks
+  "condition": "new"
+}
+```
 
-    ## Book Operations
+#### 4. Search for an Operating Systems Textbook
 
-    ### Creating a New Book
+simulate searching for the Operating Systems textbook by its title.
 
-    - **POST** `http://localhost:8080/books/create`
+- **GET** `http://localhost:8080/books/search?title=Advanced Programming in the UNIX Environment`
 
-    ```json
-    {
-        "title": "Everything you need to know about software engineering",
-        "isbn": 12345678901,
-        "publishDate": "2024-02-22",
-        "author": "Chris Hong",
-        "genre": "Amaaaazing",
-        "bookCondition": "New",
-        "price": 999.99
-    }
-    ```
-    
-    `note: A book with a valid ISBN number and price can be left blank and will be autofilled` 
+This GET request will return all listings that match the book title "Advanced Programming in the UNIX Environment". Make sure to encode the URL parameters correctly if the title includes spaces or special characters.
 
-    ### Updating a Book
+#### 5. User Purchases B-Bucks
 
-    - **PUT** `http://localhost:8080/books/update/{id}`
+To buy B-Bucks, the user makes a purchase transaction, which is automatically reflected in their account balance.
 
-    ```json
-    {
-        "title": "Everything you dont need to know about software engineering",
-        "isbn": 11111111,
-        "publishDate": "2020-02-20",
-        "author": "Christopher Hong",
-        "genre": "Cool",
-        "bookCondition": "Old",
-        "price": 999999.99
-    }
-    ```
+- **POST** `http://localhost:8080/point-transactions/create`
 
-    ### Counting Books
+```json
+{
+  "userId": 1, 
+  "transactionType": "Deposit", // Deposit or Purchase
+  "amount": 5000.0 // B-Bucks to add/subtract
+}
+```
+This transaction credits 6000 B-Bucks to the user's account, automatically updating their current balance to reflect the purchase. The balance is calculated based on the most recent balance available in the user's transaction history.
 
-    - **GET** `http://localhost:8080/books/count`
+### 6. Buy Textbook
 
-    ### Getting a Book by ID
+Finally, the user purchases the textbook. You can simulate a pending purchase followed by a completed purchase to demonstrate handling different transaction states.
 
-    - **GET** `http://localhost:8080/books/{id}`
+#### Purchase Pending
 
-    ### Deleting a Book by ID
+- **POST** `http://localhost:8080/book-transactions/create`
 
-    - **DELETE** `http://localhost:8080/books/delete/{id}`
+```json
+{
+  "buyerId": 1,
+  "sellerId": 2,
+  "listingId": 1,
+  "transactionPrice": 5000.00,
+  "transactionStatus": "pending"
+}
+```
 
-    Make sure that the `bookId` is not in the `book_listings` table before deletion.
+#### Purchase Completed
 
-    ## Listing Operations
+After the purchase is confirmed (e.g., the seller delivers the book), update the transaction to "completed".
 
-    ### Creating a New Listing
+- **PUT** `http://localhost:8080/book-transactions/update/{transactionId}`
 
-    - **POST** `http://localhost:8080/listings/create`
+Replace `{transactionId}` with the ID of the transaction you've created.
 
-    ```json
-    {
-        "bookId": 1,
-        "userId": 1,
-        "listingStatus": "new"
-    }
-    ```
+```json
+{
+  "transactionStatus": "completed"
+}
+```
 
-    ### Updating a Listing
-
-    - **PUT** `http://localhost:8080/listings/update/{id}`
-
-    Make sure the `bookId` and `userId` refer to existing records.
-
-    ```json
-    {
-        "bookId": 2,
-        "userId": 2,
-        "listingStatus": "old"
-    }
-    ```
-
-    ### Counting Listings
-
-    - **GET** `http://localhost:8080/listings/count`
-
-    ### Getting a Listing by ID
-
-    - **GET** `http://localhost:8080/listings/{id}`
-
-    ### Deleting a Listing by ID
-
-    - **DELETE** `http://localhost:8080/listings/delete/{id}`
-
-    ## Book Tag Operations
-
-    ### Creating a New Book Tag
-
-    - **POST** `http://localhost:8080/booktags/create`
-
-    ```json
-    {
-        "tagName": "Science Fiction",
-        "bookId": 1
-    }
-    ```
-
-    ### Getting a Book Tag by ID
-
-    - **GET** `http://localhost:8080/booktags/{id}`
-
-    ### Getting Book Tags Count
-
-    - **GET** `http://localhost:8080/booktags/count`
-
-    ### Updating a Book Tag
-
-    - **PUT** `http://localhost:8080/booktags/update/{id}`
-
-    ```json
-    {
-        "tagName": "Fantasy",
-        "bookId": 2
-    }
-    ```
-
-    ### Deleting a Book Tag by ID
-
-    - **DELETE** `http://localhost:8080/booktags/delete/{id}`
-
-    ## Book Transaction Operations
-
-    Make sure that the referenced `buyerId` and `sellerId` exist in the `users` table (userIds), and the `listingId` exists in the `book_listings` table.
-
-    ### Creating a New Book Transaction
-
-    - **POST** `http://localhost:8080/book-transactions/create`
-
-    Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
-
-    ```json
-    {
-        "buyerId": 1,
-        "sellerId": 2,
-        "listingId": 1,
-        "transactionPrice": 250.00,
-        "transactionStatus": "completed"
-    }
-    ```
-
-    ### Getting a Book Transaction by ID
-
-    - **GET** `http://localhost:8080/book-transactions/{id}`
-
-    ### Getting Book Transactions Count
-
-    - **GET** `http://localhost:8080/book-transactions/count`
-
-    ### Updating a Book Transaction
-
-    - **PUT** `http://localhost:8080/book-transactions/update/{id}`
-
-    Make sure the `buyerId`, `sellerId`, and `listingId` refer to existing records.
-
-    ```json
-    {
-        "buyerId": 1,
-        "sellerId": 2,
-        "listingId": 1,
-        "transactionPrice": 300.00,
-        "transactionStatus": "completed"
-    }
-    ```
-
-    ### Deleting a Book Transaction by ID
-
-    - **DELETE** `http://localhost:8080/book-transactions/delete/{id}`
-
-    ## Store Item Operations
-
-    ### Creating a New Store Item
-
-    - **POST** `http://localhost:8080/store-items/create`
-
-    ```json
-    {
-        "item": "CooperCombo",
-        "item_price": 79.99,
-        "special_offer": "Get 10% more B-Bucks when you purchase this item!",
-        "item_description": "A special combo pack for Cooper students."
-    }
-    ```
-
-    ### Getting a Store Item by ID
-
-    - **GET** `http://localhost:8080/store-items/{id}`
-
-    ### Getting Store Items Count
-
-    - **GET** `http://localhost:8080/store-items/count`
-
-    ### Updating a Store Item
-
-    - **PUT** `http://localhost:8080/store-items/update/{id}`
-
-    ```json
-    {
-        "item": "SuperCooperCombo",
-        "item_price": 89.99,
-        "special_offer": "Get 20% more B-Bucks when you purchase this item!",
-        "item_description": "A super combo pack for Cooper students."
-    }
-    ```
-
-    ### Deleting a Store Item by ID
-
-    - **DELETE** `http://localhost:8080/store-items/delete/{id}`
-
-    ## Point Transaction Operations
-
-    Ensure that the `userId` referenced exists in the `users` table for all operations.
-
-    ### Creating a New Point Transaction
-
-    - **POST** `http://localhost:8080/point-transactions/create`
-
-    ```json
-    {
-        "userId": 1,
-        "transactionType": "Purchase",
-        "amount": 100.00,
-        "currentBalance": 900.00
-    }
-    ```
-
-    ### Getting a Point Transaction by ID
-
-    - **GET** `http://localhost:8080/point-transactions/{id}`
-
-    ### Counting Point Transactions
-
-    - **GET** `http://localhost:8080/point-transactions/count`
-
-    ### Updating a Point Transaction
-
-    - **PUT** `http://localhost:8080/point-transactions/update/{id}`
-
-    Make sure the `userId` refers to an existing record.
-
-    ```json
-    {
-        "userId": 1,
-        "transactionType": "Refund",
-        "amount": 50.00,
-        "currentBalance": 950.00
-    }
-    ```
-
-    ### Deleting a Point Transaction by ID
-
-    - **DELETE** `http://localhost:8080/point-transactions/delete/{id}`
-
-    ## Book Search Operations
-
-    Before performing book search operations, make sure the `userId` referenced exists in the `users` table.
-
-    ### Creating a New Book Search
-
-    - **POST** `http://localhost:8080/book-searches/create`
-
-    ```json
-    {
-        "userId": 1,
-        "searchQuery": "Data Structures and Algorithms"
-    }
-    ```
-
-    ### Getting a Book Search by ID
-
-    - **GET** `http://localhost:8080/book-searches/{id}`
-
-    ### Counting Book Searches
-
-    - **GET** `http://localhost:8080/book-searches/count`
-
-    ### Updating a Book Search
-
-    - **PUT** `http://localhost:8080/book-searches/update/{id}`
-
-    Ensure the `userId` refers to an existing record.
-
-    ```json
-    {
-        "userId": 1,
-        "searchQuery": "Introduction to Software Engineering"
-    }
-    ```
-
-    ### Deleting a Book Search by ID
-
-    - **DELETE** `http://localhost:8080/book-searches/delete/{id}`

@@ -8,10 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import com.thebookcooper.model.Book;
 import com.thebookcooper.model.Listing;
 import com.thebookcooper.dao.ListingsDAO;
+import com.thebookcooper.dao.BookInfoDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
@@ -50,6 +54,37 @@ public class ListingsController {
             return new ResponseEntity<>("Error retrieving listing", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchListingsByBookTitle(@RequestParam String title) {
+        try (Connection connection = dcm.getConnection()) {
+
+            BookInfoDAO bookInfoDAO = new BookInfoDAO(connection);
+            ListingsDAO listingsDAO = new ListingsDAO(connection);
+            
+            // Find books by title
+            List<Book> books = bookInfoDAO.findByTitle(title);
+            if (books.isEmpty()) {
+                return new ResponseEntity<>("No books found matching the title", HttpStatus.NOT_FOUND);
+            }
+            
+            // For each book, find its listings
+            List<Listing> listings = new ArrayList<>();
+            for (Book book : books) {
+                List<Listing> bookListings = listingsDAO.findByBookId(book.getBookId());
+                listings.addAll(bookListings);
+            }
+            
+            if (listings.isEmpty()) {
+                return new ResponseEntity<>("No listings found for books matching the title", HttpStatus.NOT_FOUND);
+            }
+            
+            return new ResponseEntity<>(listings, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error searching listings by book title", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
     @PostMapping("/create")
     public ResponseEntity<?> createListing(@RequestBody String json) {
@@ -63,6 +98,8 @@ public class ListingsController {
             newListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
             newListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
             newListing.setListingStatus((String) inputMap.get("listingStatus"));
+            newListing.setBookCondition((String) inputMap.get("bookCondition"));
+            newListing.setPrice(Double.parseDouble(inputMap.get("price").toString()));
             newListing.setListingDate(new Timestamp(System.currentTimeMillis()));
             
             Listing createdListing = listDAO.create(newListing);
@@ -78,6 +115,7 @@ public class ListingsController {
         }
     }
 
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateListing(@PathVariable("id") long id, @RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -91,6 +129,8 @@ public class ListingsController {
             updatedListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
             updatedListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
             updatedListing.setListingStatus((String) inputMap.get("listingStatus"));
+            updatedListing.setBookCondition((String) inputMap.get("bookCondition"));
+            updatedListing.setPrice(Double.parseDouble(inputMap.get("price").toString()));
             updatedListing.setListingDate(new Timestamp(System.currentTimeMillis()));
 
             Listing updated = listDAO.update(updatedListing);
