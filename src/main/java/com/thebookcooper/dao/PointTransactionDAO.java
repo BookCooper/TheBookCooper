@@ -97,4 +97,21 @@ public class PointTransactionDAO extends DataAccessObject<PointTransaction> {
             throw new RuntimeException(e);
         }
     }
+
+    public java.math.BigDecimal fetchCurrentBalanceByUserId(long userId) throws SQLException {
+        String sql = "SELECT b_bucks_balance FROM users WHERE user_id = ?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setLong(1, userId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                // Return the current B-Bucks balance from the users table
+                return rs.getBigDecimal("b_bucks_balance");
+            } else {
+                // If the user is not found, return a balance of 0
+                return new java.math.BigDecimal(0);
+            }
+        }
+    }
+    
+    
 }

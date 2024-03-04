@@ -4,6 +4,8 @@ import com.thebookcooper.model.*;
 import com.thebookcooper.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BookInfoDAO extends DataAccessObject<Book> {
@@ -17,6 +19,8 @@ public class BookInfoDAO extends DataAccessObject<Book> {
     private static final String UPDATE = "UPDATE book_info SET title= ?, isbn= ?, publish_date= ?, author= ?, genre= ?, book_condition= ?, price= ? WHERE book_id= ?";
 
     private static final String DELETE = "DELETE FROM book_info WHERE book_id= ?";
+
+    private static final String SEARCH_BY_TITLE = "SELECT * FROM book_info WHERE title LIKE ?";
 
     public BookInfoDAO(Connection connection) {
         super(connection);
@@ -115,5 +119,29 @@ public class BookInfoDAO extends DataAccessObject<Book> {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+        public List<Book> findByTitle(String title) {
+        List<Book> books = new ArrayList<>();
+        try (PreparedStatement statement = this.connection.prepareStatement(SEARCH_BY_TITLE)) {
+            statement.setString(1, "%" + title + "%"); // Use LIKE for partial matches
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Book book = new Book();
+                book.setBookId(rs.getLong("book_id"));
+                book.setTitle(rs.getString("title"));
+                book.setISBN(rs.getLong("isbn"));
+                book.setPublishDate(rs.getDate("publish_date"));
+                book.setAuthor(rs.getString("author"));
+                book.setGenre(rs.getString("genre"));
+                book.setBookCondition(rs.getString("book_condition"));
+                book.setPrice(rs.getDouble("price"));
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return books;
     }
 }

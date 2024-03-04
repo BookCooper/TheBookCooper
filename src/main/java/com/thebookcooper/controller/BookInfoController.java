@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Date;
 import java.sql.ResultSet;
-import java.util.Map;
 
 import com.thebookcooper.model.*;
 import com.thebookcooper.dao.*;
@@ -140,6 +139,7 @@ public class BookInfoController {
                 // if neither "new" nor "used" price exists, set the price to 0.0
                 else {
                     book.setPrice(0.0);
+                    throw new IllegalArgumentException("Invalid book condition");
                 }
             }
             catch (Exception e) {
@@ -178,6 +178,30 @@ public class BookInfoController {
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Error retrieving book", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchBooksByTitle(@RequestParam String title) {
+        if (title == null || title.trim().isEmpty()) {
+            return new ResponseEntity<>("Title is required", HttpStatus.BAD_REQUEST);
+        }
+        
+        try (Connection connection = dcm.getConnection()) {
+            BookInfoDAO bookInfoDAO = new BookInfoDAO(connection);
+            List<Book> books = bookInfoDAO.findByTitle(title);
+            
+            if (books.isEmpty()) {
+                return new ResponseEntity<>("No books found matching the title", HttpStatus.NOT_FOUND);
+            }
+            
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error accessing the database", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error processing the request", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

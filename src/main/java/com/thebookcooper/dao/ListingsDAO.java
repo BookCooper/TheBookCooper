@@ -4,6 +4,8 @@ import com.thebookcooper.model.*;
 import com.thebookcooper.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ListingsDAO extends DataAccessObject<Listing> {
@@ -112,6 +114,30 @@ public class ListingsDAO extends DataAccessObject<Listing> {
             throw new RuntimeException(e);
         }
     }
+
+    public List<Listing> findByBookId(long bookId) {
+    List<Listing> listings = new ArrayList<>();
+    String sql = "SELECT * FROM book_listings WHERE book_id=?";
+    try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+        statement.setLong(1, bookId);
+        ResultSet rs = statement.executeQuery();
+        while (rs.next()) {
+            Listing listing = new Listing();
+            // Populate the listing object from the ResultSet
+            listing.setListingId(rs.getLong("listing_id"));
+            listing.setUserId(rs.getLong("user_id"));
+            listing.setBookId(rs.getLong("book_id"));
+            listing.setListingStatus(rs.getString("listing_status"));
+            listing.setListingDate(rs.getTimestamp("listing_date"));
+            listings.add(listing);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new RuntimeException(e);
+    }
+    return listings;
+}
+
 
 
 }
