@@ -95,21 +95,19 @@ public class BookTransactionController {
             
 
             double curBal = Double.parseDouble(trans_string);
-            //Double.parseDouble(inputMap.get("price").toString()))
-            //
-            double newnewBalance;
+            double newBal;
             
             if(currentBalance.doubleValue() >= transactionPrice) {
-                newnewBalance = currentBalance.doubleValue() - transactionPrice;
+                newBal = currentBalance.doubleValue() - transactionPrice;
             }
             else {
                 responseEntity = new ResponseEntity<>("Insufficient Balance. Failed to process the transaction.", HttpStatus.INTERNAL_SERVER_ERROR);
                 return responseEntity; 
             }
             
-            String newnew_string = String.valueOf(newnewBalance);
+            String newBal_s = String.valueOf(newBal);
 
-            java.math.BigDecimal updatedBalance = new java.math.BigDecimal(newnew_string);
+            java.math.BigDecimal updatedBalance = new java.math.BigDecimal(newBal_s);
             
             //updatedBalance = java.math.BigDecimal(updatedBalance)
 
@@ -123,7 +121,7 @@ public class BookTransactionController {
             }
 
             // Update the buyer's balance 
-            buyer.setBBucksBalance(newnewBalance);
+            buyer.setBBucksBalance(newBal);
             userDAO.update(buyer);
 
             // Create a new point transaction 

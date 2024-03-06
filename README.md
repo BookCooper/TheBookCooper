@@ -18,7 +18,38 @@ Welcome to the Book Cooper demo! This demo showcases the process of creating boo
    docker compose up --build
    ```
 
-### Prefill the Database
+## Example workflow
+
+### Create a user that just finished OS and wants to sell textbook
+
+#### 0. Admin Creates a Store Item
+
+- **POST** `http://localhost:8080/store-items/create`
+
+```json
+{
+  "item": "1000 B-Bucks",
+  "item_price": 10.00,
+  "special_offer": "Bonus B-Bucks with every purchase!",
+  "item_description": "Get 1000 B-Bucks for only $10. Use B-Bucks to buy books!"
+}
+```
+
+
+#### 1. Create a User
+
+- **POST** `http://localhost:8080/users/create`
+
+```json
+{
+  "userName": "Finished OS",
+  "password": "password",
+  "email": "donewithos@gmail.com",
+  "bBucksBalance": 10.0
+}
+```
+
+#### 2. Create a book with an unknown price
 
 - **POST** `http://localhost:8080/books/create`
 
@@ -34,19 +65,30 @@ Welcome to the Book Cooper demo! This demo showcases the process of creating boo
 }
 ```
 
-- **POST** `http://localhost:8080/users/create`
+#### 3. Search for an Operating Systems Textbook
 
+simulate searching for the Operating Systems textbook by its title.
+
+- **GET** `http://localhost:8080/books/search?title=Advanced Programming in the UNIX Environment`
+
+This GET request will return all listings that match the book title "Advanced Programming in the UNIX Environment". Make sure to encode the URL parameters correctly if the title includes spaces or special characters.
+
+
+#### 4. Create a listing for the Operating Systems Textbook
+
+- **POST** `http://localhost:8080/listings/create`
 ```json
 {
-  "userName": "SuperDev",
-  "password": "password",
-  "email": "thebookcooper@gmail.com",
-  "bBucksBalance": 10000000.0
+  "userId": 1,
+  "bookId": 1,
+  "price": 5100.00, // in B-Bucks
+  "bookCondition": "new",
+  "listingStatus": "listed"
 }
-
 ```
 
-### Scenario: User Buys a Textbook
+
+### Scenario: Upcoming Junior needs OS textbook
 
 #### 1. Create a User
 
@@ -56,50 +98,13 @@ Welcome to the Book Cooper demo! This demo showcases the process of creating boo
 {
   "userName": "IneedOS",
   "password": "password",
-  "email": "test@gmail.com",
+  "email": "inneedforos@gmail.com",
   "bBucksBalance": 10.0
 }
 
 ```
-To reflect the updated functionality of automatically updating the current balance when a user buys B-Bucks, you can update the README section for buying B-Bucks as follows:
 
----
-
-#### 2. Create a Store Item for B-Bucks
-
-- **POST** `http://localhost:8080/store-items/create`
-
-```json
-{
-  "item": "5000 B-Bucks",
-  "item_price": 40.00, // in USD
-  "special_offer": "Bonus B-Bucks with every purchase!",
-  "item_description": "Get 1000 B-Bucks extra for buying this pack! Use B-Bucks to buy books!"
-}
-```
-
-#### 3. Create a listing for the Operating Systems Textbook
-
-- **POST** `http://localhost:8080/listings/create`
-
-```json
-{
-  "sellerId": 2,
-  "bookId": 1,
-  "price": 5000.00, // in B-Bucks
-  "condition": "new"
-}
-```
-
-#### 4. Search for an Operating Systems Textbook
-
-simulate searching for the Operating Systems textbook by its title.
-
-- **GET** `http://localhost:8080/books/search?title=Advanced Programming in the UNIX Environment`
-
-This GET request will return all listings that match the book title "Advanced Programming in the UNIX Environment". Make sure to encode the URL parameters correctly if the title includes spaces or special characters.
-
-#### 5. User Purchases B-Bucks
+#### 2. User Purchases B-Bucks
 
 To buy B-Bucks, the user makes a purchase transaction, which is automatically reflected in their account balance.
 
@@ -107,42 +112,98 @@ To buy B-Bucks, the user makes a purchase transaction, which is automatically re
 
 ```json
 {
-  "userId": 1, 
+  "userId": 2, 
   "transactionType": "Deposit", // Deposit or Purchase
   "amount": 5000.0 // B-Bucks to add/subtract
 }
 ```
-This transaction credits 6000 B-Bucks to the user's account, automatically updating their current balance to reflect the purchase. The balance is calculated based on the most recent balance available in the user's transaction history.
+This transaction credits 5000 B-Bucks to the user's account, automatically updating their current balance to reflect the purchase. The balance is calculated based on the most recent balance available in the user's transaction history.
 
-### 6. Buy Textbook
+#### 3. User Searches for OS Textbook
 
-Finally, the user purchases the textbook. You can simulate a pending purchase followed by a completed purchase to demonstrate handling different transaction states.
+- **GET** `http://localhost:8080/listings/search?title=Advanced Programming in the UNIX`
 
-#### Purchase Pending
+#### 4. User Tries to buy the OS Textbook
 
 - **POST** `http://localhost:8080/book-transactions/create`
 
 ```json
 {
-  "buyerId": 1,
-  "sellerId": 2,
+  "buyerId": 2,
+  "sellerId": 1,
   "listingId": 1,
-  "transactionPrice": 5000.00,
+  "transactionPrice": 5100.00,
   "transactionStatus": "pending"
 }
 ```
 
-#### Purchase Completed
+If the user doesn't have enough B-Bucks, they will have to buy more (refer to step 2)!
 
-After the purchase is confirmed (e.g., the seller delivers the book), update the transaction to "completed".
+#### 5. User checks B-Buck Balance
 
-- **PUT** `http://localhost:8080/book-transactions/update/{transactionId}`
+- **GET** `http://localhost:8080/users/{userId = 2}`
 
-Replace `{transactionId}` with the ID of the transaction you've created.
+If the user has enough B-Bucks to purchase the book, go back to step 4 to purchase the book again. 
 
+
+#### 6. Update a transaction
+
+Once the transaction is made, its status can be set to "complete"
+
+- **PUT** `http://localhost:8080/book-transactions/update/{transactionId = 1}`
 ```json
 {
-  "transactionStatus": "completed"
+    "buyerId": 2,
+    "sellerId": 1,
+    "listingId": 1,
+    "transactionPrice": 5100.00,
+    "transactionStatus": "completed"
 }
 ```
 
+### Book with an unknown price and ISBN
+
+Using the users already created,
+
+#### 1. Create a Book
+
+- **POST** `http://localhost:8080/books/create`
+
+```json
+{
+  "title": "The Lemonade War",
+  "publishDate": "2013-05-24",
+  "author": "Davies",
+  "genre": "Fiction",
+  "bookCondition": "new",
+  "isbn": 0,
+  "price": 0 
+}
+```
+
+#### 2. Create a Listing or Two
+
+Send one or two (or three) HTTP requests using the information below to create listings for your new book.
+
+- **POST** `http://localhost:8080/listings/create`
+
+```json
+{
+  "userId": 2,
+  "bookId": 2,
+  "price": 1000.00, // in B-Bucks
+  "bookCondition": "new",
+  "listingStatus": "listed"
+}
+```
+
+#### 3. View All of the Listings for Your Book Title
+
+- **GET** `http://localhost:8080/listings/search?title=The Lemonade War`
+
+#### 4. Remove a specific listing
+
+- **DELETE** `http://localhost:8080/listings/delete/{listingId = 2}`
+
+
+Functionality for all database tables such as create, update, count, delete, and viewing a specific ID is implemented though not explicitly featured in this demo to save time. 
