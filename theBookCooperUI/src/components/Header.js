@@ -1,14 +1,14 @@
 import React from 'react';
+import '../styles/LandingPage.css';
 
 const Header = () => {
   return (
     <header>
-      <h1>The Book Cooper</h1>
-      <div className="header-buttons">
-        {/* Update these links to your React Router Links or a tags for external links */}
-        <a href="/signup" className="signup-button">Sign Up</a>
-        <a href="/login" className="login-button">Login</a>
-      </div>
+        <h1>TheBookCooper</h1>
+        <div className="header-buttons">
+            <h3 href="/signup" className="signup-button">Sign Up</h3>
+            <h3 href="/login" className="login-button">Login</h3>
+        </div>
     </header>
   );
 };
