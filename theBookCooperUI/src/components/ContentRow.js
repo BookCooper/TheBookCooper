@@ -11,7 +11,7 @@ const ContentRow = () => {
             <section className="row color1">
                 <div className="content-container">
                         <div className="slogan">
-                                <h2>A NEW WAY TO OPTIMIZE YOUR ACADEMIC</h2>
+                                <h2>A NEW WAY TO OPTIMIZE YOUR ACADEMIC ARSENAL</h2>
                         </div>
                         <div className="image-section">
                                 <img src={Landing1} alt="Optimize Your Academic Schedule"/>
