@@ -33,7 +33,7 @@ const LoginPage = () => {
                 value={password}
                 onChange={e=>setPassword(e.target.value)}
             />
-            <button onClick={logIn}>Log In</button>
+            <button onClick={logIn}>Log In</button> <br/> <br/>
             <Link to="/create-account">Don't have an account? Create one here</Link>
         </>
     );
