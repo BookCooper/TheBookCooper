@@ -2,49 +2,6 @@
 
 @import "./Boilerplate.css";
 
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: normal;
-    margin: 0;
-    background-color: #025ABB;
-    font-family: Arial, sans-serif;
-}
-
-header {
-    background-color: #002F56;
-    color: #fff;
-    width: 100%;
-    height: 15vh;
-    line-height: 3vh;
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 3em;
-}
-
-header h1 {
-    font-size: 4em;
-    margin-left: 0.5em;
-}
-
-.row {
-    width: 100%;
-    min-height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.color1 {
-    background-color: #025ABB;
-}
-
-.color2 {
-    background-color: #002F56;
-}
 
 .content-container {
     display: flex;
