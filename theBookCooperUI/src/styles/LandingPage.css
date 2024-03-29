@@ -1,4 +1,7 @@
 /* LandingPage.css */
+
+@import "./Boilerplate.css";
+
 body {
     display: flex;
     flex-direction: column;
