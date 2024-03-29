@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import reportWebVitals from './reportWebVitals';
+
 import { App } from './App';
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
 import CreateAccountPage from "./pages/CreateAccountPage";
-import reportWebVitals from './reportWebVitals';
+import PaymentPage from "./pages/PaymentPage";
 
 /*
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -55,6 +57,7 @@ root.render(
             <Route path="/login" element={<LoginPage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
         </Routes>
     </BrowserRouter>,
 );
