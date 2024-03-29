@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import Header from '../components/Header';
 
 
 const CreateAccountPage = () => {
@@ -27,6 +28,7 @@ const CreateAccountPage = () => {
 
     return (
         <>
+            <Header />
             <h1>Create Account</h1>
             {error && <p className="error">{error}</p>}
             <input

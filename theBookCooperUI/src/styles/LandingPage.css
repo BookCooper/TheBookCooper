@@ -85,6 +85,7 @@ header h1 {
 
 .login-button:hover, .signup-button:hover {
     background-color: #025ABB;
+    cursor:pointer;
 }
 
 .header-buttons {
