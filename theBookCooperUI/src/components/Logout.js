@@ -27,12 +27,6 @@ const Logout = () => {
                 ? <button className = "login-button" onClick={handleLogout}>Log Out</button>
                 : <button className = "login-button" onClick={() => navigate('/login')}>Log In</button>
             }
-            {
-            //{user
-            //   ? <pre>You are logged in!</pre>
-            //   : <p>Log in here!</p>
-            //}
-            }
         </div>
     );
 };

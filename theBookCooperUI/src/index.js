@@ -5,7 +5,7 @@ import { App } from './App';
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
-import CreateAccountPage from "./pages/CreateAccountPage";
+import SignupPage from "./pages/SignupPage";
 import reportWebVitals from './reportWebVitals';
 
 /*
@@ -53,7 +53,7 @@ root.render(
             <Route path="/" element={<App />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/create-account" element={<CreateAccountPage />} />
+            <Route path="/signup" element={<SignupPage />} />
             <Route path="/contact" element={<ContactPage />} />
         </Routes>
     </BrowserRouter>,
