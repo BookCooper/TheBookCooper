@@ -1,19 +1,33 @@
 # pull official base image
-FROM node:18
+#FROM node:18
 
 # set working directory
-WORKDIR /app
+#WORKDIR /app
 
 # add `/app/node_modules/.bin` to $PATH
-ENV PATH /theBookCooperUI/node_modules/.bin:$PATH
+#ENV PATH /theBookCooperUI/node_modules/.bin:$PATH
 
 # install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install react-scripts@5.0.1 -g --silent
+#COPY package.json ./
+#COPY package-lock.json ./
+#RUN npm install react-scripts@5.0.1 -g --silent
 
 # add app
-COPY . ./
+#COPY . ./
 
 # start app
-CMD npm start
+#CMD npm start
+
+FROM node:16.13.1-alpine as build
+RUN npm install -g serve # A simple webserver
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+
+RUN npm install
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+CMD ["serve", "-s", "build", "-l", "3000"]
