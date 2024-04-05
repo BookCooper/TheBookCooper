@@ -1,11 +1,12 @@
-import {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import '../styles/Login.css';
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -19,26 +20,40 @@ const Login = () => {
     };
 
     return (
-        
-        <>
-            <h1>Log In</h1>
-            {error && <p className="error">{error}</p>}
-            <input
-                placeholder="Your email address"
-                value={email}
-                onChange={e=>setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Your password"
-                value={password}
-                onChange={e=>setPassword(e.target.value)}
-            />
-            <button onClick={logIn}>Log In</button> <br/> <br/>
-            <Link to="/signup">Don't have an account? Create one here</Link>
-        </>
+        <div className="login-container">
+            <div className="white-box">
+                <h1 className="login-label">Log In</h1>
+                {error && <p className="error-message">{error}</p>}
+                <div>
+                    <label htmlFor="email" className="email-label">Email</label>
+                    <input
+                        id="email"
+                        className="email-box"
+                        type="email"
+                        placeholder="Your email address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="password" className="password-label">Password</label>
+                    <input
+                        id="password"
+                        className="password-box"
+                        type="password"
+                        placeholder="Your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <div className="footer-links">
+                    <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
+                    <Link to="/signup" className="sign-up-text">Sign Up</Link>
+                </div>
+                <button className="login-button" onClick={logIn}>Log In</button>
+            </div>
+        </div>
     );
 }
-
 
 export default Login;
