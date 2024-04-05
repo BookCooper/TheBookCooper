@@ -21,6 +21,13 @@
   overflow-y: auto; /* Allows scrolling if content exceeds max height */
 }
 
+/* Add this to ensure the form contents are also centered */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 
 .login-label {
   font-family: Arial, sans-serif;
@@ -85,6 +92,8 @@
   gap: 150px; /* Space between 'Forgot password?' and 'Sign Up' */
   margin-top: 10px; /* Adjust as needed for space above the first link */
 }
+
+
 
 /* Responsive Design Adjustments */
 @media (max-width: 768px) {
