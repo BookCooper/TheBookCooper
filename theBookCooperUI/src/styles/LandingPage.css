@@ -31,7 +31,7 @@
     padding-right: 100px;
 }
 
-.login-button, .signup-button {
+.login-button, .signup-button, .contact-button, .about-button {
     background-color: #0C8CE9;
     color: #fff;
     text-decoration: none;

@@ -3,9 +3,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 85vh;
   background: #025ABB;
 }
 
@@ -13,132 +12,83 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 580px;
-  height: 651px;
+  width: 580px; /* Fixed width for control */
+  min-height: 65vh; /* Minimum height to maintain a responsive aspect */
+  max-height: 85vh; /* Maximum height to prevent overflow of the viewport */
   background: #FFFFFF;
   border-radius: 55px;
   padding: 20px;
-}
-/* Styling for the Login Header/Label */
-.login-label {
-  position: absolute;
-  width: 132px;
-  height: 16px;
-  left: calc(50% - 132px/2 - 1px);
-  top: calc(50% - 16px/2 - 250px);
-  font-family: Arial, sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 50px;
-  line-height: 16px;
-  text-align: center;
-  color: #000000;
+  overflow-y: auto; /* Allows scrolling if content exceeds max height */
 }
 
-/* Styling for Input Fields */
+
+.login-label {
+  font-family: Arial, sans-serif;
+  font-size: 50px;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+/* Input Fields and Button Shared Styles */
+.email-box, .password-box, .login-page-button {
+  width: 504px; /* Full width for larger screens */
+  padding: 20px 40px;
+  margin-bottom: 20px; /* Space between elements */
+}
+
+/* Specific Styling for Input Fields */
 .email-box, .password-box {
-  position: absolute;
-  width: 504px;
-  height: 70px;
   background: #D9D9D9;
   border-radius: 100px;
   border: none;
-  padding: 0 20px;
   font-size: 20px;
 }
 
-.email-box {
-  left: calc(50% - 504px/2);
-  top: calc(50% - 70px/2 - 98px);
-}
-
-.password-box {
-  left: calc(50% - 504px/2);
-  top: calc(50% - 70px/2 + 58px);
-}
-
-/* Labels */
-.email-label, .password-label {
-  position: absolute;
-  font-family: Arial, sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 25px;
-  line-height: 16px;
-  text-align: center;
-  color: #000000;
-}
-
-.email-label {
-  width: 64px;
-  height: 16px;
-  left: calc(50% - 64px/2 - 206px);
-  top: calc(50% - 16px/2 - 153px);
-}
-
-.password-label {
-  width: 117px;
-  height: 16px;
-  left: calc(50% - 117px/2 - 179.5px);
-  top: calc(50% - 16px/2 + 3px);
-}
-
-/* Login Button */
-.login-button {
-  position: absolute;
-  width: 418px;
-  height: 65px;
-  left: calc(50% - 418px/2);
-  top: calc(50% - 65px/2 + 221.5px);
+/* Styling for the Login Button */
+.login-page-button {
   background: #0C8CE9;
   border-radius: 10px;
   color: #FFFFFF;
   font-family: Arial, sans-serif;
   font-size: 25px;
-  line-height: 16px;
   border: none;
   cursor: pointer;
 }
 
-/* Additional Texts */
-.sign-up-text, .forgot-password {
-  position: absolute;
+/* Styling for Labels and Additional Texts */
+.email-label, .password-label {
   font-family: Arial, sans-serif;
-  font-weight: 500;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+.email-label, .password-label{
+  font-size: 25px;
+  margin: 20px 40px; /* Adjust as needed */
+  margin-bottom: 20px; /* Space between elements */
+  
+}
+
+.sign-up-text, .forgot-password {
+  font-family: Arial, sans-serif;
+  font-weight: 50;
   font-size: 25px;
   color: #000000;
   cursor: pointer;
+  text-decoration: none; /* Removes underline from links */
 }
 
-.forgot-password {
-  width: 214px;
-  height: 1px;
-  left: calc(50% - 214px/2 - 140px);
-  top: calc(50% - 1px/2 + 420px);
+.footer-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 150px; /* Space between 'Forgot password?' and 'Sign Up' */
+  margin-top: 10px; /* Adjust as needed for space above the first link */
 }
 
-.sign-up-text {
-  width: 94px;
-  height: 16px;
-  left: calc(50% - 94px/2 + 158px);
-  top: calc(50% - 16px/2 + 346px);
-}
-
-/* Header Background */
-.header-background {
-  position: absolute;
-  width: 1440px;
-  height: 169px;
-  left: 0px;
-  top: 0px;
-  background: #002F56;
-}
-
+/* Responsive Design Adjustments */
 @media (max-width: 768px) {
-  .white-box {
-    width: 90%; /* Makes the box take up more of the screen on smaller devices */
-    height: auto; /* Allows the box to grow as needed */
+  .email-box, .password-box, .login-button, .sign-up-text, .forgot-password, .footer-links {
+    width: 90%; /* Adjusts input and button width for smaller screens */
   }
-
-  /* Adjust font sizes and other dimensions as needed for smaller screens */
 }

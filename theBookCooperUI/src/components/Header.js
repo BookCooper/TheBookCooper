@@ -11,8 +11,8 @@ const Header = () => {
         <header>
             <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
             <div className = "header-buttons">
-                <button className="login-button" onClick={() => navigate('/about')}>About Us</button>
-                <button className="login-button" onClick={() => navigate('/contact')}>Contact Us</button>
+                <button className="about-button" onClick={() => navigate('/about')}>About Us</button>
+                <button className="contact-button" onClick={() => navigate('/contact')}>Contact Us</button>
             </div>
             <Logout />
         </header>

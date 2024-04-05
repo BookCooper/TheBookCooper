@@ -22,8 +22,7 @@ const Login = () => {
     return (
         <div className="login-container">
             <div className="white-box">
-                <h1 className="login-label">Log In</h1>
-                {error && <p className="error-message">{error}</p>}
+                <h1 className="login-label">Login</h1>
                 <div>
                     <label htmlFor="email" className="email-label">Email</label>
                     <input
@@ -46,11 +45,12 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                {error && <p className="error-message">{error}</p>}
+                <button className="login-page-button" onClick={logIn}>Log In</button>
                 <div className="footer-links">
                     <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
                     <Link to="/signup" className="sign-up-text">Sign Up</Link>
                 </div>
-                <button className="login-button" onClick={logIn}>Log In</button>
             </div>
         </div>
     );
