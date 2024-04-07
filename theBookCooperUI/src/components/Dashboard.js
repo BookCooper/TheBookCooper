@@ -1,14 +1,16 @@
 import '../styles/LandingPage.css';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function ShowListings() {
     const [data, setData] = useState(null);
     useEffect(() => {
-        fetch(
-            `http://localhost:8080/api/getUsers`
-        )
-            .then((response) => response.json())
-            .then(setData);
+
+        const loadUsers = async () => {
+            const response = await axios.get(`http://localhost:8080/users/count`);
+            setData(response.data)
+        }
+        loadUsers();
     }, []);
     if (data)
         return (
@@ -16,7 +18,7 @@ function ShowListings() {
                 <pre>{JSON.stringify(data, null, 2)}</pre>
             </>
         );
-    return <h1>Data</h1>;
+    return <h1>Dataaaa</h1>;
 }
 
 

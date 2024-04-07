@@ -2,7 +2,6 @@
 
 @import "./Boilerplate.css";
 
-
 .content-container {
     display: flex;
     justify-content: space-between;
