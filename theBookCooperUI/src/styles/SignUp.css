@@ -1,0 +1,92 @@
+/* General Page Background */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    background: #025ABB;
+  }
+  
+  /* Main Box Styling */
+  .signup-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto; /* Adjusts based on content */
+    min-width: 580px; /* Minimum width */
+    max-width: 90%; /* Prevents box from becoming too wide on larger screens */
+    background: #FFFFFF;
+    border-radius: 55px;
+    padding: 40px; /* Adjust padding as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .signup-label {
+    font-family: Arial, sans-serif;
+    font-size: 50px;
+    color: #000000;
+    margin-bottom: 25px;
+  }
+  
+  /* Styling for Inputs and Button */
+  .input-field, .signup-page-button {
+    width: 504px; /* Full width for larger screens */
+    padding: 20px 40px;
+    margin-bottom: 20px; /* Space between elements */
+  }
+  
+  .input-field {
+    background: #D9D9D9; /* Light grey background */
+    border-radius: 100px;
+    border: none;
+    font-size: 20px;
+  }
+  
+  .signup-page-button {
+    background: #0C8CE9;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+  
+  .signup-page-button:hover {
+    background: #007CBA; /* Darker shade for hover */
+  }
+  
+  /* Labels, Headers, and Links */
+  .label-text, .account-link {
+    font-size: 25px;
+    margin: 20px 40px; /* Adjust as needed */
+    margin-bottom: 20px; /* Space between elements */  
+  }
+  
+  .label-text {
+    font-size: 25px;
+  }
+  
+  .account-link {
+    color: #000000;
+    text-decoration: none; /* Removes underline */
+    font-size: 20px;
+  }
+  
+  .login-text {
+    font-family: Arial, sans-serif;
+    font-weight: 50;
+    font-size: 18px;
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none; /* Removes underline from links */
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .input-field, .signup-page-button {
+      width: 90%; /* Allows for responsive adjustment on smaller screens */
+    }
+  }
+  
