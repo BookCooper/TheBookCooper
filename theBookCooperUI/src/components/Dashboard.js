@@ -1,17 +1,30 @@
 import '../styles/LandingPage.css';
 import React, { useState, useEffect } from 'react';
+import useUser from "../hooks/useUser";
 import axios from 'axios';
+
 
 function ShowListings() {
     const [data, setData] = useState(null);
+    const {user, isLoading} = useUser();
     useEffect(() => {
-
+        
         const loadUsers = async () => {
-            const response = await axios.get(`http://localhost:8080/users/count`);
-            setData(response.data)
+        
+            try {
+                //const response = await axios.get(`users/count`);
+                const token = user && await user.getIdToken();
+                console.log(token);
+                const headers = token ? {Authorization: `Bearer ${token}`} : {};
+                const response = await axios.get(`/users/count`, {headers});
+                setData(response.data)
+            }
+            catch (error) {
+                setData("UNAUTHORIZED " + error.message);
+            }
         }
         loadUsers();
-    }, []);
+    }, [isLoading, user]);
     if (data)
         return (
             <>
