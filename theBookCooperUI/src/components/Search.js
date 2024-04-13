@@ -1,5 +1,5 @@
 import '../styles/LandingPage.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
 
@@ -39,8 +39,29 @@ function ShowResults() {
                 onChange={e => setInput(e.target.value)}
                 placeholder="Enter your query"
             />
-            <button onClick={getBooks} disabled={isLoading || !user}>Look up</button>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+
+            {/*disable the look up button when its loading, user isnt logged in, or no input*/}
+            <button onClick={getBooks} disabled={isLoading || !user || !input}>Look up</button>
+            
+            {loading 
+            ? (
+                <p>Loading...</p>
+            ) 
+            : 
+                data ? (
+                    <div>
+                        {data.map((book) => (
+                            <a key={book.bookId} href={`/books/${book.bookId}`} className="book-listing">
+                            <div>
+                            <h3>{book.title}</h3>
+                            <p>{book.author}</p>
+                            </div>
+                            </a>
+                        ))}
+                    </div>
+                ) 
+                : (<p>No data or user is not authenticated</p>)
+            }
         </>
     );
 }
