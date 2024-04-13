@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PaymentPage from "./pages/PaymentPage";
 import SearchPage from "./pages/SearchPage";
+import ListingDetailPage from "./pages/ListingDetailPage"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { auth } from './firebase-config';
@@ -28,6 +29,7 @@ root.render(
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/listings/:listingId" element={<ListingDetailPage />} />
         </Routes>
     </BrowserRouter>,
 );

@@ -1,7 +1,8 @@
 import '../styles/LandingPage.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
+import BookDetails from './BookDetails'
 
 
 function ShowResults() {
@@ -9,20 +10,31 @@ function ShowResults() {
     const {user, isLoading} = useUser();
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const [token, setToken] = useState(null);
 
-    const getBooks = async () => {
+    useEffect(() => {
+        const fetchToken = async () => {
+            if (user) {
+                const fetchedToken = await user.getIdToken();
+                setToken(fetchedToken);
+            }
+        };
+
+        fetchToken();
+    }, [user, isLoading]);
+
+    const getListings = async () => {
     
-        if (!user) {
-            setData('No user logged in.');
+        if (!token) {
+            setData('No user logged in or token not retrieved.');
             return;
         }
 
         setLoading(true);
         setData(null); 
         try {
-            const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
-            const response = await axios.get(`/books/search?title=${encodeURIComponent(input)}`, { headers });
+            const response = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
             setData(response.data);
         } catch (error) {
             setData(error.message);
@@ -41,7 +53,7 @@ function ShowResults() {
             />
 
             {/*disable the look up button when its loading, user isnt logged in, or no input*/}
-            <button onClick={getBooks} disabled={isLoading || !user || !input}>Look up</button>
+            <button onClick={getListings} disabled={isLoading || !user || !input}>Look up</button>
             
             {loading 
             ? (
@@ -50,11 +62,11 @@ function ShowResults() {
             : 
                 data ? (
                     <div>
-                        {data.map((book) => (
-                            <a key={book.bookId} href={`/books/${book.bookId}`} className="book-listing">
+                        {data.map((listing) => (
+                            <a key={listing.listingId} href={`/listings/${listing.listingId}`}>
                             <div>
-                            <h3>{book.title}</h3>
-                            <p>{book.author}</p>
+                            <BookDetails bookId={listing.bookId} token={token} />
+                            <p>{listing.price} B-Bucks</p>
                             </div>
                             </a>
                         ))}
