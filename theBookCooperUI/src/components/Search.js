@@ -2,42 +2,100 @@ import '../styles/LandingPage.css';
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
-import BookDetails from './BookDetails'
-
-
 function ShowResults() {
-    const [data, setData] = useState(null);
-    const {user, isLoading} = useUser();
+    const { user, isLoading } = useUser();
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useState(null);
+    const [listings, setListings] = useState([]);
 
-    useEffect(() => {
-        const fetchToken = async () => {
-            if (user) {
-                const fetchedToken = await user.getIdToken();
-                setToken(fetchedToken);
-            }
-        };
-
-        fetchToken();
-    }, [user, isLoading]);
-
-    const getListings = async () => {
-    
-        if (!token) {
-            setData('No user logged in or token not retrieved.');
+    const getListings = async (input) => {
+        if (!user) {
+            setListings([]);
             return;
         }
 
         setLoading(true);
-        setData(null); 
         try {
+            const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
-            const response = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
-            setData(response.data);
+            const listingResponse = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
+
+            // Fetch book data for each listing
+            const booksData = await Promise.all(listingResponse.data.map(async (listing) => {
+                const bookResponse = await axios.get(`/books/${listing.bookId}`, { headers });
+                return { ...listing, book: bookResponse.data };
+            }));
+
+            setListings(booksData);
         } catch (error) {
-            setData(error.message);
+            console.error('Failed to fetch listings or books:', error);
+            setListings([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <>
+            <input
+                type="text"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="Enter your query"
+            />
+            <button onClick={() => getListings(input)} disabled={isLoading || !user || !input}>Look up</button>
+            
+            {loading ? (
+                <p>Loading...</p>
+            ) : listings.length > 0 ? (
+
+                
+                <div>
+                    {listings.map((listing) => (
+                        <div key={listing.listingId}>
+                        <a key={listing.listingId} href={`/listings/${listing.listingId}`}>
+                            <h3>{listing.book.title}</h3> </a>
+                            <p>Author: {listing.book.author}</p>
+                            <p>{listing.price} B-Bucks</p>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p>No listings found or user is not authenticated.</p>
+            )}
+        </>
+    );
+}
+/*
+function ShowResults() {
+    const {user, isLoading} = useUser();
+    const [input, setInput] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const [header, setHeader] = useState(null);
+        
+    const [listing, setListing] = useState(null);
+    const [book, setBook] = useState(null);
+    
+    const getListings = async (input) => {
+
+        if (!user) {
+            setListing('No user logged in or token not retrieved.');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const token = await user.getIdToken();
+            const headers = { Authorization: `Bearer ${token}` };
+            setHeader(headers);
+
+            const listingResponse = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
+            setListing(listingResponse.data);
+
+
+        } catch (error) {
+            setListing(error.message);
         } finally {
             setLoading(false);
         }
@@ -52,31 +110,34 @@ function ShowResults() {
                 placeholder="Enter your query"
             />
 
-            {/*disable the look up button when its loading, user isnt logged in, or no input*/}
-            <button onClick={getListings} disabled={isLoading || !user || !input}>Look up</button>
+            {/*disable the look up button when its loading, user isnt logged in, or no input}
+            <button onClick={() => getListings(input)} disabled={isLoading || !user || !input}>Look up</button>
             
-            {loading 
-            ? (
-                <p>Loading...</p>
-            ) 
-            : 
-                data ? (
+            { 
+                listing && Array.isArray(listing)? (
                     <div>
-                        {data.map((listing) => (
-                            <a key={listing.listingId} href={`/listings/${listing.listingId}`}>
+                        {listing.map((listingElement) => (
+                            <a key={listingElement.listingId} href={`/listings/${listing.listingId}`}>
                             <div>
-                            <BookDetails bookId={listing.bookId} token={token} />
-                            <p>{listing.price} B-Bucks</p>
+                                {
+
+                                    //get book data from listing response
+                                    const bookResponse = await axios.get(`/books/${listngElement.data.bookId}`, { header });
+                                    setBook(bookResponse.data);
+
+
+                                }                           
+                                <p>{listingElement.price} B-Bucks</p>
                             </div>
                             </a>
                         ))}
                     </div>
                 ) 
-                : (<p>No data or user is not authenticated</p>)
+                : (<p>The listing does not exist!</p>)
             }
         </>
     );
-}
+}*/
 
 
 const Search = () => {
