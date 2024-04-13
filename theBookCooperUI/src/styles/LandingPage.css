@@ -30,7 +30,7 @@
     padding-right: 100px;
 }
 
-.login-button, .signup-button, .contact-button, .about-button {
+.login-button, .signup-button, .contact-button, .about-button, .search-button {
     background-color: #0C8CE9;
     color: #fff;
     text-decoration: none;
@@ -42,7 +42,7 @@
     margin-right: 1em;
 }
 
-.login-button:hover, .signup-button:hover {
+.login-button:hover, .signup-button:hover, .contact-button:hover, .about-button:hover, .search-button:hover {
     background-color: #025ABB;
     cursor:pointer;
 }

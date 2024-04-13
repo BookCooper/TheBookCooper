@@ -18,11 +18,12 @@ const Header = () => {
                     <div className = "header-buttons">
                         <button className="about-button" onClick={() => navigate('/about')}>About Us</button>
                         <button className="contact-button" onClick={() => navigate('/contact')}>Contact Us</button>
+                        <button className="search-button" onClick={() => navigate('/search')}>Search</button>
                         <Logout />
                     </div>
                 :
                     <div className = "header-buttons">
-                        <button className="contact-button" onClick={() => navigate('/signup')}>Sign Up</button>
+                        <button className="signup-button" onClick={() => navigate('/signup')}>Sign Up</button>
                         <Logout />
                     </div>
             }
