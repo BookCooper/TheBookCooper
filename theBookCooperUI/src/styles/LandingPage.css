@@ -1,47 +1,6 @@
 /* LandingPage.css */
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: normal;
-    margin: 0;
-    background-color: #025ABB;
-    font-family: Arial, sans-serif;
-}
 
-header {
-    background-color: #002F56;
-    color: #fff;
-    width: 100%;
-    height: 15vh;
-    line-height: 3vh;
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 3em;
-}
-
-header h1 {
-    font-size: 4em;
-    margin-left: 0.5em;
-}
-
-.row {
-    width: 100%;
-    min-height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.color1 {
-    background-color: #025ABB;
-}
-
-.color2 {
-    background-color: #002F56;
-}
+@import "./Boilerplate.css";
 
 .content-container {
     display: flex;
@@ -71,7 +30,7 @@ header h1 {
     padding-right: 100px;
 }
 
-.login-button, .signup-button {
+.login-button, .signup-button, .contact-button, .about-button, .search-button {
     background-color: #0C8CE9;
     color: #fff;
     text-decoration: none;
@@ -83,8 +42,9 @@ header h1 {
     margin-right: 1em;
 }
 
-.login-button:hover, .signup-button:hover {
+.login-button:hover, .signup-button:hover, .contact-button:hover, .about-button:hover, .search-button:hover {
     background-color: #025ABB;
+    cursor:pointer;
 }
 
 .header-buttons {

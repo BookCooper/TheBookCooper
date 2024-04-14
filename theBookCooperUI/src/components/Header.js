@@ -1,25 +1,36 @@
 import React from 'react';
 import '../styles/LandingPage.css';
 import Logout from './Logout.js';
-//import Link from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useUser from "../hooks/useUser";
 
 const Header = () => {
-  return (
-    <header>
-        <h1>TheBookCooper</h1>
-        {
-            //got rid of sign up button in place for just log in where user can
-            //sign up for an account if they don't have one already. 
-            //
-            //makes it easier for us so we don't have to check if the user is
-            //signed in already and thus have to remove the sign up button. Although
-            //it probably wouldn't take long to implement it is just a lot of extra work
-            //
-            //<div className = "signup-button"> <Link to="/create-account">Sign up</Link> </div>
-        }
-        <Logout />
-    </header>
-  );
+
+    const navigate = useNavigate();
+    const { user, isLoading } = useUser();
+
+    return (
+        <header>
+            <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
+
+            {user
+                ?
+                    <div className = "header-buttons">
+                        <button className="about-button" onClick={() => navigate('/about')}>About Us</button>
+                        <button className="contact-button" onClick={() => navigate('/contact')}>Contact Us</button>
+                        <button className="search-button" onClick={() => navigate('/search')}>Search</button>
+                        <Logout />
+                    </div>
+                :
+                    <div className = "header-buttons">
+                        <button className="signup-button" onClick={() => navigate('/signup')}>Sign Up</button>
+                        <Logout />
+                    </div>
+            }
+        </header>
+    );
 };
 
+
 export default Header;
+
