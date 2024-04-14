@@ -18,6 +18,7 @@ import com.thebookcooper.dao.BookSearchDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/book-searches") // Adjusted base path to match resource
 public class BookSearchController {
 

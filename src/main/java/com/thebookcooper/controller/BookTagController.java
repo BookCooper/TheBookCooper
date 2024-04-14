@@ -17,6 +17,7 @@ import com.thebookcooper.dao.BookTagDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/booktags") // Base path 
 public class BookTagController {
 

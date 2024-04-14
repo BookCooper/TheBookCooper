@@ -1,42 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import reportWebVitals from './reportWebVitals';
+
+
 import { App } from './App';
+import DashboardPage from "./pages/DashboardPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import reportWebVitals from './reportWebVitals';
+import PaymentPage from "./pages/PaymentPage";
+import SearchPage from "./pages/SearchPage";
+import ListingDetailPage from "./pages/ListingDetailPage"
+import CreateBookPage from "./pages/CreateBookPage"
 
-import {
-    BrowserRouter,
-    Routes,
-    Route
-} from "react-router-dom";
-
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCu5ovkarugZLk8QeXE1oovuASed5zkw0c",
-  authDomain: "the-book-cooper.firebaseapp.com",
-  projectId: "the-book-cooper",
-  storageBucket: "the-book-cooper.appspot.com",
-  messagingSenderId: "312128100089",
-  appId: "1:312128100089:web:cebe5225ef7040320a7428",
-  measurementId: "G-7Y4SZ4EJVE"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(app);
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { auth } from './firebase-config';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -47,6 +27,11 @@ root.render(
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/listings/:listingId" element={<ListingDetailPage />} />
+            <Route path="/create-book" element={<CreateBookPage />} />
         </Routes>
     </BrowserRouter>,
 );
@@ -55,3 +40,5 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+

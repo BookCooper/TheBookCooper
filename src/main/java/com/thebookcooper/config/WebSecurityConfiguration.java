@@ -1,4 +1,4 @@
-/*package com.thebookcooper.config;
+package com.thebookcooper.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,9 @@ public class WebSecurityConfiguration {
         http.oauth2ResourceServer().jwt();
         return http.build();
     }
-}*/
+}
 
+/*
 package com.thebookcooper.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebSecurityConfiguration {
@@ -39,7 +43,9 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             // Configure HTTP basic authentication (if needed)
-            .authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
+            .authorizeHttpRequests(authz -> authz
+                .anyRequest().authenticated() // All other requests require authentication
+            )
             .httpBasic()
             // Configure OAuth2 resource server JWT validation
             .and()
@@ -53,5 +59,14 @@ public class WebSecurityConfiguration {
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
-}
 
+    @Configuration
+    public class WebConfig implements WebMvcConfigurer {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000");
+        }
+    }
+}
+*/
