@@ -42,7 +42,7 @@ function ShowResults() {
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Enter your query"
+                placeholder="Enter a book's title to search!"
             />
             <button onClick={() => getListings(input)} disabled={isLoading || !user || !input}>Look up</button>
             
