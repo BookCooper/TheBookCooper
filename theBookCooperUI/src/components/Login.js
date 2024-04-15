@@ -27,16 +27,50 @@ const Login = () => {
             setError('Please provide both email and password');
             return;
         }
+
         try {
-            await signInWithEmailAndPassword(getAuth(), email, password);
-            // If this is successful, the user will be set by useUser and caught by the useEffect below
+            const userCredential = await signInWithEmailAndPassword(getAuth(), email, password);
+            const firebaseUser = userCredential.user;
+
+            // Get the token from the signed-in user
+            const token = await firebaseUser.getIdToken();
+            const headers = { Authorization: `Bearer ${token}` };
+
+            // Fetch user data using the token
+            const userResponse = await axios.get(`/users/email/${email}`, { headers });
+            console.log("API Response:", userResponse.data);
+
+            // If the user data includes the userId, set it in the state
+            if (userResponse.data && userResponse.data.userId) {
+                console.log("Setting userID:", userResponse.data.userId);
+                setUserId(userResponse.data.userId);
+                navigate('/'); // Navigate only after userId is set
+            }
+
+             /*   try {
+                    const token = await user.getIdToken();
+                    const headers = { Authorization: `Bearer ${token}` };
+                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
+                    console.log("API Response:", userResponse.data);
+                    
+                    if (userResponse.data && userResponse.data.userId) {
+                        console.log("Setting userID:", userResponse.data.userId);
+                        setUserId(userResponse.data.userId);
+                    }
+                } catch (e) {
+                    console.error("Error fetching user data:", e);
+                    setError(e.toString());
+                }
+            }*/
+
         } catch (e) {
+            console.error("Login error:", e);
             setError(e.message);
         }
     };
 
     // Fetch user data after successful login
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchUserData = async () => {
             if (user) {
                 try {
@@ -58,7 +92,7 @@ const Login = () => {
         if (user) {
             fetchUserData();
         }
-    }, [email]);
+    }, [email]);*/
 
     useEffect(() => {
         if (userId) {
@@ -66,69 +100,6 @@ const Login = () => {
             navigate('/'); // Navigate only after userId is set
         }
     }, [userId, navigate]);
-
-
-    /*
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (user) {
-                try {
-                    const token = await user.getIdToken();
-                    const headers = { Authorization: `Bearer ${token}` };
-                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
-                    console.log("API Response:", userResponse.data);
-
-                    if (userResponse.data && userResponse.data.userId) {
-                        console.log("Setting userID:", userResponse.data.userId);
-                        setUserId(userResponse.data.userId);
-                    };
-                    
-                    navigate('/');
-                } catch (e) {
-                    console.error("Error fetching user data:", e);
-                }
-            }
-        };
-        fetchUserData();
-    }, [user, email, navigate]);
-
-    // Effect to log userInfo when it updates
-    
-    const logIn = async (e) => {
-        e.preventDefault();
-        setError('');
-        if (!email || !password) {
-            setError('Please provide both email and password');
-            return;
-        }
-        try {
-            await signInWithEmailAndPassword(getAuth(), email, password);
-            console.log("Again user id is: " + userId)
-        } catch (e) {
-            setError(e.message);
-        }
-    };
-    
-    
-    const logIn = async (e) => {
-        e.preventDefault(); // Prevent the form from causing a page reload
-        try {
-            await signInWithEmailAndPassword(getAuth(), email, password);
-
-            const token = await user.getIdToken();
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            
-            //get listing data
-            const userResponse = await axios.get(`/users/email/${email}`, { headers });
-            setUserInfo(userResponse.data);
-
-            console.log(userInfo.userId)
-
-            navigate('/');
-        } catch (e) {
-            setError(e.message);
-        }
-    };*/
 
 
     return (

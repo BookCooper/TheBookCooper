@@ -15,7 +15,7 @@ public class UserDAO extends DataAccessObject<User> {
     private static final String GET_ONE = "SELECT user_id, user_name, email, b_bucks_balance, creation_date, last_login " +
             "FROM users WHERE user_id=?";
     
-    private static final String GET_ONE_EMAIL = "SELECT user_id, user_name, password, email, b_bucks_balance, creation_date, last_login " +
+    private static final String GET_ONE_EMAIL = "SELECT user_id, user_name, email, b_bucks_balance, creation_date, last_login " +
             "FROM users WHERE email=?";
 
     private static final String INSERT = "INSERT INTO users (user_name, email, b_bucks_balance, creation_date, last_login) " +
@@ -58,7 +58,6 @@ public class UserDAO extends DataAccessObject<User> {
             while (rs.next()) {
                 user.setUserId(rs.getLong("user_id"));
                 user.setUserName(rs.getString("user_name"));
-                user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
                 user.setBBucksBalance(rs.getDouble("b_bucks_balance"));
                 user.setCreationDate(rs.getTimestamp("creation_date"));

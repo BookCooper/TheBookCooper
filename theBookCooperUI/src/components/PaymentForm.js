@@ -52,11 +52,18 @@ function PaymentForm() {
 
                 //get store item data
                 const storeItemResponse = await axios.get(`/store-items/${storeId}`, { headers });
-                setStoreItem(storeItemResponse.data);
+                setStoreItem(storeItemResponse.data)
+
+                console.log("store item is: " + storeItem)
+                console.log(storeItemResponse.data)
+                console.log("store item id is: " + storeId)
 
                 //get user data
                 const userResponse = await axios.get(`/users/${userId}`, { headers });
+                console.log("user id is: " + userId)
+
                 setUserInfo(userResponse.data);
+                console.log("User response " + userResponse.data);
 
                 console.log(userInfo)
                 
@@ -105,7 +112,6 @@ function PaymentForm() {
 
                     const updateResponse = await axios.put(`/users/update/${userId}`, {
                         userName: userInfo.userName,
-                        password: userInfo.password,
                         email: userInfo.email,
                         bBucksBalance: newBalance
                     }, { headers });
