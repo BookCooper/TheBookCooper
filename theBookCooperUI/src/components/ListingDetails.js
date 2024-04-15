@@ -116,13 +116,16 @@ function ShowListing() {
                 <pre>{JSON.stringify(book, null, 2)}</pre>
                 <pre>{JSON.stringify(seller, null, 2)}</pre>
                 <pre>{JSON.stringify(buyer, null, 2)}</pre>
+                
+                <br/> <br/>
 
-                <a> you have B-Bucks </a> <br/> <br/>
+                {success ? <a> You Bought the book! </a>
+                         : <a> {transaction} </a>
+                }
+                
+                <br/> <br/>
 
                 <button onClick={newTransaction} disabled={success} >Buy Book</button>
-                {success ? <a> You Bought the book! {JSON.stringify(transaction, null, 2)} </a>
-                         : <a> </a>
-                }
             </>
         );
     return <h1>Boo! (k)</h1>;
