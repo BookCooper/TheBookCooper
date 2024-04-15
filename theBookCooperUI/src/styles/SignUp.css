@@ -56,4 +56,37 @@
   .signup-page-button:hover {
     background: #007CBA; /* Darker shade for hover */
   }
+  
+  /* Labels, Headers, and Links */
+  .label-text, .account-link {
+    font-size: 25px;
+    margin: 20px 40px; /* Adjust as needed */
+    margin-bottom: 20px; /* Space between elements */  
+  }
+  
+  .label-text {
+    font-size: 25px;
+  }
+  
+  .account-link {
+    color: #000000;
+    text-decoration: none; /* Removes underline */
+    font-size: 20px;
+  }
+  
+  .login-text {
+    font-family: Arial, sans-serif;
+    font-weight: 50;
+    font-size: 18px;
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none; /* Removes underline from links */
+  }
 
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .input-field, .signup-page-button {
+      width: 90%; /* Allows for responsive adjustment on smaller screens */
+    }
+  }
+  

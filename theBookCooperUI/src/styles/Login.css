@@ -13,13 +13,16 @@
   flex-direction: column;
   align-items: center;
   width: 580px; /* Fixed width for control */
+  max-width: 960px; /* Maximum width the box can expand to */
   min-height: 65vh; /* Minimum height to maintain a responsive aspect */
   max-height: 85vh; /* Maximum height to prevent overflow of the viewport */
   background: #FFFFFF;
   border-radius: 55px;
   padding: 20px;
   overflow-y: auto; /* Allows scrolling if content exceeds max height */
+  margin: auto; /* Centers the box if the viewport is wider than max-width */
 }
+
 
 /* Add this to ensure the form contents are also centered */
 .form-container {
@@ -60,6 +63,11 @@
   font-size: 25px;
   border: none;
   cursor: pointer;
+  transition: background-color 0s ease; /* Smooth transition for hover effect */
+}
+
+.login-page-button:hover {
+  background: #025ABB; /* Darker shade of blue for hover state */
 }
 
 /* Styling for Labels and Additional Texts */
@@ -72,8 +80,7 @@
 .email-label, .password-label{
   font-size: 25px;
   margin: 20px 40px; /* Adjust as needed */
-  margin-bottom: 20px; /* Space between elements */
-  
+  margin-bottom: 20px; /* Space between elements */  
 }
 
 .sign-up-text, .forgot-password {
@@ -95,9 +102,10 @@
 
 
 
+
 /* Responsive Design Adjustments */
 @media (max-width: 768px) {
-  .email-box, .password-box, .login-button, .sign-up-text, .forgot-password, .footer-links {
+  .email-box, .password-box, .login-page-button, .sign-up-text, .forgot-password, .footer-links {
     width: 90%; /* Adjusts input and button width for smaller screens */
   }
 }
