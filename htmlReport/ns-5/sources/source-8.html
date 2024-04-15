@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > User</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.thebookcooper.model</a>
+</div>
+
+<h1>Coverage Summary for Class: User (com.thebookcooper.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">User</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.model;
+&nbsp;
+&nbsp;import com.thebookcooper.util.UserDTO;
+&nbsp;
+&nbsp;import java.sql.Timestamp;
+&nbsp;
+<b class="fc">&nbsp;public class User implements UserDTO {</b>
+&nbsp;
+&nbsp;    private long userId;
+&nbsp;    private String userName;
+&nbsp;    private String email;
+&nbsp;    private double bBucksBalance;
+&nbsp;    private Timestamp creationDate;
+&nbsp;    private Timestamp lastLogin;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public long getUserId() {
+<b class="fc">&nbsp;        return userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserId(long userId) {
+<b class="fc">&nbsp;        this.userId = userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getUserName() {
+<b class="fc">&nbsp;        return userName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Timestamp getLastLogin() {
+<b class="fc">&nbsp;        return lastLogin;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setLastLogin(Timestamp lastLogin) {
+<b class="fc">&nbsp;        this.lastLogin = lastLogin;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Timestamp getCreationDate() {
+<b class="fc">&nbsp;        return creationDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCreationDate(Timestamp creationDate) {
+<b class="fc">&nbsp;        this.creationDate = creationDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public double getBBucksBalance() {
+<b class="fc">&nbsp;        return bBucksBalance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBBucksBalance(double bBucksBalance) {
+<b class="fc">&nbsp;        this.bBucksBalance = bBucksBalance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getEmail() {
+<b class="fc">&nbsp;        return email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEmail(String email) {
+<b class="fc">&nbsp;        this.email = email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserName(String userName) {
+<b class="fc">&nbsp;        this.userName = userName;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;User{&quot; +</b>
+&nbsp;                &quot;userId=&quot; + userId +
+&nbsp;                &quot;, userName=&#39;&quot; + userName + &#39;\&#39;&#39; +
+&nbsp;                &quot;, email=&#39;&quot; + email + &#39;\&#39;&#39; +
+&nbsp;                &quot;, bBucksBalance=&quot; + bBucksBalance +
+&nbsp;                &quot;, creationDate=&quot; + creationDate +
+&nbsp;                &quot;, lastLogin=&quot; + lastLogin +
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-15 19:31</div>
+</div>
+</body>
+</html>

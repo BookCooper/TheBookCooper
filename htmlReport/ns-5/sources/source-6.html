@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > PointTransaction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.thebookcooper.model</a>
+</div>
+
+<h1>Coverage Summary for Class: PointTransaction (com.thebookcooper.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PointTransaction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65%
+  </span>
+  <span class="absValue">
+    (13/20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.model;
+&nbsp;
+&nbsp;import com.thebookcooper.util.PointTransactionDTO;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.sql.Timestamp;
+&nbsp;
+<b class="fc">&nbsp;public class PointTransaction implements PointTransactionDTO {</b>
+&nbsp;
+&nbsp;    private long bbTransactionId;
+&nbsp;    private long userId;
+&nbsp;    private String transactionType;
+&nbsp;    private BigDecimal amount;
+&nbsp;    private Timestamp transactionDate;
+&nbsp;    private BigDecimal currentBalance;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public long getBbTransactionId() {
+<b class="fc">&nbsp;        return bbTransactionId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBbTransactionId(long bbTransactionId) {
+<b class="fc">&nbsp;        this.bbTransactionId = bbTransactionId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public long getUserId() {
+<b class="fc">&nbsp;        return userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUserId(long userId) {
+<b class="fc">&nbsp;        this.userId = userId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String getTransactionType() {
+<b class="fc">&nbsp;        return transactionType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTransactionType(String transactionType) {
+<b class="fc">&nbsp;        this.transactionType = transactionType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public BigDecimal getAmount() {
+<b class="fc">&nbsp;        return amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setAmount(BigDecimal amount) {
+<b class="fc">&nbsp;        this.amount = amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public Timestamp getTransactionDate() {
+<b class="fc">&nbsp;        return transactionDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTransactionDate(Timestamp transactionDate) {
+<b class="fc">&nbsp;        this.transactionDate = transactionDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public BigDecimal getCurrentBalance() {
+<b class="fc">&nbsp;        return currentBalance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCurrentBalance(BigDecimal currentBalance) {
+<b class="fc">&nbsp;        this.currentBalance = currentBalance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;PointTransaction{&quot; +</b>
+<b class="nc">&nbsp;                &quot;bbTransactionId=&quot; + bbTransactionId +</b>
+<b class="nc">&nbsp;                &quot;, userId=&quot; + userId +</b>
+<b class="nc">&nbsp;                &quot;, transactionType=&#39;&quot; + transactionType + &#39;\&#39;&#39; +</b>
+<b class="nc">&nbsp;                &quot;, amount=&quot; + amount +</b>
+<b class="nc">&nbsp;                &quot;, transactionDate=&quot; + transactionDate +</b>
+<b class="nc">&nbsp;                &quot;, currentBalance=&quot; + currentBalance +</b>
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-15 19:31</div>
+</div>
+</body>
+</html>

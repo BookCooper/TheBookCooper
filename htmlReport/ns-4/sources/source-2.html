@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BookSearchDAO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.thebookcooper.dao</a>
+</div>
+
+<h1>Coverage Summary for Class: BookSearchDAO (com.thebookcooper.dao)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BookSearchDAO</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.5%
+  </span>
+  <span class="absValue">
+    (39/51)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.dao;
+&nbsp;
+&nbsp;import com.thebookcooper.model.BookSearch;
+&nbsp;import com.thebookcooper.util.DataAccessObject;
+&nbsp;
+&nbsp;import java.sql.*;
+&nbsp;
+&nbsp;public class BookSearchDAO extends DataAccessObject&lt;BookSearch&gt; {
+&nbsp;
+&nbsp;    private static final String INSERT = &quot;INSERT INTO book_searches (user_id, search_query, search_date) VALUES (?, ?, CURRENT_TIMESTAMP)&quot;;
+&nbsp;    private static final String GET_ONE = &quot;SELECT search_id, user_id, search_query, search_date FROM book_searches WHERE search_id=?&quot;;
+&nbsp;    private static final String UPDATE = &quot;UPDATE book_searches SET user_id=?, search_query=?, search_date=CURRENT_TIMESTAMP WHERE search_id=?&quot;;
+&nbsp;    private static final String DELETE = &quot;DELETE FROM book_searches WHERE search_id=?&quot;;
+&nbsp;
+&nbsp;    public BookSearchDAO(Connection connection) {
+<b class="fc">&nbsp;        super(connection);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public BookSearch findById(long id) {
+<b class="fc">&nbsp;        BookSearch search = new BookSearch();</b>
+<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE)) {</b>
+<b class="fc">&nbsp;            statement.setLong(1, id);</b>
+<b class="fc">&nbsp;            ResultSet rs = statement.executeQuery();</b>
+<b class="fc">&nbsp;            if (rs.next()) {</b>
+<b class="fc">&nbsp;                search.setSearchId(rs.getLong(&quot;search_id&quot;));</b>
+<b class="fc">&nbsp;                search.setUserId(rs.getLong(&quot;user_id&quot;));</b>
+<b class="fc">&nbsp;                search.setSearchQuery(rs.getString(&quot;search_query&quot;));</b>
+<b class="fc">&nbsp;                search.setSearchDate(rs.getTimestamp(&quot;search_date&quot;));</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return search;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public BookSearch create(BookSearch dto) {
+<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {</b>
+<b class="fc">&nbsp;            statement.setLong(1, dto.getUserId());</b>
+<b class="fc">&nbsp;            statement.setString(2, dto.getSearchQuery());</b>
+&nbsp;
+<b class="fc">&nbsp;            int affectedRows = statement.executeUpdate();</b>
+<b class="fc">&nbsp;            if (affectedRows == 0) {</b>
+<b class="nc">&nbsp;                throw new SQLException(&quot;Creating book search failed, no rows affected.&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {</b>
+<b class="fc">&nbsp;                if (generatedKeys.next()) {</b>
+<b class="fc">&nbsp;                    dto.setSearchId(generatedKeys.getLong(1));</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    throw new SQLException(&quot;Creating book search failed, no ID obtained.&quot;);</b>
+&nbsp;                }
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            return dto;</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public BookSearch update(BookSearch dto) {
+&nbsp;
+<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE)) {</b>
+<b class="fc">&nbsp;            statement.setLong(1, dto.getUserId());</b>
+<b class="fc">&nbsp;            statement.setString(2, dto.getSearchQuery());</b>
+<b class="fc">&nbsp;            statement.setLong(3, dto.getSearchId());</b>
+&nbsp;
+<b class="fc">&nbsp;            int affectedRows = statement.executeUpdate();</b>
+<b class="fc">&nbsp;            if (affectedRows == 0) {</b>
+<b class="nc">&nbsp;                throw new SQLException(&quot;Updating book search failed, no rows affected.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return dto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void delete(long id) {
+<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(DELETE)) {</b>
+<b class="fc">&nbsp;            statement.setLong(1, id);</b>
+&nbsp;
+<b class="fc">&nbsp;            int affectedRows = statement.executeUpdate();</b>
+<b class="fc">&nbsp;            if (affectedRows == 0) {</b>
+<b class="nc">&nbsp;                throw new SQLException(&quot;Deleting book search failed, no rows affected.&quot;);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-15 19:31</div>
+</div>
+</body>
+</html>

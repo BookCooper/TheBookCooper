@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BookTransaction</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.thebookcooper.model</a>
+</div>
+
+<h1>Coverage Summary for Class: BookTransaction (com.thebookcooper.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BookTransaction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.8%
+  </span>
+  <span class="absValue">
+    (15/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.2%
+  </span>
+  <span class="absValue">
+    (15/22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.model;
+&nbsp;
+&nbsp;
+&nbsp;import com.thebookcooper.util.BookTransactionDTO;
+&nbsp;
+&nbsp;import java.sql.Timestamp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;public class BookTransaction implements BookTransactionDTO{</b>
+&nbsp;
+&nbsp;    private long transactionId;
+&nbsp;    private long buyerId;
+&nbsp;    private long sellerId;
+&nbsp;    private Timestamp transactionDate;
+&nbsp;    private long listingId;
+&nbsp;    private double transactionPrice;
+&nbsp;    private String transactionStatus;
+&nbsp;
+&nbsp;    // Getters and Setters
+&nbsp;    public long getTransactionId() {
+<b class="fc">&nbsp;        return transactionId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTransactionId(long transactionId) {
+<b class="fc">&nbsp;        this.transactionId = transactionId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public long getBuyerId() {
+<b class="fc">&nbsp;        return buyerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBuyerId(long buyerId) {
+<b class="fc">&nbsp;        this.buyerId = buyerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public long getSellerId() {
+<b class="fc">&nbsp;        return sellerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setSellerId(long sellerId) {
+<b class="fc">&nbsp;        this.sellerId = sellerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Timestamp getTransactionDate() {
+<b class="fc">&nbsp;        return transactionDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTransactionDate(Timestamp transactionDate) {
+<b class="fc">&nbsp;        this.transactionDate = transactionDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public long getListingId() {
+<b class="fc">&nbsp;        return listingId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setListingId(long listingId) {
+<b class="fc">&nbsp;        this.listingId = listingId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public double getTransactionPrice() {
+<b class="fc">&nbsp;        return transactionPrice;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTransactionPrice(double transactionPrice) {
+<b class="fc">&nbsp;        this.transactionPrice = transactionPrice;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getTransactionStatus() {
+<b class="fc">&nbsp;        return transactionStatus;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTransactionStatus(String transactionStatus) {
+<b class="fc">&nbsp;        this.transactionStatus = transactionStatus;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+&nbsp;        return &quot;BookTransaction{&quot; +
+<b class="nc">&nbsp;                &quot;transactionId=&quot; + transactionId +</b>
+<b class="nc">&nbsp;                &quot;, buyerId=&quot; + buyerId +</b>
+<b class="nc">&nbsp;                &quot;, sellerId=&quot; + sellerId +</b>
+<b class="nc">&nbsp;                &quot;, transactionDate=&quot; + transactionDate +</b>
+<b class="nc">&nbsp;                &quot;, listingId=&quot; + listingId +</b>
+<b class="nc">&nbsp;                &quot;, transactionPrice=&quot; + transactionPrice +</b>
+<b class="nc">&nbsp;                &quot;, transactionStatus=&#39;&quot; + transactionStatus + &#39;\&#39;&#39; +</b>
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-15 19:31</div>
+</div>
+</body>
+</html>
