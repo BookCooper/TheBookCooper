@@ -20,7 +20,6 @@ import com.thebookcooper.model.User;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/point-transactions") // Base path for point transactions
 public class PointTransactionController {
 

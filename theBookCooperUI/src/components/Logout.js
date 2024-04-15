@@ -1,7 +1,6 @@
 import useUser from "../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import {getAuth, signOut} from 'firebase/auth';
-import '../styles/Login.css';
 
 const Logout = () => {
     
@@ -27,6 +26,12 @@ const Logout = () => {
             {user
                 ? <button className = "login-button" onClick={handleLogout}>Log Out</button>
                 : <button className = "login-button" onClick={() => navigate('/login')}>Log In</button>
+            }
+            {
+            //{user
+            //   ? <pre>You are logged in!</pre>
+            //   : <p>Log in here!</p>
+            //}
             }
         </div>
     );

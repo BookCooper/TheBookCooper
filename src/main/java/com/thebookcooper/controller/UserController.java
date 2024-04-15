@@ -15,7 +15,6 @@ import com.thebookcooper.dao.UserDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/users") // Base path
 public class UserController {
 

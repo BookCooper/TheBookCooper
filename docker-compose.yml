@@ -31,13 +31,6 @@ services:
     depends_on:
       - db
 
-  ui: 
-      build: theBookCooperUI
-      ports:
-      - 3000:3000
-      depends_on:
-      - app
-
 volumes:
   db-data:
 

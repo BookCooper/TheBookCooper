@@ -24,7 +24,6 @@ import com.thebookcooper.dao.PointTransactionDAO;
 import com.thebookcooper.dao.UserDAO;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/book-transactions") // Base path for transactions
 public class BookTransactionController {
 

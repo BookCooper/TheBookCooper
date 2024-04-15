@@ -19,7 +19,6 @@ import com.thebookcooper.dao.BookInfoDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/listings")
 public class ListingsController {
     

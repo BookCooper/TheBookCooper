@@ -29,7 +29,6 @@ import java.net.*;
 import java.util.*;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/books") // Base path
 public class BookInfoController {
 

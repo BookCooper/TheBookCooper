@@ -18,7 +18,6 @@ import com.thebookcooper.dao.StoreItemDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/store-items")
 public class StoreItemController {
 
