@@ -15,6 +15,7 @@ import SearchPage from "./pages/SearchPage";
 import ListingDetailPage from "./pages/ListingDetailPage"
 import CreateBookPage from "./pages/CreateBookPage"
 import StorePage from "./pages/StorePage"
+import CreateListingPage from "./pages/CreateListingPage"
 import { UserDetailsProvider } from './hooks/useDetails'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -35,6 +36,7 @@ root.render(
             <Route path="/search" element={<SearchPage />} />
             <Route path="/listings/:listingId" element={<ListingDetailPage />} />
             <Route path="/create-book" element={<CreateBookPage />} />
+            <Route path="/create-listing" element={<CreateListingPage />} />
             <Route path="/store" element={<StorePage />} />
         </Routes>
     </BrowserRouter>

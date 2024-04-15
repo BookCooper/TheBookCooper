@@ -19,9 +19,8 @@ const Header = () => {
             {user
                 ?
                     <div className = "header-buttons">
-                        <button className="about-button" onClick={() => navigate('/about')}>About Us</button>
-                        <button className="contact-button" onClick={() => navigate('/contact')}>Contact Us</button>
                         <button className="search-button" onClick={() => navigate('/search')}>Search</button>
+                        <button className="contact-button" onClick={() => navigate('/create-listing')}>Create Listing</button>
                         <button className="search-button" onClick={() => navigate('/store')}>Store</button>
                         <Logout />
                     </div>
