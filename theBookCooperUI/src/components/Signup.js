@@ -30,7 +30,7 @@ const Signup = () => {
                 bBucksBalance: 0.0  // Optional, include if needed
             }, {headers});
 
-            navigate('/'); // Navigate to homepage or dashboard upon successful signup
+            navigate('/login'); // Navigate to homepage or dashboard upon successful signup
         } catch (error) {
             console.error('Signup error:', error);
             setError(error.response?.data?.message || 'Failed to sign up')
