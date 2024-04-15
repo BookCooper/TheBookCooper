@@ -2,7 +2,6 @@
 CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   user_name VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,  -- Should be hashed
   email VARCHAR(255) UNIQUE NOT NULL,
   b_bucks_balance DECIMAL(10, 2) DEFAULT 0,
   creation_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
