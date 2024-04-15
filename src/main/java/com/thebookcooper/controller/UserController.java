@@ -62,7 +62,6 @@ public class UserController {
             UserDAO userDAO = new UserDAO(connection);
 
             newUser.setUserName((String) inputMap.get("userName"));
-            newUser.setPassword((String) inputMap.get("password"));
             newUser.setEmail((String) inputMap.get("email"));
             newUser.setBBucksBalance(Double.parseDouble(inputMap.get("bBucksBalance").toString()));
             newUser.setCreationDate(new Timestamp(System.currentTimeMillis()));
@@ -92,7 +91,6 @@ public class UserController {
             User updatedUser = new User();
             updatedUser.setUserId(id);
             updatedUser.setUserName((String) inputMap.get("userName"));
-            updatedUser.setPassword((String) inputMap.get("password"));
             updatedUser.setEmail((String) inputMap.get("email"));
             updatedUser.setBBucksBalance(Double.parseDouble(inputMap.get("bBucksBalance").toString()));
             updatedUser.setLastLogin(new Timestamp(System.currentTimeMillis()));

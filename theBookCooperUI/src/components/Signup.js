@@ -5,40 +5,37 @@ import axios from 'axios';
 import '../styles/SignUp.css';
 
 const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [error, setError] = useState('');
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const signUp = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-        setError(<span style={{ color: 'red' }}>Passwords do not match.</span>);
-        return;
-    }
-    try {
-        const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
-        const token = await userCredential.user.getIdToken(); // Get the Firebase token after successful signup
+    const signUp = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            setError(<span style={{ color: 'red' }}>Passwords do not match.</span>);
+            return;
+        }
+        try {
+            const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+            const token = await userCredential.user.getIdToken();
+            const headers = { Authorization: `Bearer ${token}` };
 
-        await axios.post('/users/create', {
-            userName: username,
-            email: email,
-            bBucksBalance: 0.0  // Optional, include if needed
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+            await axios.post('/users/create', {
+                userName: username,
+                email: email,
+                bBucksBalance: 0.0  // Optional, include if needed
+            }, {headers});
 
-        navigate('/'); // Navigate to homepage or dashboard upon successful signup
-    } catch (error) {
-        console.error('Signup error:', error);
-        setError(error.response?.data?.message || 'Failed to sign up.');
-    }
-};
+            navigate('/'); // Navigate to homepage or dashboard upon successful signup
+        } catch (error) {
+            console.error('Signup error:', error);
+            setError(error.response?.data?.message || 'Failed to sign up')
+        }
+    };
 
 
     return (
