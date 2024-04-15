@@ -1,27 +1,110 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import '../styles/Login.css';
+import { useDetails } from '../hooks/useDetails';
+import axios from 'axios';
+import useUser from "../hooks/useUser";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
+    const { userId, setUserId } = useDetails();
+    const {user, isLoading} = useUser();
     const navigate = useNavigate();
 
+    // Reset userId when component mounts
+    useEffect(() => {
+        setUserId(null);
+        console.log(userId)
+    }, [setUserId, userId]);
+    
     const logIn = async (e) => {
-        e.preventDefault(); // Prevent the form from causing a page reload
+        e.preventDefault();
+        setError('');
+        if (!email || !password) {
+            setError('Please provide both email and password');
+            return;
+        }
+
         try {
-            await signInWithEmailAndPassword(getAuth(), email, password);
-            navigate('/');
+            const userCredential = await signInWithEmailAndPassword(getAuth(), email, password);
+            const firebaseUser = userCredential.user;
+
+            // Get the token from the signed-in user
+            const token = await firebaseUser.getIdToken();
+            const headers = { Authorization: `Bearer ${token}` };
+
+            // Fetch user data using the token
+            const userResponse = await axios.get(`/users/email/${email}`, { headers });
+            console.log("API Response:", userResponse.data);
+
+            // If the user data includes the userId, set it in the state
+            if (userResponse.data && userResponse.data.userId) {
+                console.log("Setting userID:", userResponse.data.userId);
+                setUserId(userResponse.data.userId);
+                navigate('/'); // Navigate only after userId is set
+            }
+
+             /*   try {
+                    const token = await user.getIdToken();
+                    const headers = { Authorization: `Bearer ${token}` };
+                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
+                    console.log("API Response:", userResponse.data);
+                    
+                    if (userResponse.data && userResponse.data.userId) {
+                        console.log("Setting userID:", userResponse.data.userId);
+                        setUserId(userResponse.data.userId);
+                    }
+                } catch (e) {
+                    console.error("Error fetching user data:", e);
+                    setError(e.toString());
+                }
+            }*/
+
         } catch (e) {
+            console.error("Login error:", e);
             setError(e.message);
         }
     };
+
+    // Fetch user data after successful login
+    /*useEffect(() => {
+        const fetchUserData = async () => {
+            if (user) {
+                try {
+                    const token = await user.getIdToken();
+                    const headers = { Authorization: `Bearer ${token}` };
+                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
+                    console.log("API Response:", userResponse.data);
+                    
+                    if (userResponse.data && userResponse.data.userId) {
+                        console.log("Setting userID:", userResponse.data.userId);
+                        setUserId(userResponse.data.userId);
+                    }
+                } catch (e) {
+                    console.error("Error fetching user data:", e);
+                    setError(e.toString());
+                }
+            }
+        };
+        if (user) {
+            fetchUserData();
+        }
+    }, [email]);*/
+
+    useEffect(() => {
+        if (userId) {
+            console.log("User ID is now set to:", userId);
+            navigate('/'); // Navigate only after userId is set
+        }
+    }, [userId, navigate]);
+
+
     return (
         <div className="login-container">
-            <div className="white-box">
+            <div className="login-white-box">
                 <form onSubmit={logIn} className="form-container">
                 <h1 className="login-label">Login</h1>
             <div>

@@ -1,12 +1,24 @@
 /* General Page Background */
-.signup-container {
+  .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 85vh;
+    min-height: 100vh;  /* Full height of the viewport */
     background: #025ABB;
   }
-  
+
+  .signup-white-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 580px; /* Fixed width for control */
+    max-width: 960px; /* Maximum width the box can expand to */
+    min-height: 100%; /* Adjusted to be flexible with content */
+    background: #FFFFFF;
+    border-radius: 55px;
+    padding: 20px;
+    margin: auto; /* Centers the box if the viewport is wider than max-width */
+  }
   /* Main Box Styling */
   .signup-box {
     display: flex;
@@ -59,6 +71,8 @@
   
   /* Labels, Headers, and Links */
   .label-text, .account-link {
+    font-family: Arial, sans-serif;
+    color: #000000;
     font-size: 25px;
     margin: 20px 40px; /* Adjust as needed */
     margin-bottom: 20px; /* Space between elements */  

@@ -75,6 +75,7 @@ public class BookTransactionController {
 
             // we don't necessairly need transaction price; it's in the listing
             long buyerId = Long.parseLong(inputMap.get("buyerId").toString());
+            long sellerId = Long.parseLong(inputMap.get("sellerId").toString());
             double transactionPrice = Double.parseDouble(inputMap.get("transactionPrice").toString());
             String transactionStatus = (String) inputMap.get("transactionStatus");
 
@@ -90,47 +91,38 @@ public class BookTransactionController {
 
             // Get buyer's current balance
             User buyer = userDAO.findById(buyerId);
-            java.math.BigDecimal currentBalance = pointTransactionDAO.fetchCurrentBalanceByUserId(buyerId);
+            User seller = userDAO.findById(sellerId);
+
+            java.math.BigDecimal currentBuyerBalance = pointTransactionDAO.fetchCurrentBalanceByUserId(buyerId);
+            java.math.BigDecimal currentSellerBalance = pointTransactionDAO.fetchCurrentBalanceByUserId(sellerId);
             
             String trans_string = String.valueOf(transactionPrice);
             
 
             double curBal = Double.parseDouble(trans_string);
-            double newBal;
+            double newBuyerBal, newSellerBal;
             
-            if(currentBalance.doubleValue() >= transactionPrice) {
-                newBal = currentBalance.doubleValue() - transactionPrice;
+            if(currentBuyerBalance.doubleValue() >= transactionPrice) {
+                newBuyerBal = currentBuyerBalance.doubleValue() - transactionPrice;
+                newSellerBal = currentSellerBalance.doubleValue() + transactionPrice;
             }
             else {
                 responseEntity = new ResponseEntity<>("Insufficient Balance. Failed to process the transaction.", HttpStatus.INTERNAL_SERVER_ERROR);
                 return responseEntity; 
             }
             
-            String newBal_s = String.valueOf(newBal);
-
-            java.math.BigDecimal updatedBalance = new java.math.BigDecimal(newBal_s);
-            
-            //updatedBalance = java.math.BigDecimal(updatedBalance)
-
-            String pointTransactionType = "";
-            if ("purchase completed".equalsIgnoreCase(transactionStatus)) {
-                updatedBalance = currentBalance.subtract(java.math.BigDecimal.valueOf(transactionPrice));
-                pointTransactionType = "Purchase Completed";
-            } else if ("purchase pending".equalsIgnoreCase(transactionStatus)) {
-                updatedBalance = currentBalance.subtract(java.math.BigDecimal.valueOf(transactionPrice));
-                pointTransactionType = "Purchase Pending";
-            }
-
             // Update the buyer's balance 
-            buyer.setBBucksBalance(newBal);
+            buyer.setBBucksBalance(newBuyerBal);
+            seller.setBBucksBalance(newSellerBal);
             userDAO.update(buyer);
+            userDAO.update(seller);
 
             // Create a new point transaction 
             PointTransaction pointTransaction = new PointTransaction();
             pointTransaction.setUserId(buyerId);
-            pointTransaction.setTransactionType(pointTransactionType);
+            pointTransaction.setTransactionType("Purchased");
             pointTransaction.setAmount(java.math.BigDecimal.valueOf(transactionPrice));
-            pointTransaction.setCurrentBalance(updatedBalance);
+            pointTransaction.setCurrentBalance(java.math.BigDecimal.valueOf(newBuyerBal));
             pointTransaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
             PointTransaction createdPointTransaction = pointTransactionDAO.create(pointTransaction);
 

@@ -8,7 +8,6 @@ public class User implements UserDTO {
 
     private long userId;
     private String userName;
-    private String password;
     private String email;
     private double bBucksBalance;
     private Timestamp creationDate;
@@ -64,20 +63,11 @@ public class User implements UserDTO {
         this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", bBucksBalance=" + bBucksBalance +
                 ", creationDate=" + creationDate +

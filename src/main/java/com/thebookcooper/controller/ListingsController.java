@@ -25,6 +25,13 @@ public class ListingsController {
     
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
     
+    private Listing findListingById(long id) throws SQLException {
+        try (Connection connection = dcm.getConnection()) {
+            ListingsDAO listingDAO = new ListingsDAO(connection);
+            return listingDAO.findById(id);
+        }
+    }
+
     @GetMapping("/count")
     public ResponseEntity<?> countListings() {
         try (Connection connection = dcm.getConnection();
@@ -43,8 +50,9 @@ public class ListingsController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getListingById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
-            ListingsDAO listingDAO = new ListingsDAO(connection);
-            Listing listing = listingDAO.findById(id);
+
+            Listing listing = findListingById(id);
+
             if (listing != null) {
                 return new ResponseEntity<>(listing, HttpStatus.OK);
             } else {
@@ -124,9 +132,8 @@ public class ListingsController {
             Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
             Connection connection = dcm.getConnection();
             ListingsDAO listDAO = new ListingsDAO(connection);
+            Listing updatedListing = findListingById(id);
 
-            Listing updatedListing = new Listing();
-            updatedListing.setListingId(id);
             updatedListing.setUserId(Long.parseLong(inputMap.get("userId").toString()));
             updatedListing.setBookId(Long.parseLong(inputMap.get("bookId").toString()));
             updatedListing.setListingStatus((String) inputMap.get("listingStatus"));

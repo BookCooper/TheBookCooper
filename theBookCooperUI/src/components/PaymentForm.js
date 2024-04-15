@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
-
+import { useParams } from 'react-router-dom';
+import useUser from "../hooks/useUser";
+import { useDetails } from '../hooks/useDetails';
 
 
 const CARD_OPTIONS = {
@@ -25,12 +27,62 @@ const CARD_OPTIONS = {
 }
 
 
-export default function PaymentForm() {
+function PaymentForm() {
 
     const [ success, setSuccess ] = useState(false); 
     const stripe = useStripe(); 
     const elements = useElements(); 
+    const { storeId } = useParams();
+    const [ storeItem, setStoreItem ] = useState(null); 
+    const [ userInfo, setUserInfo ] = useState(null); 
+    const { user, isLoading } = useUser();
+    const { userId } = useDetails();
+
+    /* get store item stuff*/
+    useEffect(() => {
+        const loadStoreItem = async () => {
+            if (!user || !userId) {
+                setStoreItem('No user logged in.');
+                return;
+            }
+            try {
+                const token = await user.getIdToken();
+                const headers = token ? { Authorization: `Bearer ${token}` } : {};
+                console.log(token)
+
+                //get store item data
+                const storeItemResponse = await axios.get(`/store-items/${storeId}`, { headers });
+                setStoreItem(storeItemResponse.data)
+
+                console.log("store item is: " + storeItem)
+                console.log(storeItemResponse.data)
+                console.log("store item id is: " + storeId)
+
+                //get user data
+                const userResponse = await axios.get(`/users/${userId}`, { headers });
+                console.log("user id is: " + userId)
+
+                setUserInfo(userResponse.data);
+                console.log("User response " + userResponse.data);
+
+                console.log(userInfo)
+                
+            } catch (e) {
+                setStoreItem(e.message);
+            }
+        };
+
+        if (user) {
+            loadStoreItem();
+        }
+    }, [storeId, userId, user]);
+
+    useEffect(() => {
+        console.log("Current userID:", userId);  // Check the value of userId whenever the effect runs
+    }, [user, userId, storeId]);  // Adjust dependencies as needed
+
     
+    /* Stripe Payment stuff */
     const handleSubmit = async(e) => {
 
         e.preventDefault();
@@ -44,13 +96,25 @@ export default function PaymentForm() {
             try {
                 const {id} = paymentMethod; 
                 const response = await axios.post("http://localhost:3001/payment", {
-                    amount: 50,
+                    amount: storeItem.itemPrice * 100,
                     id: id
                 });
 
                 if(response.data.success) {
                     console.log("Successful payment"); 
                     setSuccess(true); 
+
+                    const newBalance = userInfo.bbucksBalance + parseFloat(storeItem.item)
+                    console.log("New Balance is:" + newBalance)
+
+                    const token = await user.getIdToken();
+                    const headers = { Authorization: `Bearer ${token}` };
+
+                    const updateResponse = await axios.put(`/users/update/${userId}`, {
+                        userName: userInfo.userName,
+                        email: userInfo.email,
+                        bBucksBalance: newBalance
+                    }, { headers });
                 }
             }
             catch (error) {
@@ -62,6 +126,7 @@ export default function PaymentForm() {
         }
     }
 
+
     return (
         <>
             {!success ?
@@ -72,14 +137,17 @@ export default function PaymentForm() {
                         </div>
                     </fieldset>
 
-                    <button>Pay</button>
+                    <button disabled={!storeItem}>Pay</button>
                 </form>
             :
                 <div>
-                    <h2> You have just purchased 1000 B-Bucks! </h2>   
+                    <h2> You have just purchased {storeItem.item} </h2>   
+                    <h3> New B-Bucks Balance is {userInfo.bbucksBalance + parseFloat(storeItem.item)} </h3>
                 </div>
             }
         </>
 
     );
 }
+
+export default PaymentForm; 

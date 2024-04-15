@@ -14,12 +14,16 @@ import PaymentPage from "./pages/PaymentPage";
 import SearchPage from "./pages/SearchPage";
 import ListingDetailPage from "./pages/ListingDetailPage"
 import CreateBookPage from "./pages/CreateBookPage"
+import StorePage from "./pages/StorePage"
+import CreateListingPage from "./pages/CreateListingPage"
+import { UserDetailsProvider } from './hooks/useDetails'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { auth } from './firebase-config';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+    <UserDetailsProvider>
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />} />
@@ -28,12 +32,15 @@ root.render(
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/payment/:storeId" element={<PaymentPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/listings/:listingId" element={<ListingDetailPage />} />
             <Route path="/create-book" element={<CreateBookPage />} />
+            <Route path="/create-listing" element={<CreateListingPage />} />
+            <Route path="/store" element={<StorePage />} />
         </Routes>
-    </BrowserRouter>,
+    </BrowserRouter>
+    </UserDetailsProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function
