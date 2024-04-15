@@ -1,93 +1,108 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import '../styles/SignUp.css'; // Assuming you have similar styles as Login.css
+import axios from 'axios'; 
+import '../styles/SignUp.css';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
-  const [user, setUser] = useState(null); // You may not need this if you're using a custom hook like useUser 
 
   const navigate = useNavigate();
 
   const signUp = async (e) => {
-      e.preventDefault();
-      if(password !== confirmPassword){
-            setError(<span style={{ color: 'red' }}>Passwords do not match.</span>);
-          return;
-      }
-      try {
-          await createUserWithEmailAndPassword(getAuth(), email, password);
-          navigate('/'); // Navigate to homepage or dashboard upon successful signup
-      } catch (e) {
-          setError(e.message);
-      }
-  };
+    e.preventDefault();
+    if (password !== confirmPassword) {
+        setError(<span style={{ color: 'red' }}>Passwords do not match.</span>);
+        return;
+    }
+    try {
+        const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+        const token = await userCredential.user.getIdToken(); // Get the Firebase token after successful signup
 
-  return (
-    <div className="signup-container"> {/* Consider reusing login-container styles */}
-      <div className="white-box">
-        <form onSubmit={signUp} className="form-container"> {/* Reuse form-container styles */}
-          <h1 className="signup-label">Create Account</h1> {/* Reuse login-label styles, just change class if necessary */}
-          <div>
-            <label htmlFor="email" className="label-text">Email</label>
-            <input
-              id="email"
-              className="input-field" // Reuse email-box styles
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="username" className="label-text">Username</label>
-            <input
-              id="username"
-              className="input-field" // Consider adding a new class if you need
-              type="text"
-              placeholder="Your username"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="label-text">Password</label>
-            <input
-              id="password"
-              className="input-field" // Reuse password-box styles
-              type="password"
-              placeholder="Your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="confirm-password" className="label-text">Confirm Password</label>
-            <input
-              id="confirm-password"
-              className="input-field" // Consider adding a new class if you need different styles
-              type="password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="signup-page-button">Sign Up</button> {/* Consider reusing login-page-button styles */}
-          <div className="footer-links">
-            <Link to="/login" className="login-text">Already have an account? Log in here.</Link>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+        await axios.post('/users/create', {
+            userName: username,
+            email: email,
+            bBucksBalance: 0.0  // Optional, include if needed
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        navigate('/'); // Navigate to homepage or dashboard upon successful signup
+    } catch (error) {
+        console.error('Signup error:', error);
+        setError(error.response?.data?.message || 'Failed to sign up.');
+    }
+};
+
+
+    return (
+        <div className="signup-container">
+            <div className="signup-white-box">
+                <form onSubmit={signUp} className="form-container">
+                    <h1 className="signup-label">Create Account</h1>
+                    <div>
+                        <label htmlFor="email" className="label-text">Email</label>
+                        <input
+                            id="email"
+                            className="input-field"
+                            type="email"
+                            placeholder="Your email address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="username" className="label-text">Username</label>
+                        <input
+                            id="username"
+                            className="input-field"
+                            type="text"
+                            placeholder="Your username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="label-text">Password</label>
+                        <input
+                            id="password"
+                            className="input-field"
+                            type="password"
+                            placeholder="Your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="confirm-password" className="label-text">Confirm Password</label>
+                        <input
+                            id="confirm-password"
+                            className="input-field"
+                            type="password"
+                            placeholder="Confirm your password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {error && <p className="error-message">{error}</p>}
+                    <button type="submit" className="signup-page-button">Sign Up</button>
+                    <div className="footer-links">
+                        <Link to="/login" className="login-text">Already have an account? Log in here.</Link>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 }
 
 export default Signup;

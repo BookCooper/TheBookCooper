@@ -21,7 +21,7 @@ const Login = () => {
     };
     return (
         <div className="login-container">
-            <div className="white-box">
+            <div className="login-white-box">
                 <form onSubmit={logIn} className="form-container">
                 <h1 className="login-label">Login</h1>
             <div>
