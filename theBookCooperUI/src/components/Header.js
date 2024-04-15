@@ -11,7 +11,13 @@ const Header = () => {
 
     return (
         <header>
-            <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
+            
+            {user
+                ?
+                    <img src="./new_logo.png" alt="New Logo"/>
+                :
+                    <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
+            }
 
             {user
                 ?
@@ -33,4 +39,3 @@ const Header = () => {
 
 
 export default Header;
-

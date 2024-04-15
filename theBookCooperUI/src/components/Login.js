@@ -17,7 +17,8 @@ const Login = () => {
     // Reset userId when component mounts
     useEffect(() => {
         setUserId(null);
-    }, [setUserId]);
+        console.log(userId)
+    }, [setUserId, userId]);
     
     const logIn = async (e) => {
         e.preventDefault();
@@ -57,7 +58,7 @@ const Login = () => {
         if (user) {
             fetchUserData();
         }
-    }, [user, email]);
+    }, [email]);
 
     useEffect(() => {
         if (userId) {
