@@ -14,7 +14,7 @@ const Header = () => {
             
             {user
                 ?
-                    <img src="./new_logo.png" alt="New Logo"/>
+                    <img src="./new_logo.png" alt="New Logo" style={{cursor: 'pointer', width: "115px"}} onClick={() => navigate('/')} />
                 :
                     <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
             }
