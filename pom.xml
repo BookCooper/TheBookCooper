@@ -32,6 +32,8 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.1</version>
         </dependency>
+
+        <!-- Spring Security -->
         <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -40,6 +42,34 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.7.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.7.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.6.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
