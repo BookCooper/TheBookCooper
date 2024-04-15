@@ -21,6 +21,13 @@ public class UserController {
 
     private final DatabaseConnectionManager dcm = new DatabaseConnectionManager("db", 5432, "thebookcooper", "BCdev", "password");
 
+    private User findUserById(long id) throws SQLException {
+        try (Connection connection = dcm.getConnection()) {
+            UserDAO userDAO = new UserDAO(connection);
+            return userDAO.findById(id);
+        }
+    }
+
     @GetMapping("/count")
     public ResponseEntity<?> countUsers() {
         try (Connection connection = dcm.getConnection();
@@ -39,8 +46,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable("id") long id) {
         try (Connection connection = dcm.getConnection()) {
-            UserDAO userDAO = new UserDAO(connection);
-            User user = userDAO.findById(id);
+            User user = findUserById(id);
             if (user != null) {
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
@@ -52,6 +58,21 @@ public class UserController {
         }
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserById(@PathVariable("email") String email) {
+        try (Connection connection = dcm.getConnection()) {
+            UserDAO userDAO = new UserDAO(connection);
+            User user = userDAO.findByEmail(email);
+            if (user != null) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error retrieving user", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -89,8 +110,7 @@ public class UserController {
             Connection connection = dcm.getConnection();
             UserDAO userDAO = new UserDAO(connection);
 
-            User updatedUser = new User();
-            updatedUser.setUserId(id);
+            User updatedUser = findUserById(id);
             updatedUser.setUserName((String) inputMap.get("userName"));
             updatedUser.setPassword((String) inputMap.get("password"));
             updatedUser.setEmail((String) inputMap.get("email"));

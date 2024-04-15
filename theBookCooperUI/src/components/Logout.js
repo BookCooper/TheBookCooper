@@ -7,6 +7,7 @@ const Logout = () => {
     
     //for some reason you NEED to have isLoading (even though we don't use it)
     //or else the log in/log out buttons WILL NOT WORK (????)
+
     const { user, isLoading } = useUser();
     const navigate = useNavigate();
 
