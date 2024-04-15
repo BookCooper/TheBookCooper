@@ -18,7 +18,6 @@ public class UserTest {
         user = new User();
         user.setUserId(1L);
         user.setUserName("JohnDoe");
-        user.setPassword("password123");
         user.setEmail("john.doe@example.com");
         user.setBBucksBalance(150.00);
         user.setCreationDate(Timestamp.from(Instant.now()));
@@ -33,11 +32,6 @@ public class UserTest {
     @Test
     void testGetUserName() {
         assertEquals("JohnDoe", user.getUserName(), "User name should match the set value");
-    }
-
-    @Test
-    void testGetPassword() {
-        assertEquals("password123", user.getPassword(), "Password should match the set value");
     }
 
     @Test

@@ -26,12 +26,14 @@ public class UserDAOTest {
     @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        when(connection.prepareStatement(anyString(), anyInt())).thenReturn(preparedStatement);
+        when(connection.prepareStatement(anyString(), eq(Statement.RETURN_GENERATED_KEYS))).thenReturn(preparedStatement);
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
         when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true);
-        when(resultSet.getLong(1)).thenReturn(1L);
+        when(resultSet.getLong(1)).thenReturn(1L);  // Assuming primary key retrieval is simulated here
     }
+
 
     @Test
     void findByIdTest() throws SQLException {
@@ -62,7 +64,6 @@ public class UserDAOTest {
 
         User user = new User();
         user.setUserName("JohnDoe");
-        user.setPassword("pass123");
         user.setEmail("johndoe@example.com");
         user.setBBucksBalance(100.00);
         user = userDAO.create(user);
@@ -76,16 +77,14 @@ public class UserDAOTest {
 
     @Test
     void updateUserTest() throws SQLException {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);  // Simulate successful update
-
         User user = new User();
         user.setUserId(1L);
         user.setUserName("UpdatedName");
-        user.setPassword("newPassword");
         user.setEmail("update@example.com");
         user.setBBucksBalance(200.00);
         user.setLastLogin(new Timestamp(System.currentTimeMillis()));
+
+        when(preparedStatement.executeUpdate()).thenReturn(1); // Mock successful update
 
         User updatedUser = userDAO.update(user);
 
@@ -93,13 +92,13 @@ public class UserDAOTest {
         assertEquals("UpdatedName", updatedUser.getUserName(), "Username should be updated");
 
         verify(preparedStatement).setString(1, user.getUserName());
-        verify(preparedStatement).setString(2, user.getPassword());
-        verify(preparedStatement).setString(3, user.getEmail());
-        verify(preparedStatement).setDouble(4, user.getBBucksBalance());
-        verify(preparedStatement).setTimestamp(5, user.getLastLogin());
-        verify(preparedStatement).setLong(6, user.getUserId());
-        verify(preparedStatement, times(1)).executeUpdate();
+        verify(preparedStatement).setString(2, user.getEmail());
+        verify(preparedStatement).setDouble(3, user.getBBucksBalance());
+        verify(preparedStatement).setTimestamp(4, user.getLastLogin());
+        verify(preparedStatement).setLong(5, user.getUserId());
+        verify(preparedStatement).executeUpdate();
     }
+
 
     @Test
     void updateWithNoAffectedRows() throws SQLException {
