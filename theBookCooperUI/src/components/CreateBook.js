@@ -33,7 +33,7 @@ function NewBook() {
                 author,
                 genre,
                 bookCondition,
-                isbn: isbn ? parseInt(isbn, 10) : undefined,
+                isbn: isbn ? parseInt(isbn, 10) : 0,
                 price: price ? parseFloat(price) : 0
             };
 
