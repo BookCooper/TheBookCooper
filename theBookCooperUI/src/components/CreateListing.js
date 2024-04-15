@@ -7,6 +7,7 @@ import { useDetails } from '../hooks/useDetails';
 function NewListing() {
     const { user, isLoading } = useUser();
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const [bookId, setBookId] = useState("");
     const [bookCondition, setBookCondition] = useState("");
@@ -39,6 +40,7 @@ function NewListing() {
 
             const response = await axios.post(`/listings/create`, listingData, { headers });
             console.log('Listing created successfully:', response.data);
+            setSuccess(true);
         } catch (error) {
             console.error('Failed to create book:', error);
         } finally {
@@ -48,6 +50,7 @@ function NewListing() {
 
     return (
         <>
+            <br/>
             <a> Book ID: </a> <input
                 type="text"
                 value={bookId}
@@ -65,9 +68,22 @@ function NewListing() {
                 value={price}
                 onChange={e => setPrice(e.target.value)}
                 placeholder="Enter the book's price"
-            /><br/>
+            /><br/> <br/>
 
-            <button onClick={newListing} disabled={isLoading || !user || !bookId || !bookCondition || !price}>Create Book</button>
+
+
+            {success ? <a> You have listed the book! </a>
+                     : <a> </a>
+            }
+            <br/>
+
+
+
+
+            <button onClick={newListing} disabled={isLoading || !user || !bookId || !bookCondition || !price}>Create Book</button><br/><br/>
+
+
+            <a href="/create-book"> Can't find your book? Click here to create one! </a> 
         </>
     );
 }

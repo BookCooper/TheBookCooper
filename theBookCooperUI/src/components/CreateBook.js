@@ -14,6 +14,7 @@ function NewBook() {
     const [bookCondition, setBookCondition] = useState("");
     const [isbn, setIsbn] = useState("");
     const [price, setPrice] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const newBook = async () => {
         if (!user) {
@@ -38,6 +39,7 @@ function NewBook() {
             };
 
             console.log(bookData);
+            setSuccess(true)
 
             const response = await axios.post(`/books/create`, bookData, { headers });
             console.log('Book created successfully:', response.data);
@@ -93,7 +95,15 @@ function NewBook() {
                 placeholder="Enter the book's price (leave empty for autocompletion)"
             /><br/>
 
-            <button onClick={newBook} disabled={isLoading || !user || !title || !author || !bookCondition}>Create Book</button>
+            <button onClick={newBook} disabled={isLoading || !user || !title || !author || !bookCondition || success}>Create Book</button>
+
+            <br/> <br/>
+
+            {success ? <a> You have created a book! </a>
+                     : <a> </a>
+            }
+            <br/>
+
         </>
     );
 }

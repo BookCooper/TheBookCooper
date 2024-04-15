@@ -8,6 +8,37 @@ function ShowResults() {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [listings, setListings] = useState([]);
+    
+    /*
+    const getListings = async (input) => {
+        if (!user) {
+            setListings([]);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const token = await user.getIdToken();
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
+            
+            // filter only active listings
+            const listingResponse = response.data.filter((listing) => listing.listingStatus === 'active');
+
+            // get book data
+            const booksData = await Promise.all(listingResponse.data.map(async (listing) => {
+                const bookResponse = await axios.get(`/books/${listing.bookId}`, { headers });
+                return { ...listing, book: bookResponse.data };
+            }));
+
+            setListings(booksData);
+        } catch (error) {
+            console.error('Failed to fetch listings or books:', error);
+            setListings([]);
+        } finally {
+            setLoading(false);
+        }
+    };*/
 
     const getListings = async (input) => {
         if (!user) {
@@ -21,8 +52,11 @@ function ShowResults() {
             const headers = { Authorization: `Bearer ${token}` };
             const listingResponse = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
 
-            // get book data
-            const booksData = await Promise.all(listingResponse.data.map(async (listing) => {
+            // Filter out listings that are not active
+            const activeListings = listingResponse.data.filter((listing) => listing.listingStatus === 'active');
+
+            // Get book data for active listings
+            const booksData = await Promise.all(activeListings.map(async (listing) => {
                 const bookResponse = await axios.get(`/books/${listing.bookId}`, { headers });
                 return { ...listing, book: bookResponse.data };
             }));

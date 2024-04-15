@@ -12,6 +12,7 @@ function ShowListing() {
     const [book, setBook] = useState(null);
     const [seller, setSeller] = useState(null);
     const [buyer, setBuyer] = useState(null);
+    const [success, setSuccess] = useState(null);
 
     const {user, isLoading} = useUser();
     const { userId, setUserId } = useDetails();
@@ -101,7 +102,7 @@ function ShowListing() {
                 listingStatus: "completed"
             }, { headers });
 
-            
+            setSuccess(true)
 
         } catch (error) {
             setTransaction("UNAUTHORIZED " + error.message);
@@ -114,10 +115,14 @@ function ShowListing() {
                 <pre>{JSON.stringify(listing, null, 2)}</pre>
                 <pre>{JSON.stringify(book, null, 2)}</pre>
                 <pre>{JSON.stringify(seller, null, 2)}</pre>
+                <pre>{JSON.stringify(buyer, null, 2)}</pre>
 
                 <a> you have B-Bucks </a> <br/> <br/>
 
-                <button onClick={newTransaction} >Buy Book</button>
+                <button onClick={newTransaction} disabled={success} >Buy Book</button>
+                {success ? <a> You Bought the book! {JSON.stringify(transaction, null, 2)} </a>
+                         : <a> </a>
+                }
             </>
         );
     return <h1>Boo! (k)</h1>;
