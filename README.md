@@ -53,13 +53,17 @@ password: password
 
 User tries to create a book listing for the Operating Systems textbook, but the book does not exist in the database. So the user creates the book first. 
 
-title: "Advanced Programming in the UNIX Environment, 3rd Edition"
-publishDate: "2013-05-24"
-author: "Stevens, W. Richard & Rago, Stephen A."
-genre: "Computer Science"
-bookCondition: "new"
-isbn: 9780321637734
-price: 0 (The price will be filled automatically through API calls)
+```json
+{
+   "title": "Advanced Programming in the UNIX Environment, 3rd Edition"
+   "publishDate": "2013-05-24"
+   "author": "Stevens, W. Richard & Rago, Stephen A."
+   "genre": "Computer Science"
+   "bookCondition": "new"
+   "isbn": 9780321637734
+   "price": 0 (The price will be filled automatically through API calls)
+}
+```
 
 #### 4. Create a listing for the Operating Systems Textbook
 
@@ -96,11 +100,15 @@ User tries to buy the Operating Systems textbook. However, the user does not hav
 
 The user buys 5000 B-Bucks for $35.00 and input the following payment information:
 
-Card Number: 1234567890123456
-Expiration Date: 12/23
-CVV: 123
+Card Number: 4242 4242 4242 42424
+Expiration Date: 12/34
+CVV: 567
+Zip: 89012
 
 #### 4. User Tries to buy the OS Textbook Again
 
 User search the textbook up again and tries to buy the Operating Systems textbook yet again. This time the user has enough B-Bucks to purchase the book.
 
+#### 5. Transaction complete
+
+If any user tries to search for the OS Textbook that was just bought, it will not show up in the search results.
