@@ -47,52 +47,11 @@ const Login = () => {
                 navigate('/'); // Navigate only after userId is set
             }
 
-             /*   try {
-                    const token = await user.getIdToken();
-                    const headers = { Authorization: `Bearer ${token}` };
-                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
-                    console.log("API Response:", userResponse.data);
-                    
-                    if (userResponse.data && userResponse.data.userId) {
-                        console.log("Setting userID:", userResponse.data.userId);
-                        setUserId(userResponse.data.userId);
-                    }
-                } catch (e) {
-                    console.error("Error fetching user data:", e);
-                    setError(e.toString());
-                }
-            }*/
-
         } catch (e) {
             console.error("Login error:", e);
             setError(e.message);
         }
     };
-
-    // Fetch user data after successful login
-    /*useEffect(() => {
-        const fetchUserData = async () => {
-            if (user) {
-                try {
-                    const token = await user.getIdToken();
-                    const headers = { Authorization: `Bearer ${token}` };
-                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
-                    console.log("API Response:", userResponse.data);
-                    
-                    if (userResponse.data && userResponse.data.userId) {
-                        console.log("Setting userID:", userResponse.data.userId);
-                        setUserId(userResponse.data.userId);
-                    }
-                } catch (e) {
-                    console.error("Error fetching user data:", e);
-                    setError(e.toString());
-                }
-            }
-        };
-        if (user) {
-            fetchUserData();
-        }
-    }, [email]);*/
 
     useEffect(() => {
         if (userId) {

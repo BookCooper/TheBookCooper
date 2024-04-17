@@ -1,9 +1,9 @@
 import React from 'react';
-import '../styles/LandingPage.css';
+import '../styles/Header.css';
 import Logout from './Logout.js';
-import Search from './Search.js'
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import SearchBar from "./SearchBar.js"
 
 const Header = () => {
 
@@ -13,15 +13,15 @@ const Header = () => {
     return (
         <header>
             
-            <img src="/new_logo.png" alt="New Logo" style={{cursor: 'pointer', width: "115px"}} onClick={() => navigate('/')} />
+            <img src="/new_logo.png" alt="New Logo" onClick={() => navigate('/')} />
             <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
 
             {user
-                ?
-                    <div className = "header-buttons">
-                        <button className="search-button" onClick={() => navigate('/search')}>Search</button>
+                ?   
+                    <div className="search-and-buttons-container">
+                        <SearchBar />
                         <button className="contact-button" onClick={() => navigate('/create-listing')}>Create Listing</button>
-                        <button className="search-button" onClick={() => navigate('/store')}>Store</button>
+                        <button className="store-button" onClick={() => navigate('/store')}>Store</button>
                         <Logout />
                     </div>
                 :

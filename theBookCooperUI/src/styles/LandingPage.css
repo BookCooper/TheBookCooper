@@ -30,28 +30,6 @@
     padding-right: 100px;
 }
 
-.login-button, .signup-button, .contact-button, .about-button, .search-button {
-    background-color: #0C8CE9;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 30px;
-    border-radius: 10px;
-    font-size: 1em;
-    min-width: fit-content;
-    min-height: fit-content;
-    margin-right: 1em;
-}
-
-.login-button:hover, .signup-button:hover, .contact-button:hover, .about-button:hover, .search-button:hover {
-    background-color: #025ABB;
-    cursor:pointer;
-}
-
-.header-buttons {
-    margin-left: auto;
-    display: flex;
-    gap: 3em;
-}
 
 .testimonial-header {
     display: flex;
