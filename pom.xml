@@ -35,6 +35,21 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.1</version>
         </dependency>
+        
+
+        <!-- Stripe Payment -->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>20.136.0</version> 
+        </dependency>
+
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version> 
+        </dependency>
+
 
         <!-- Spring Security -->
         <dependency>

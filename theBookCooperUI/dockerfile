@@ -16,7 +16,7 @@
 #COPY . ./
 
 # start app
-#CMD npm start
+#CMD npm run dev
 
 FROM node:16.13.1-alpine as build
 RUN npm install -g serve # A simple webserver

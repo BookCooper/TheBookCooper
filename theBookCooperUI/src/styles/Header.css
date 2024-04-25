@@ -33,7 +33,7 @@ header {
     cursor:pointer;
 }
 
-.search-and-buttons-container {
+.search-and-buttons-container, .not-logged-in-buttons {
     display: flex; /* This will align the children divs side by side */
     align-items: center; /* This will center them vertically */
     justify-content: space-between; /* This will put some space between them */

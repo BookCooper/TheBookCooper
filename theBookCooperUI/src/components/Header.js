@@ -25,7 +25,7 @@ const Header = () => {
                         <Logout />
                     </div>
                 :
-                    <div className = "header-buttons">
+                    <div className = "not-logged-in-buttons">
                         <button className="signup-button" onClick={() => navigate('/signup')}>Sign Up</button>
                         <Logout />
                     </div>

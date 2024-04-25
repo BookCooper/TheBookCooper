@@ -95,20 +95,21 @@ function PaymentForm() {
         if(!error) {
             try {
                 const {id} = paymentMethod; 
-                const response = await axios.post("http://localhost:3001/payment", {
+
+                const token = await user.getIdToken();
+                const headers = { Authorization: `Bearer ${token}` };
+
+                const response = await axios.post("/payment-request", {
                     amount: storeItem.itemPrice * 100,
                     id: id
-                });
+                }, { headers });
 
                 if(response.data.success) {
                     console.log("Successful payment"); 
                     setSuccess(true); 
 
-                    const newBalance = userInfo.bbucksBalance + parseFloat(storeItem.item)
-                    console.log("New Balance is:" + newBalance)
-
-                    const token = await user.getIdToken();
-                    const headers = { Authorization: `Bearer ${token}` };
+                    const newBalance = userInfo.bbucksBalance + parseFloat(storeItem.item);
+                    console.log("New Balance is:" + newBalance);
 
                     const updateResponse = await axios.put(`/users/update/${userId}`, {
                         userName: userInfo.userName,
@@ -116,6 +117,8 @@ function PaymentForm() {
                         bBucksBalance: newBalance
                     }, { headers });
                 }
+
+                console.log(response.data);
             }
             catch (error) {
                 console.log("Error", error); 
