@@ -2,25 +2,26 @@ package com.thebookcooper.util;
 
 public class PaymentRequestDTO {
 
-    private Long amount; // in cents
+    private int amount; // in cents
     private String paymentMethodId;
 
+    public PaymentRequestDTO() {}
 
-    public PaymentRequestDTO(Long amount, String paymentMethodId) {
+    public PaymentRequestDTO(int amount, String paymentMethodId) {
         this.amount = amount;
         this.paymentMethodId = paymentMethodId;
     }
 
-    public Long getAmount() {
+    public String getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    public String getPaymentMethodId() {
-        return paymentMethodId;
     }
 
     public void setPaymentMethodId(String paymentMethodId) {
