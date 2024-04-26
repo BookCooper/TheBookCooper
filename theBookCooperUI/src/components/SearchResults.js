@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import SearchBar from './SearchBar';
+import SearchListings from './SearchListings';
 
 function ShowResults() {
     const { user, isLoading } = useUser();
@@ -47,7 +47,7 @@ function ShowResults() {
     return (
         
         <>
-        <SearchBar initialValue={query} />
+        <SearchListings initialValue={query} />
         {loading ? (
             <p>Loading...</p>
         ) : listings.length > 0 ? (

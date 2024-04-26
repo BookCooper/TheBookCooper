@@ -8,10 +8,15 @@ function NewListing() {
     const { user, isLoading } = useUser();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [input, setInput] = useState("");
 
     const [bookId, setBookId] = useState("");
     const [bookCondition, setBookCondition] = useState("");
     const [price, setPrice] = useState("");
+
+    const [books, setBooks] = useState([]);
+    const [found, setFound] = useState(false);
+    const [searchPerformed, setSearchPerformed] = useState(false); // State to track if search has been performed
 
     //listing id, user id, book id, listing status, book condition, price, listing date
     //user input: book id, book condition, price
@@ -48,8 +53,68 @@ function NewListing() {
         }
     };
 
+    const getBooks = async (input) => {
+        if (!user) {
+            setBooks([]);
+            setFound(false);
+            setSearchPerformed(true);
+            return;
+        }
+
+        try {
+            const token = await user.getIdToken();
+            const headers = { Authorization: `Bearer ${token}` };
+            const response = await axios.get(`/books/search?title=${encodeURIComponent(input)}`, { headers });
+
+            if (response.data.length > 0) {
+                setBooks(response.data);
+                setFound(true);
+            } else {
+                setBooks([]);
+                setFound(false);
+            }
+            setSearchPerformed(true);
+        } catch (error) {
+            console.error('Failed to fetch books:', error);
+            setBooks([]);
+            setFound(false);
+            setSearchPerformed(true);
+        }
+    };
+
     return (
         <>
+            <div>
+                <div className="search-box">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        placeholder="What book would you like to list?"
+                    />
+                    <button onClick={() => getBooks(input)} disabled={isLoading || !user || !input}>Look up</button>
+                </div>
+                <div>
+                {searchPerformed && (
+                    found ? 
+                    <div>
+                    {books.map((book) => (
+                        <div key={book.bookId}>
+                        <a href={`/books/${book.bookId}`}>
+                        <h3>{book.title}</h3>
+                        </a>
+                        <p>Author: {book.author}</p>
+                        <p>{book.price} B-Bucks</p>
+                        <button onClick={() => setBookId(book.bookId)} disabled={isLoading || !user || !input}>This is the book!</button>
+                        
+                        </div>
+                    ))}
+                    </div>
+                    : <p>No books were found!</p>
+                )}
+                </div>
+            </div>
+
             <br/>
             <a> Book ID: </a> <input
                 type="text"
@@ -71,13 +136,10 @@ function NewListing() {
             /><br/> <br/>
 
 
-
             {success ? <a> You have listed the book! </a>
                      : <a> </a>
             }
             <br/>
-
-
 
 
             <button onClick={newListing} disabled={isLoading || !user || !bookId || !bookCondition || !price}>Create Book</button><br/><br/>

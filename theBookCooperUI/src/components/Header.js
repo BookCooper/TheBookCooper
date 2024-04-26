@@ -3,7 +3,7 @@ import '../styles/Header.css';
 import Logout from './Logout.js';
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
-import SearchBar from "./SearchBar.js"
+import SearchListings from "./SearchListings.js"
 
 const Header = () => {
 
@@ -19,7 +19,7 @@ const Header = () => {
             {user
                 ?   
                     <div className="search-and-buttons-container">
-                        <SearchBar />
+                        <SearchListings />
                         <button className="contact-button" onClick={() => navigate('/create-listing')}>Create Listing</button>
                         <button className="store-button" onClick={() => navigate('/store')}>Store</button>
                         <Logout />

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 
 
-const SearchBar = ({ placeholder = "Search for a book" }) => {
+const SearchListings = ({ placeholder = "Search for a book" }) => {
     const [input, setInput] = useState("");
     const navigate = useNavigate();
 
@@ -30,4 +30,4 @@ const SearchBar = ({ placeholder = "Search for a book" }) => {
     );
 };
 
-export default SearchBar;
+export default SearchListings;

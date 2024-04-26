@@ -76,12 +76,14 @@ function NewBook() {
                 onChange={e => setPublishDate(e.target.value)}
                 placeholder="Enter the publish date"
             /> <a> (Of the form YYYY-MM-DD) </a> <br/>
-            <a> Condition: </a> <input
-                type="text"
+            <a> Condition: </a> <select
                 value={bookCondition}
                 onChange={e => setBookCondition(e.target.value)}
-                placeholder="Enter the book's condition"
-            /><br/>
+                placeholder="Select the book's condition"
+                >
+                <option value="new">New</option>
+                <option value="used">Used</option>
+            </select><br/>
             <a> ISBN: </a> <input
                 type="text"
                 value={isbn}
