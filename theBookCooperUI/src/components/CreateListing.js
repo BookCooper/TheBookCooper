@@ -1,4 +1,5 @@
-import '../styles/LandingPage.css';
+//import '../styles/LandingPage.css';
+import '../styles/CreateListing.css';
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
@@ -16,7 +17,9 @@ function NewListing() {
 
     const [books, setBooks] = useState([]);
     const [found, setFound] = useState(false);
+
     const [searchPerformed, setSearchPerformed] = useState(false); // State to track if search has been performed
+    const [createPerformed, setCreatePerformed] = useState(false); // State to track if listing create has been performed
 
     //listing id, user id, book id, listing status, book condition, price, listing date
     //user input: book id, book condition, price
@@ -46,8 +49,10 @@ function NewListing() {
             const response = await axios.post(`/listings/create`, listingData, { headers });
             console.log('Listing created successfully:', response.data);
             setSuccess(true);
+            setCreatePerformed(true);
         } catch (error) {
             console.error('Failed to create book:', error);
+            setCreatePerformed(true);
         } finally {
             setLoading(false);
         }
@@ -83,70 +88,80 @@ function NewListing() {
     };
 
     return (
-        <>
-            <div>
-                <div className="search-box">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={e => setInput(e.target.value)}
-                        placeholder="What book would you like to list?"
-                    />
-                    <button onClick={() => getBooks(input)} disabled={isLoading || !user || !input}>Look up</button>
-                </div>
+        <div className = "create-listing-container">
+            <div className = "create-listing-white-box">
+                <h2 className="create-listing-label">Create A Listing</h2>
                 <div>
-                {searchPerformed && (
-                    found ? 
-                    <div>
-                    {books.map((book) => (
-                        <div key={book.bookId}>
-                        <a href={`/books/${book.bookId}`}>
-                        <h3>{book.title}</h3>
-                        </a>
-                        <p>Author: {book.author}</p>
-                        <p>{book.price} B-Bucks</p>
-                        <button onClick={() => setBookId(book.bookId)} disabled={isLoading || !user || !input}>This is the book!</button>
-                        
-                        </div>
-                    ))}
+                    <div className="look-up-container">
+                        <input
+                            type="text"
+                            className="input-field"
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            placeholder="What book would you like to list?"
+                        /> <br/>
+                        <button className="look-up-button" onClick={() => getBooks(input)} disabled={isLoading || !user || !input}>Look up</button>
                     </div>
-                    : <p>No books were found!</p>
-                )}
+                    <div>
+                    {searchPerformed && (
+                        found ? 
+                        <div className="book-result-container">
+                        {books.map((book) => (
+                            <div key={book.bookId}>
+                                {/*<a href={`/books/${book.bookId}`}> <h3>{book.title}</h3> </a>*/}
+                                <h3>{book.title}</h3> 
+                                <p>Author: {book.author}</p>
+                                <p>Genre: {book.genre}</p>
+                                <p>Publish Date: {book.publishDate}</p>
+                                <p>Recommended Listing Price: {book.price} B-Bucks</p>
+                                <button className="my-book-button" onClick={() => {setBookId(book.bookId); setPrice(book.price);}} disabled={isLoading || !user || !input}>This is the book!</button>
+                                <hr/>
+                            </div>
+                        ))}
+                        </div>
+                        : <div> <br/> <b> <p style={{textAlign: "center"}}>No books were found!</p> </b> </div>
+                    )}
+                    </div>
                 </div>
+
+                <br/> <hr/>
+                <a href="/create-book"> Can't find your book? Click here to create one! </a> 
+
+                <br/>
+                {/*
+                <a> Book ID: </a> <input
+                    type="text"
+                    value={bookId}
+                    className="input-field"
+                    onChange={e => setBookId(e.target.value)}
+                    placeholder="Enter the book's ID"
+                /><br/>  */}
+                <a className="label-text"> Condition </a> <select
+                    value={bookCondition}
+                    className="select-field"
+                    onChange={e => setBookCondition(e.target.value)}
+                    placeholder="Select the book's condition"
+                >
+                    <option value="" disabled selected> Select the Condition </option>
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                </select> 
+                <a className="label-text"> Price </a> <input
+                    type="text"
+                    value={price}
+                    className="input-field"
+                    onChange={e => setPrice(e.target.value)}
+                    placeholder="Enter the book's price"
+                /><br/> <br/>
+
+                {createPerformed && ( found
+                    ? <a> You have listed the book! </a>
+                    : <a> There was an error trying to list your book. Please try again </a>
+                )}
+
+                <button onClick={newListing} className = "create-listing-button" disabled={isLoading || !user || !bookId || !bookCondition || !price}>Create Listing</button><br/><br/>
             </div>
-
-            <br/>
-            <a> Book ID: </a> <input
-                type="text"
-                value={bookId}
-                onChange={e => setBookId(e.target.value)}
-                placeholder="Enter the book's ID"
-            /><br/>
-            <a> Condition: </a> <input
-                type="text"
-                value={bookCondition}
-                onChange={e => setBookCondition(e.target.value)}
-                placeholder="Enter the book's condition"
-            /><br/>
-            <a> Price: </a> <input
-                type="text"
-                value={price}
-                onChange={e => setPrice(e.target.value)}
-                placeholder="Enter the book's price"
-            /><br/> <br/>
-
-
-            {success ? <a> You have listed the book! </a>
-                     : <a> </a>
-            }
-            <br/>
-
-
-            <button onClick={newListing} disabled={isLoading || !user || !bookId || !bookCondition || !price}>Create Book</button><br/><br/>
-
-
-            <a href="/create-book"> Can't find your book? Click here to create one! </a> 
-        </>
+        </div>
     );
 }
 
