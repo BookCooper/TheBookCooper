@@ -90,7 +90,8 @@ function NewListing() {
     return (
         <div className = "create-listing-container">
             <div className = "create-listing-white-box">
-                <h2 className="create-listing-label">Create A Listing</h2>
+                <br/> <b> <a className="create-listing-label">Create A Listing</a> </b> 
+                <br/> <br/>
                 <div>
                     <div className="look-up-container">
                         <input
