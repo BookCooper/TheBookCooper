@@ -12,7 +12,7 @@
     flex-direction: column;
     align-items: center;
     width: 40vw; /* Fixed width for control */
-    height: 90vh; /* Fixed width for control */
+    height: 90%; /* Fixed width for control */
     background: #FFFFFF;
     border-radius: 55px;
     padding: 20px;

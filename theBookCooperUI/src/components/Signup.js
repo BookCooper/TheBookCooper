@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import axios from 'axios'; 
 import '../styles/SignUp.css';
+import { useDetails } from '../hooks/useDetails';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
+    const { userId, setUserId } = useDetails();
 
     const navigate = useNavigate();
 
@@ -24,13 +26,16 @@ const Signup = () => {
             const token = await userCredential.user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
 
-            await axios.post('/users/create', {
+            const response = await axios.post('/users/create', {
                 userName: username,
                 email: email,
                 bBucksBalance: 0.0  // Optional, include if needed
             }, {headers});
-
-            navigate('/login'); // Navigate to homepage or dashboard upon successful signup
+            
+            setUserId(response.data.userId);
+            console.log(response.data);
+            navigate('/'); // Navigate to homepage or dashboard upon successful signup
+            console.log(userId);
         } catch (error) {
             console.error('Signup error:', error);
             setError(error.response?.data?.message || 'Failed to sign up')
