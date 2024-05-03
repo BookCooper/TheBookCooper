@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import SearchListings from './SearchListings';
 
 function ShowResults() {
     const { user, isLoading } = useUser();
@@ -45,26 +44,24 @@ function ShowResults() {
     };
 
     return (
-        
         <>
-        <SearchListings initialValue={query} />
-        {loading ? (
-            <p>Loading...</p>
-        ) : listings.length > 0 ? (
-            <div>
-            {listings.map((listing) => (
-                <div key={listing.listingId}>
-                <a href={`/listings/${listing.listingId}`}>
-                <h3>{listing.book.title}</h3>
-                </a>
-                <p>Author: {listing.book.author}</p>
-                <p>{listing.price} B-Bucks</p>
+            {loading ? (
+                <p>Loading...</p>
+            ) : listings.length > 0 ? (
+                <div>
+                    {listings.map((listing) => (
+                        <div key={listing.listingId} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
+                            <a href={`/listings/${listing.listingId}`}>
+                                <h3>{listing.book.title}</h3>
+                            </a>
+                            <p><strong>Author:</strong> {listing.book.author}</p>
+                            <p><strong>Price:</strong> {listing.price} B-Bucks</p>
+                        </div>
+                    ))}
                 </div>
-            ))}
-            </div>
-        ) : (
-            <p>No listings found or user is not authenticated.</p>
-        )}
+            ) : (
+                <p>No listings found or user is not authenticated.</p>
+            )}
         </>
     );
 }
@@ -72,8 +69,8 @@ function ShowResults() {
 const SearchResults = () => {
     return (
         <div>
-            <h2> Search Page </h2>
-            {ShowResults()}
+            <h2>Search Page</h2>
+            <ShowResults />
         </div>
     );
 };
