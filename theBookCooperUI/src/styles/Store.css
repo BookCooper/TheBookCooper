@@ -51,8 +51,8 @@
 /* Styling for Images */
 
 .store-item-image {
-    height: 16vw;  /* Adjust width as needed */
-    height: auto;  /* Maintains aspect ratio */
+    height: 30vh;  /* Adjust width as needed */
+    /*height: auto;  /* Maintains aspect ratio */
 }
 
 /* Styling for Inputs and Button */
