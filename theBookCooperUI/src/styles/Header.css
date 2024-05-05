@@ -16,7 +16,7 @@ header {
     flex-wrap: nowrap;
 }
 
-.login-button, .signup-button, .contact-button, .about-button, .store-button {
+.login-button, .signup-button, .profile-button, .contact-button, .about-button, .store-button {
     background-color: #0C8CE9;
     color: #fff;
     text-decoration: none;
@@ -28,7 +28,7 @@ header {
     margin-right: 1em;
 }
 
-.login-button:hover, .signup-button:hover, .contact-button:hover, .about-button:hover, .store-button:hover {
+.login-button:hover, .signup-button:hover, .profile-button, .contact-button:hover, .about-button:hover, .store-button:hover {
     background-color: #025ABB;
     cursor:pointer;
 }
