@@ -98,7 +98,7 @@ public class ListingsController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> searchListingsByBookTitle(@RequestParam long userId) {
+    public ResponseEntity<?> searchListingsByUserId(@RequestParam long userId) {
         try (Connection connection = dcm.getConnection()) {
 
             ListingsDAO listingsDAO = new ListingsDAO(connection);
@@ -106,10 +106,7 @@ public class ListingsController {
             // For each book, find its listings
             List<Listing> userListings = listingsDAO.findByUserId(userId);
             
-            if (userListings.isEmpty()) {
-                return new ResponseEntity<>("No listings found for this user", HttpStatus.NOT_FOUND);
-            }
-            
+            // will return an empty list on failure
             return new ResponseEntity<>(userListings, HttpStatus.OK);
         } catch (SQLException e) {
             e.printStackTrace();

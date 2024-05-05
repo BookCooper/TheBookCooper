@@ -25,7 +25,8 @@ const ProfileListings = () => {
             try {
                 const token = await user.getIdToken();
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
+                
+                //can remove this, but can also use it to display B-Buck balance, etc.
                 const userResponse = await axios.get(`/users/${userId}`, { headers });
                 setLoggedUser(userResponse.data);
 
