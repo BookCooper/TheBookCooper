@@ -51,7 +51,7 @@ const Profile = () => {
                 <Link to="edit">Edit Profile</Link>
                 <Link to="listings">My Listings</Link>
                 <Link to="history">My History</Link>
-                <div className = "sidebar-text"> You have {loggedUser.bbucksBalance} B-Bucks! </div>
+                <div className = "sidebar-text"> You have <b>{loggedUser.bbucksBalance}</b> B-Bucks! </div>
             </div>
             <div className="profile-content">
                 <h1 className = "profile-for">{loggedUser.userName}'s Profile</h1>
