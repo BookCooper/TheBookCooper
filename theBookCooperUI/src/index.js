@@ -16,6 +16,8 @@ import ListingDetailPage from "./pages/ListingDetailPage"
 import CreateBookPage from "./pages/CreateBookPage"
 import StorePage from "./pages/StorePage"
 import CreateListingPage from "./pages/CreateListingPage"
+import ProfilePage from "./pages/ProfilePage"
+
 import { UserDetailsProvider } from './hooks/useDetails'
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -38,6 +40,7 @@ root.render(
             <Route path="/create-book" element={<CreateBookPage />} />
             <Route path="/create-listing" element={<CreateListingPage />} />
             <Route path="/store" element={<StorePage />} />
+            <Route path="/profile/*" element={<ProfilePage />} />
         </Routes>
     </BrowserRouter>
     </UserDetailsProvider>,

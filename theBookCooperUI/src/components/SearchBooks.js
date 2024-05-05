@@ -1,3 +1,8 @@
+/* File used to search for books but that feature has since been implemented
+ * in the create listing component. This component still exists in case it
+ * needs to be used for future use
+*/
+
 /*import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
