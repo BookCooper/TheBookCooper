@@ -98,27 +98,21 @@ function PaymentForm() {
 
                 const token = await user.getIdToken();
                 const headers = { Authorization: `Bearer ${token}` };
+                const pointAmount = parseFloat(storeItem.item);
 
                 console.log("Price is " + storeItem.itemPrice * 100);
                 console.log("Payment id is " + id);
 
                 const response = await axios.post("/payment-request", {
                     amount: storeItem.itemPrice * 100,
-                    id: id
+                    id: id,
+                    userId: userId,
+                    pointAmount: pointAmount
                 }, { headers });
 
                 if(response.data.success) {
                     console.log("Successful payment"); 
                     setSuccess(true); 
-
-                    const newBalance = userInfo.bbucksBalance + parseFloat(storeItem.item);
-                    console.log("New Balance is:" + newBalance);
-
-                    const updateResponse = await axios.put(`/users/update/${userId}`, {
-                        userName: userInfo.userName,
-                        email: userInfo.email,
-                        bBucksBalance: newBalance
-                    }, { headers });
                 }
 
                 console.log(response.data);
