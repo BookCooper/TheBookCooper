@@ -22,6 +22,7 @@ import com.thebookcooper.model.*;
 import com.thebookcooper.dao.*;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 //stuff for price
 import java.io.*;
@@ -91,6 +92,15 @@ public class BookInfoController {
                             break; 
                         }
                     }
+                }
+                //if the value is still not found make it equal to a random number that's insignificant
+                if(book.getISBN() <= COMPARE) {
+
+                    Random random = new Random();
+                    
+                    // Generate a random 9-digit number. (100000000 is the smallest 9-digit number)
+                    int randomNumber = 100000000 + random.nextInt(900000000);
+                    book.setISBN(randomNumber);
                 }
             } 
             catch (Exception e) {
