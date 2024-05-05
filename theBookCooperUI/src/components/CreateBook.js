@@ -1,4 +1,4 @@
-import '../styles/LandingPage.css';
+import '../styles/CreateBook.css';
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
@@ -51,62 +51,63 @@ function NewBook() {
     };
 
     return (
-        <>
-            <a> Title: </a> <input
-                type="text"
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                placeholder="Enter the book's title"
-            /><br/>
-            <a> Author: </a> <input
-                type="text"
-                value={author}
-                onChange={e => setAuthor(e.target.value)}
-                placeholder="Enter the book's author"
-            /><br/>
-            <a> Genre: </a> <input
-                type="text"
-                value={genre}
-                onChange={e => setGenre(e.target.value)}
-                placeholder="Enter the book's genre"
-            /><br/>
-            <a> Publish Date: </a> <input
-                type="text"
-                value={publishDate}
-                onChange={e => setPublishDate(e.target.value)}
-                placeholder="Enter the publish date"
-            /> <a> (Of the form YYYY-MM-DD) </a> <br/>
-            <a> Condition: </a> <select
-                value={bookCondition}
-                onChange={e => setBookCondition(e.target.value)}
-                placeholder="Select the book's condition"
-                >
-                <option value="new">New</option>
-                <option value="used">Used</option>
-            </select><br/>
-            <a> ISBN: </a> <input
-                type="text"
-                value={isbn}
-                onChange={e => setIsbn(e.target.value)}
-                placeholder="Enter the book's ISBN (optional)"
-            /><br/>
-            <a> Price: </a> <input
-                type="text"
-                value={price}
-                onChange={e => setPrice(e.target.value)}
-                placeholder="Enter the book's price (leave empty for autocompletion)"
-            /><br/>
+        <div className = "create-book-container">
+            <div className = "create-book-white-box">
+                <a> Title: </a> <input
+                    type="text"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    placeholder="Enter the book's title"
+                /><br/>
+                <a> Author: </a> <input
+                    type="text"
+                    value={author}
+                    onChange={e => setAuthor(e.target.value)}
+                    placeholder="Enter the book's author"
+                /><br/>
+                <a> Genre: </a> <input
+                    type="text"
+                    value={genre}
+                    onChange={e => setGenre(e.target.value)}
+                    placeholder="Enter the book's genre"
+                /><br/>
+                <a> Publish Date: </a> <input
+                    type="date"
+                    value={publishDate}
+                    onChange={e => setPublishDate(e.target.value)}
+                    placeholder="Enter the publish date"
+                /><br/>
+                <a> Condition: </a> <select
+                    value={bookCondition}
+                    onChange={e => setBookCondition(e.target.value)}
+                    placeholder="Select the book's condition"
+                    >
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                </select><br/>
+                <a> ISBN: </a> <input
+                    type="text"
+                    value={isbn}
+                    onChange={e => setIsbn(e.target.value)}
+                    placeholder="Enter the book's ISBN (optional)"
+                /><br/>
+                <a> Price: </a> <input
+                    type="text"
+                    value={price}
+                    onChange={e => setPrice(e.target.value)}
+                    placeholder="Enter the book's price (leave empty for autocompletion)"
+                /><br/>
 
-            <button onClick={newBook} disabled={isLoading || !user || !title || !author || !bookCondition || success}>Create Book</button>
+                <button onClick={newBook} disabled={isLoading || !user || !title || !author || !bookCondition || success}>Create Book</button>
 
-            <br/> <br/>
+                <br/> <br/>
 
-            {success ? <a> You have created a book! </a>
-                     : <a> </a>
-            }
-            <br/>
-
-        </>
+                {success ? <a> You have created a book! </a>
+                         : <a> </a>
+                }
+                <br/>
+            </div>
+        </div>
     );
 }
 

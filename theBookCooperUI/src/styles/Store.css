@@ -12,7 +12,7 @@
     flex-direction: column;
     align-items: center;
     width: 75vw; /* Fixed width for control */
-    height: 70vh; /* Fixed width for control */
+    height: 90%; /* Fixed width for control */
     background: #FFFFFF;
     border-radius: 55px;
     padding: 20px;
@@ -51,7 +51,7 @@
 /* Styling for Images */
 
 .store-item-image {
-    width: 16vw;  /* Adjust width as needed */
+    height: 16vw;  /* Adjust width as needed */
     height: auto;  /* Maintains aspect ratio */
 }
 
