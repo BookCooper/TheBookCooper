@@ -11,7 +11,7 @@ const ProfileHistory = () => {
 
     const [buyTransactions, setBuyTransactions] = useState([]);
     const [sellTransactions, setSellTransactions] = useState([]);
-    const [bBuckTransactions, setbBuckTransactions] = useState([]);
+    const [pointTransactions, setPointTransactions] = useState([]);
 
     const [loggedUser, setLoggedUser] = useState(null);
 
@@ -45,6 +45,11 @@ const ProfileHistory = () => {
                 });
                 setSellTransactions(sellResponse.data);
                 
+                const pointResponse = await axios.get(`/point-transactions/user`, { 
+                    params: { userId: userId },
+                    headers 
+                });
+                setPointTransactions(pointResponse.data);
 
             } catch (error) {
                 setError("UNAUTHORIZED " + error.message);
@@ -65,6 +70,9 @@ const ProfileHistory = () => {
     return (
         <div>
             <h1> Profile History </h1>
+
+            <a> Point Transactions </a> <br/>
+            <pre>{JSON.stringify(pointTransactions, null, 2)}</pre>
 
             <a> Buyer Transactions </a> <br/>
             <pre>{JSON.stringify(buyTransactions, null, 2)}</pre>

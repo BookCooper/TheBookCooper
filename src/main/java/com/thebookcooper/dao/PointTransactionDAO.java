@@ -4,6 +4,8 @@ import com.thebookcooper.model.PointTransaction;
 import com.thebookcooper.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PointTransactionDAO extends DataAccessObject<PointTransaction> {
 
@@ -62,6 +64,31 @@ public class PointTransactionDAO extends DataAccessObject<PointTransaction> {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public List<PointTransaction> findByUserId(long userId) {
+        List<PointTransaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM point_transactions WHERE user_id=?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setLong(1, userId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                PointTransaction transaction = new PointTransaction();
+                
+                transaction.setBbTransactionId(rs.getLong("bb_transaction_id"));
+                transaction.setUserId(rs.getLong("user_id"));
+                transaction.setTransactionType(rs.getString("transaction_type"));
+                transaction.setAmount(rs.getBigDecimal("amount"));
+                transaction.setTransactionDate(rs.getTimestamp("transaction_date"));
+                transaction.setCurrentBalance(rs.getBigDecimal("current_balance"));
+
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return transactions;
     }
 
     @Override
