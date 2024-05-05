@@ -3,6 +3,8 @@ import useUser from "../hooks/useUser";
 import '../styles/LandingPage.css';
 
 import axios from 'axios';
+import { getAuth, updateEmail, updatePassword } from "firebase/auth";
+import { reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { useDetails } from "../hooks/useDetails";
 
 const ProfileEdit = () => {
@@ -17,8 +19,12 @@ const ProfileEdit = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
     const [email, setEmail] = useState("");
+    const [reauthSuccess, setReauthSuccess] = useState("");
 
     useEffect(() => {
         const loadUserDetails = async () => {
@@ -54,30 +60,60 @@ const ProfileEdit = () => {
 
     //update user when they click button
     const updateUser = async () => {
+        if (isLoading) {
+            return; //dont proceed if already loading
+        }
+
+        //reauthenticate user
+        const auth = getAuth();
+        const credential = EmailAuthProvider.credential(email, password);
+
         try {
-            const token = await user.getIdToken();
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
+            await reauthenticateWithCredential(auth.currentUser, credential);
+            setReauthSuccess(true);
+        } catch (err) {
+            setError("Re-authentication failed: " + err.message);
+        }
 
-            //console.log("Username is: " + username + " | email is: " + email + " | b-bucks are: " + loggedUser.bBucksBalance) 
-            
-            const updateResponse = await axios.put(`/users/update/${userId}`, {
-                userName: username,
-                email: email,
-                bBucksBalance: loggedUser.bbucksBalance
-            }, { headers });
 
-            console.log(updateResponse.data);
+        if(reauthSuccess) {
+            try {
+                //shows the little loading message
+                setLoadingDetails(true);
 
-            if (updateResponse.status === 200) {
-                console.log("Profile updated successfully.");
-                window.location.reload(true);
-            } else {
-                console.error("Failed to update the profile. Status code:", updateResponse.status);
+                const token = await user.getIdToken();
+                const headers = { Authorization: `Bearer ${token}` };
+
+                
+                // update user in firebase
+                if (user.email !== email) {
+                    await updateEmail(user, email);
+                }
+                if (newPassword === confirmNewPassword) {
+                    await updatePassword(user, newPassword);
+                }
+
+                //update user in back end
+                const updateResponse = await axios.put(`/users/update/${userId}`, {
+                    userName: username,
+                    email: email,
+                    bBucksBalance: loggedUser.bbucksBalance
+                }, { headers });
+
+                console.log(updateResponse.data);
+                if (updateResponse.status === 200) {
+                    console.log("Profile updated successfully.");
+                    window.location.reload(true); //reload page on success
+                } else {
+                    console.error("Failed to update the profile. Status code:", updateResponse.status);
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                setError("Error updating profile: " + (error.message || "Unknown error"));
+            } finally {
+                setLoadingDetails(false);
             }
-
-        } catch (error) {
-            setError("UNAUTHORIZED " + error.message);
-        } 
+        }
     }
 
 
@@ -104,23 +140,31 @@ const ProfileEdit = () => {
                 className="input-field"
             /><br/>
             <a className = "label-text"> Password: </a> <input
-                type="text"
+                type="password"
+                value={newPassword}
+                onChange={e => setNewPassword(e.target.value)}
+                placeholder="Change your new password"
+                className="input-field"
+            /><br/>
+            <a className = "label-text"> Confirm New Password: </a> <input
+                className="input-field"
+                type="password"
+                placeholder="Confirm your new password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                required
+            /><br/><br/><br/>
+
+
+            <a className = "label-text"> Password: </a> <input
+                type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Change your password"
                 className="input-field"
             /><br/>
-            <a className = "label-text"> Confirm Password: </a> <input
-                id="confirm-password"
-                className="input-field"
-                type="password"
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-            /><br/>
 
-            <br/> <button onClick={updateUser} disabled={isLoading || !user}>Update Account</button>
+            <br/> <button onClick={updateUser} disabled={isLoading || !user || (newPassword !== confirmNewPassword)}>Update Account</button>
 
         </div>
     );
