@@ -51,9 +51,10 @@ const Profile = () => {
                 <Link to="edit">Edit Profile</Link>
                 <Link to="listings">My Listings</Link>
                 <Link to="history">My History</Link>
+                <div className = "sidebar-text"> You have {loggedUser.bbucksBalance} B-Bucks! </div>
             </div>
             <div className="profile-content">
-                <h1>Profile for {loggedUser.userName}</h1>
+                <h1 className = "profile-for">{loggedUser.userName}'s Profile</h1>
                 <Routes>
                     <Route path="/" element={<div>Profile Overview</div>} />
                     <Route path="edit" element={<ProfileEdit />} />

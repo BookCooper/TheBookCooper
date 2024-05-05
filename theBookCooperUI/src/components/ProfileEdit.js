@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
-import '../styles/LandingPage.css';
+import '../styles/ProfileEdit.css';
 
 import axios from 'axios';
 import { getAuth, updateEmail, updatePassword } from "firebase/auth";
@@ -122,50 +122,51 @@ const ProfileEdit = () => {
     if (!user || !loggedUser) return <p>Please log in.</p>;
 
     return (
-        <div>
-            <h1> Profile Edit </h1>
+        <div className="create-edit-container">
+            <div className="create-edit-white-box">
+                <h1> Edit Your Profile </h1>
 
-            <a className = "label-text"> Username: </a> <input
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                placeholder="Change your username"
-                className="input-field"
-            /><br/>
-            <a className = "label-text"> Email: </a> <input
-                type="text"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Change your email"
-                className="input-field"
-            /><br/>
-            <a className = "label-text"> Password: </a> <input
-                type="password"
-                value={newPassword}
-                onChange={e => setNewPassword(e.target.value)}
-                placeholder="Change your new password"
-                className="input-field"
-            /><br/>
-            <a className = "label-text"> Confirm New Password: </a> <input
-                className="input-field"
-                type="password"
-                placeholder="Confirm your new password"
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                required
-            /><br/><br/><br/>
+                <a className = "label-text"> Username: </a> <input
+                    type="text"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    placeholder="Change your username"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Email: </a> <input
+                    type="text"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="Change your email"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Password: </a> <input
+                    type="password"
+                    value={newPassword}
+                    onChange={e => setNewPassword(e.target.value)}
+                    placeholder="Change your new password"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Confirm New Password: </a> <input
+                    className="input-field"
+                    type="password"
+                    placeholder="Confirm your new password"
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    required
+                /><br/><br/><br/>
 
 
-            <a className = "label-text"> Password: </a> <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="Change your password"
-                className="input-field"
-            /><br/>
+                <a className = "label-text"> Current Password: </a> <input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="Change your password"
+                    className="input-field"
+                /><br/>
 
-            <br/> <button onClick={updateUser} disabled={isLoading || !user || (newPassword !== confirmNewPassword)}>Update Account</button>
-
+                <br/> <button className = "update-profile-button" onClick={updateUser} disabled={isLoading || !user || (newPassword !== confirmNewPassword)}>Update Account</button>
+            </div>
         </div>
     );
 }

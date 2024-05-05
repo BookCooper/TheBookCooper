@@ -12,10 +12,10 @@
     color: white;
     padding: 20px;
     width: 15vw;
-    height: 100vh;
+    min-height: 100vh;
 }
 
-.sidebar a {
+.sidebar a, .sidebar-text {
     font-family: Arial, sans-serif;
     display: block;
     color: white;
@@ -27,6 +27,12 @@
 .sidebar a:hover {
     background-color: #34495E;
 }
+
+.profile-for {
+    text-align: center;
+    color: white;
+}
+
 
 .profile-content {
     flex: 3;
