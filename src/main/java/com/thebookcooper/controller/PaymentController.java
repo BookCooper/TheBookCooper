@@ -39,6 +39,9 @@ public class PaymentController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try (Connection connection = dcm.getConnection()){
+
+            /* Stripe Payment Logic*/
+
             Map<String, Object> inputMap = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
             //System.out.println("Received payment request: " + json);
 
@@ -60,6 +63,9 @@ public class PaymentController {
             PaymentIntentCreateParams params = builder.build();
             PaymentIntent paymentIntent = PaymentIntent.create(params);
 
+
+            /* Update user's balance and create point transaction if payment success */
+
             if ("succeeded".equals(paymentIntent.getStatus())) {
 
                 // Get buyer's current balance
@@ -70,9 +76,7 @@ public class PaymentController {
                 User user = userDAO.findById(userId);
 
                 BigDecimal pointAmount = new BigDecimal(inputMap.get("pointAmount").toString());
-
                 BigDecimal currentUserBalance = pointTransactionDAO.fetchCurrentBalanceByUserId(userId);
-
                 BigDecimal newBal = currentUserBalance.add(pointAmount);
 
                 user.setBBucksBalance(Double.parseDouble(newBal.toString()));
@@ -86,29 +90,6 @@ public class PaymentController {
                 newTransaction.setTransactionDate(new Timestamp(System.currentTimeMillis()));
 
                 PointTransaction createdTransaction = pointTransactionDAO.create(newTransaction);
-
-                /*
-                double pointAmount = Double.parseDouble((String) inputMap.get(("pointAmount")));
-
-                java.math.BigDecimal currentUserBalance = pointTransactionDAO.fetchCurrentBalanceByUserId(userId);
-                double curBal = Double.parseDouble(currentUserBalance);
-
-                double newBal = curBal + pointAmount;
-                
-                // Update the buyer's balance 
-                user.setBBucksBalance(newBal);
-                userDAO.update(user);
-
-                // Create the point transaction with the updated balance
-                PointTransaction newTransaction = new PointTransaction();
-                newTransaction.setUserId(userId);
-                newTransaction.setTransactionType("Point");
-                newTransaction.setAmount(pointAmount);
-                newTransaction.setCurrentBalance(newBal);
-                newTransaction.setTransactionDate(new java.sql.Timestamp(System.currentTimeMillis()));
-        
-                PointTransaction createdTransaction = pointTransactionDAO.create(newTransaction);// Create a new point transaction */
-
                 return ResponseEntity.ok(new PaymentResponseDTO(true, "Payment successful"));
             } 
             else {
