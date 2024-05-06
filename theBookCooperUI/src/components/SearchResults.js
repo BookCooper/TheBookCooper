@@ -3,6 +3,7 @@ import useUser from "../hooks/useUser";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import SearchListings from './SearchListings';
+import '../styles/SearchResults.css';
 
 function ShowResults() {
     const { user, isLoading } = useUser();
@@ -46,33 +47,36 @@ function ShowResults() {
 
     return (
         
-        <>
-        <SearchListings initialValue={query} />
-        {loading ? (
-            <p>Loading...</p>
-        ) : listings.length > 0 ? (
-            <div>
-            {listings.map((listing) => (
-                <div key={listing.listingId}>
-                <a href={`/listings/${listing.listingId}`}>
-                <h3>{listing.book.title}</h3>
-                </a>
-                <p>Author: {listing.book.author}</p>
-                <p>{listing.price} B-Bucks</p>
-                </div>
-            ))}
+        <div className = "create-results-container">
+            <div className = "create-results-white-box">
+                <SearchListings initialValue={query} /> <br/> <br/>
+                <a className = "label-text"> Search Results for: {query} </a> <br/>
+                {loading ? (
+                    <p>Loading...</p>
+                ) : listings.length > 0 ? (
+                    <div>
+                    {listings.map((listing) => (
+                        <div key={listing.listingId}>
+                        <a href={`/listings/${listing.listingId}`}>
+                            <h3>{listing.book.title}</h3>
+                        </a>
+                        <p>Author: {listing.book.author}</p>
+                        <p>{listing.price} B-Bucks</p>
+                        <hr/>
+                        </div>
+                    ))}
+                    </div>
+                ) : (
+                    <p>No listings found or user is not authenticated.</p>
+                )}
             </div>
-        ) : (
-            <p>No listings found or user is not authenticated.</p>
-        )}
-        </>
+        </div>
     );
 }
 
 const SearchResults = () => {
     return (
         <div>
-            <h2> Search Page </h2>
             {ShowResults()}
         </div>
     );
