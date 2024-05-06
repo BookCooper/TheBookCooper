@@ -6,4 +6,4 @@ services:
     image: thebookcooper-ui-image
     container_name: thebookcooper-ui
     ports:
-      - 80:80
+      - 3000:3000
