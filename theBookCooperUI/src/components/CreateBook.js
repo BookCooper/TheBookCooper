@@ -93,14 +93,14 @@ function NewBook() {
                     <option value="used">Used</option>
                 </select><br/>
                 <a className = "label-text"> ISBN: </a> <input
-                    type="text"
+                    type="number"
                     value={isbn}
                     onChange={e => setIsbn(e.target.value)}
                     placeholder="Enter the book's ISBN (leave empty for autocompletion)"
                     className="input-field"
                 /><br/>
-                <a className = "label-text"> Recommended Price: </a> <input
-                    type="text"
+                <a className = "label-text"> Recommended Price (B-Bucks): </a> <input
+                    type="number"
                     value={price}
                     onChange={e => setPrice(e.target.value)}
                     placeholder="Enter the book's price (leave empty for autocompletion)"

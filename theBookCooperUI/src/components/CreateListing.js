@@ -147,8 +147,8 @@ function NewListing() {
                     <option value="new">New</option>
                     <option value="used">Used</option>
                 </select> 
-                <a className="label-text"> Price </a> <input
-                    type="text"
+                <a className="label-text"> Price (B-Bucks) </a> <input
+                    type="number"
                     value={price}
                     className="input-field"
                     onChange={e => setPrice(e.target.value)}
