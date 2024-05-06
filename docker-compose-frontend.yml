@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: theBookCooperUI
+    image: thebookcooper-ui-image
+    container_name: thebookcooper-ui
+    ports:
+      - 80:80

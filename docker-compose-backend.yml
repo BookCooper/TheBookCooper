@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    container_name: thebookcooper-db
+    environment:
+      POSTGRES_DB: thebookcooper
+      POSTGRES_USER: BCdev
+      POSTGRES_PASSWORD: password
+    expose:
+      - "5432"
+    ports:
+      - 5432:5432
+
+  app:
+    build: .
+    container_name: thebookcooper-app
+    environment:
+      POSTGRES_DB: thebookcooper
+      POSTGRES_USER: BCdev
+      POSTGRES_PASSWORD: password
+    expose:
+      - "8080:8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+
+#  app:
+#    build: .
+#    image: thebookcooperacr2.azurecr.io/thebookcooper-app
+#    container_name: thebookcooper-app
+#    depends_on:
+#      - db
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/thebookcooper
+#      SPRING_DATASOURCE_USERNAME: BCdev
+#      SPRING_DATASOURCE_PASSWORD: password
+#    ports:
+#      - 8080:8080

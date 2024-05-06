@@ -41,7 +41,7 @@ function NewBook() {
             console.log(bookData);
             setSuccess(true)
 
-            const response = await axios.post(`/books/create`, bookData, { headers });
+            const response = await axios.post(`http://localhost:8080/books/create`, bookData, { headers });
             console.log('Book created successfully:', response.data);
         } catch (error) {
             console.error('Failed to create book:', error);

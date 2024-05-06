@@ -9,7 +9,7 @@ const BookDetails = ({ bookId, token }) => {
         const fetchBookDetails = async () => {
             try {
                 const headers = { Authorization: `Bearer ${token}` };
-                const response = await axios.get(`/books/${bookId}`, { headers });
+                const response = await axios.get(`http://localhost:8080/books/${bookId}`, { headers });
                 setBook(response.data);
             } catch (e) {
                 console.error(e);

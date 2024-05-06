@@ -16,7 +16,7 @@ function ShowListings() {
                 const token = user && await user.getIdToken();
                 console.log(token);
                 const headers = token ? {Authorization: `Bearer ${token}`} : {};
-                const response = await axios.get(`/users/count`, {headers});
+                const response = await axios.get(`http://localhost:8080/users/count`, {headers});
                 setData(response.data)
             }
             catch (error) {
