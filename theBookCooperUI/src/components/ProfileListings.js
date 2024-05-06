@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
-import '../styles/LandingPage.css';
+import '../styles/ProfileListings.css';
 
 import axios from 'axios';
 import { useDetails } from "../hooks/useDetails";
@@ -53,9 +53,23 @@ const ProfileListings = () => {
     if (!user || !loggedUser) return <p>Please log in.</p>;
 
     return (
-        <div>
-            <h1> Profile Listings </h1>
-            <pre>{JSON.stringify(listings, null, 2)}</pre>
+        <div className = "create-listings-container">
+            <div className = "create-listings-white-box">
+                <h1>Profile Listings</h1>
+                {listings.length > 0 ? (
+                    listings.map((listing, index) => (
+                        <div key={listing.listingId}>
+                            <p>Listing ID: {listing.listingId}</p>
+                            <p>Price: {listing.price} B-Bucks</p>
+                            <p>Status: {listing.listingStatus}</p>
+                            <p>Date Listed: {new Date(listing.listingDate).toLocaleDateString()}</p>
+                            <hr/>
+                        </div>
+                    ))
+                ) : (
+                    <p>No listings available.</p>
+                )}            
+            </div>
         </div>
     );
 }

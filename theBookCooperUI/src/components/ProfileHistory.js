@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
-import '../styles/LandingPage.css';
+import '../styles/ProfileHistory.css';
 
 import axios from 'axios';
 import { useDetails } from "../hooks/useDetails";
@@ -49,7 +49,8 @@ const ProfileHistory = () => {
                     params: { userId: userId },
                     headers 
                 });
-                setPointTransactions(pointResponse.data);
+                const filteredTransactions = pointResponse.data.filter(transaction => transaction.transactionType === "Point");
+                setPointTransactions(filteredTransactions);
 
             } catch (error) {
                 setError("UNAUTHORIZED " + error.message);
@@ -68,18 +69,55 @@ const ProfileHistory = () => {
     if (!user || !loggedUser) return <p>Please log in.</p>;
 
     return (
-        <div>
-            <h1> Profile History </h1>
-
-            <a> Point Transactions </a> <br/>
-            <pre>{JSON.stringify(pointTransactions, null, 2)}</pre>
-
-            <a> Buyer Transactions </a> <br/>
-            <pre>{JSON.stringify(buyTransactions, null, 2)}</pre>
-
-            <a> Seller Transactions </a> <br/>
-            <pre>{JSON.stringify(sellTransactions, null, 2)}</pre>
+        <div className = "create-history-white-box">
             
+            <h1> Profile History </h1>
+            
+            <div className="create-history-gray-box">
+                <a className="label-text">Point Transactions</a><br/>
+                {pointTransactions.length > 0 ? (
+                    pointTransactions.map((transaction, index) => (
+                        <div key={index}>
+                            <p>Transaction Amount: {transaction.amount} B-Bucks </p>
+                            <p>New Balance: {transaction.currentBalance} B-Bucks </p>
+                            <p>Date Purchased: {new Date(transaction.transactionDate).toLocaleDateString()}</p>
+                            <hr/>
+                        </div>
+                    ))
+                ) : (
+                    <p>No transactions available.</p>
+                )}
+            </div>
+            <div className="create-history-gray-box">
+                <a className="label-text"> Buyer Transactions</a><br/>
+                {buyTransactions.length > 0 ? (
+                    buyTransactions.map((transaction, index) => (
+                        <div key={index}>
+                            <p>Transaction ID #{transaction.transactionId}</p>
+                            <p>Bought for: {transaction.transactionPrice} B-Bucks</p>
+                            <p>Date Purchased: {new Date(transaction.transactionDate).toLocaleDateString()}</p>
+                            <hr/>
+                        </div>
+                    ))
+                ) : (
+                    <p>No listings available.</p>
+                )}
+            </div>
+           <div className="create-history-gray-box">
+                <a className="label-text">Seller Transactions</a><br/>
+                {sellTransactions.length > 0 ? (
+                    sellTransactions.map((transaction, index) => (
+                        <div key={index}>
+                            <p>Transaction ID #{transaction.transactionId}</p>
+                            <p>Sold for: {transaction.transactionPrice}</p>
+                            <p>Date Sold: {new Date(transaction.transactionDate).toLocaleDateString()}</p>
+                            <hr/>
+                        </div>
+                    ))
+                ) : (
+                    <p>No seller transactions available.</p>
+                )}
+            </div>
         </div>
     );
 }
