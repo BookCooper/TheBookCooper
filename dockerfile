@@ -9,7 +9,7 @@ ENV POSTGRES_USER=BCdev
 ENV POSTGRES_PASSWORD=password
 
 FROM eclipse-temurin:latest
-COPY ./init-scripts/ /docker-entrypoint-initdb.d/   
+#COPY ./init-scripts/ /docker-entrypoint-initdb.d/   
 COPY --from=build /ECE366_Project/target /app/target
 ENTRYPOINT ["java", "-jar", "/app/target/tbc-0.0.1-SNAPSHOT.jar"]
 

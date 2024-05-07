@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   db:
-    image: postgres
+    image: thebookcooperacr.azurecr.io/thebookcooper-db
     container_name: thebookcooper-db
+    build: db
     expose:
       - 5432:5432
     ports:
@@ -12,13 +13,11 @@ services:
       POSTGRES_DB: thebookcooper
       POSTGRES_USER: BCdev
       POSTGRES_PASSWORD: password
-    volumes:
-      - db-data:/var/lib/postgresql/data # change this to src 
-      - ./init-scripts:/docker-entrypoint-initdb.d/
     restart: always
 
   app:
     build: .
+    image: thebookcooperacr.azurecr.io/thebookcooper-app
     container_name: thebookcooper-app
     environment:
       POSTGRES_DB: thebookcooper
@@ -34,15 +33,9 @@ services:
   frontend:
     build:
       context: theBookCooperUI
-    image: thebookcooper-ui-image
+    image: thebookcooperacr.azurecr.io/thebookcooper-ui
     container_name: thebookcooper-ui
     ports:
       - 3000:3000
     depends_on:
       - app
-
-volumes:
-  db-data:
-
-networks:
-  default:
