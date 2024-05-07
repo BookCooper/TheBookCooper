@@ -5,9 +5,9 @@ services:
     image: postgres
     container_name: thebookcooper-db
     expose:
-      - "5432"
+      - 5432:5432
     ports:
-      - "5555:5432" # Map host port 5555 to container port 5432
+      - 5432:5432 # Map host port 5555 to container port 5432
     environment:
       POSTGRES_DB: thebookcooper
       POSTGRES_USER: BCdev
@@ -25,12 +25,21 @@ services:
       POSTGRES_USER: BCdev
       POSTGRES_PASSWORD: password
     expose:
-      - "8080:8080"
+      - 8080:8080
     ports:
-      - "8080:8080"
+      - 8080:8080
     depends_on:
       - db
 
+  frontend:
+    build:
+      context: theBookCooperUI
+    image: thebookcooper-ui-image
+    container_name: thebookcooper-ui
+    ports:
+      - 3000:3000
+    depends_on:
+      - app
 
 volumes:
   db-data:
