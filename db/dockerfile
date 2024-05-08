@@ -1,6 +1,6 @@
 FROM postgres
 
 # Copy the SQL files to the container
-COPY 01_setup.sql /docker-entrypoint-initdb.d/01_setup.sql
-COPY 02_init_db.sql /docker-entrypoint-initdb.d/02_init_db.sql
-COPY 03_init_store_items.sql /docker-entrypoint-initdb.d/03_init_store_items.sql
+COPY 0_setup.sql /docker-entrypoint-initdb.d/0_setup.sql
+COPY 1_init_db.sql /docker-entrypoint-initdb.d/1_init_db.sql
+COPY 2_init_store_items.sql /docker-entrypoint-initdb.d/2_init_store_items.sql

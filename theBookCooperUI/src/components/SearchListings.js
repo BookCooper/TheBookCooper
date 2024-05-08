@@ -11,7 +11,7 @@ const SearchListings = ({ placeholder = "Search for a book" }) => {
     const handleSearch = (e) => {
         e.preventDefault();
         if (input.trim() !== "") {
-            navigate(`http://` + host + `:8080/search?title=${encodeURIComponent(input)}`);
+            navigate(`/search?title=${encodeURIComponent(input)}`);
         }
     };
 

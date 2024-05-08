@@ -36,7 +36,8 @@ const Login = () => {
 
             // Get the token from the signed-in user
             const token = await firebaseUser.getIdToken();
-            const headers = { Authorization: `Bearer ${token}` };
+            //const headers = { Authorization: `Bearer ${token}` };
+            const headers = token ? {Authorization: `Bearer ${token}`, "Access-Control-Allow-Origin": "*"} : {};
             console.log("token is: " + token); 
 
             // Fetch user data using the token

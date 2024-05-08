@@ -25,7 +25,8 @@ const Signup = () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
             const token = await userCredential.user.getIdToken();
-            const headers = { Authorization: `Bearer ${token}` };
+            const headers = token ? {Authorization: `Bearer ${token}`, "Access-Control-Allow-Origin": "*"} : {};
+            //const headers = { Authorization: `Bearer ${token}` };
 
             const response = await axios.post(`http://` + host + `:8080/users/create`, {
                 userName: username,

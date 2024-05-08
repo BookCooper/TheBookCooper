@@ -3,8 +3,7 @@ COPY . /ECE366_Project
 WORKDIR /ECE366_Project
 RUN mvn -e package 
 
-
-ENV POSTGRES_DB=thebookcooper
+ENV POSTGRES_DB=jdbc:postgresql://localhost:5432/thebookcooper
 ENV POSTGRES_USER=BCdev
 ENV POSTGRES_PASSWORD=password
 
