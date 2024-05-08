@@ -63,6 +63,7 @@ const ProfileListings = () => {
                             <p>Price: {listing.price} B-Bucks</p>
                             <p>Status: {listing.listingStatus}</p>
                             <p>Date Listed: {new Date(listing.listingDate).toLocaleDateString()}</p>
+                            <a href={`/listings/${listing.listingId}`}> Click here to view your listings! </a>
                             <hr/>
                         </div>
                     ))

@@ -1,13 +1,13 @@
 @import "./Boilerplate.css";
 
-.create-listings-container {
+.create-details-container {
     display: flex;
     justify-content: center;
     align-items: center;
     background: #025ABB;
 }
 
-.create-listings-white-box {
+.create-details-white-box {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,7 +22,7 @@
 }
 
 /* Main Box Styling */
-.create-listings-label {
+.create-details-label {
     font-family: Arial, sans-serif;
     font-size: 2em;
     color: #000000;
@@ -30,25 +30,8 @@
     margin-top: 2vh;
 }
 
-/* Styling for Inputs and Button */
 
-.input-field, .select-field {
-    max-width: 35vw; /* Full width for larger screens */
-    padding: 2vh 3vh;
-    margin-bottom: 20px; /* Space between elements */
-    background: #D9D9D9; /* Light grey background */
-    border-radius: 100px;
-    border: none;
-    font-size: 1em;
-    box-sizing: border-box; /* Includes padding and borders in the element's total width */
-}
-
-.select-field {
-    display: block;
-}
-
-
-.update-profile-button {
+.buy-book-button {
     background: #0C8CE9;
     padding: 2vh 3vh;
     border-radius: 4vh;
@@ -60,9 +43,32 @@
     transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
+.create-details-gray-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%; /* Fixed width for control */
+    height: 20%; /* Fixed width for control */
+    background: #D9D9D9;
+    border-radius: 55px;
+    padding: 20px;
+    margin-top: 4vh;
+    max-height: 400px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    margin: auto; /* Optional: for centering if needed */
+}
 
+/* Main Box Styling */
+.create-details-label {
+    font-family: Arial, sans-serif;
+    font-size: 2em;
+    color: #000000;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+}
 
-.update-profile-button:hover {
+/* Styling for Inputs and Button */
+.buy-book-button:hover {
     background: #007CBA; /* Darker shade for hover */
 }
 
@@ -75,7 +81,9 @@
     text-align: left;
 }
 
-p {
+a {
     font-family: Arial, sans-serif;
+    font-size: 1.1em;
+    margin: 5px;
 }
 
