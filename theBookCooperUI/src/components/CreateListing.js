@@ -22,6 +22,7 @@ function NewListing() {
     const [createPerformed, setCreatePerformed] = useState(false); // State to track if listing create has been performed
 
     const { userId, setUserId } = useDetails();
+    const host = window.location.host;
 
     const newListing = async () => {
         if (!user) {
@@ -43,7 +44,7 @@ function NewListing() {
                 price: price ? parseFloat(price) : 0
             };
 
-            const response = await axios.post(`http://localhost:8080/listings/create`, listingData, { headers });
+            const response = await axios.post(`http://` + host + `:8080/listings/create`, listingData, { headers });
             console.log('Listing created successfully:', response.data);
             setSuccess(true);
             setCreatePerformed(true);
@@ -66,7 +67,7 @@ function NewListing() {
         try {
             const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
-            const response = await axios.get(`http://localhost:8080/books/search?title=${encodeURIComponent(input)}`, { headers });
+            const response = await axios.get(`http://` + host + `:8080/books/search?title=${encodeURIComponent(input)}`, { headers });
 
             if (response.data.length > 0) {
                 setBooks(response.data);

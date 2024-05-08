@@ -17,6 +17,7 @@ const Profile = () => {
     const [loggedUser, setLoggedUser] = useState(null);
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState('');
+    const host = window.location.host;
 
     useEffect(() => {
         const loadUserDetails = async () => {
@@ -28,7 +29,7 @@ const Profile = () => {
             try {
                 const token = await user.getIdToken();
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
-                const userResponse = await axios.get(`/users/${userId}`, { headers });
+                const userResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
                 setLoggedUser(userResponse.data);
             } catch (error) {
                 setError("UNAUTHORIZED " + error.message);

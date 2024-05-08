@@ -25,6 +25,7 @@ const ProfileEdit = () => {
 
     const [email, setEmail] = useState("");
     const [reauthSuccess, setReauthSuccess] = useState("");
+    const host = window.location.host;
 
     useEffect(() => {
         const loadUserDetails = async () => {
@@ -38,7 +39,7 @@ const ProfileEdit = () => {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
                 
                 //can remove this, but can also use it to display B-Buck balance, etc.
-                const userResponse = await axios.get(`/users/${userId}`, { headers });
+                const userResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
 
                 setLoggedUser(userResponse.data);
                 setUsername(userResponse.data.userName);
@@ -94,7 +95,7 @@ const ProfileEdit = () => {
                 }
 
                 //update user in back end
-                const updateResponse = await axios.put(`/users/update/${userId}`, {
+                const updateResponse = await axios.put(`http://` + host + `:8080/users/update/${userId}`, {
                     userName: username,
                     email: email,
                     bBucksBalance: loggedUser.bbucksBalance

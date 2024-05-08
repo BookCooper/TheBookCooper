@@ -10,7 +10,7 @@ services:
     ports:
       - 5432:5432 # Map host port 5555 to container port 5432
     environment:
-      POSTGRES_DB: thebookcooper
+      POSTGRES_DB: postgres
       POSTGRES_USER: BCdev
       POSTGRES_PASSWORD: password
     restart: always
@@ -20,7 +20,7 @@ services:
     image: thebookcooperacr.azurecr.io/thebookcooper-app
     container_name: thebookcooper-app
     environment:
-      POSTGRES_DB: thebookcooper
+      POSTGRES_DB: postgres
       POSTGRES_USER: BCdev
       POSTGRES_PASSWORD: password
     expose:
@@ -30,12 +30,12 @@ services:
     depends_on:
       - db
 
-  frontend:
+  ui:
     build:
       context: theBookCooperUI
     image: thebookcooperacr.azurecr.io/thebookcooper-ui
-    container_name: thebookcooper-ui
+    container_name: thebookcooper-ui2
     ports:
-      - 3000:3000
+      - 80:80
     depends_on:
       - app

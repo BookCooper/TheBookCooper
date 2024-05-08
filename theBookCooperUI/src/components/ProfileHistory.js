@@ -17,6 +17,7 @@ const ProfileHistory = () => {
 
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState('');
+    const host = window.location.host;
 
     useEffect(() => {
         const loadListingDetails = async () => {
@@ -30,22 +31,22 @@ const ProfileHistory = () => {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
                 
                 //can remove this, but can also use it to display B-Buck balance, etc.
-                const userResponse = await axios.get(`/users/${userId}`, { headers });
+                const userResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
                 setLoggedUser(userResponse.data);
 
-                const buyResponse = await axios.get(`/book-transactions/buyer`, { 
+                const buyResponse = await axios.get(`http://` + host + `:8080/book-transactions/buyer`, { 
                     params: { buyerId: userId },
                     headers 
                 });
                 setBuyTransactions(buyResponse.data);
                 
-                const sellResponse = await axios.get(`/book-transactions/seller`, { 
+                const sellResponse = await axios.get(`http://` + host + `:8080/book-transactions/seller`, { 
                     params: { sellerId: userId },
                     headers 
                 });
                 setSellTransactions(sellResponse.data);
                 
-                const pointResponse = await axios.get(`/point-transactions/user`, { 
+                const pointResponse = await axios.get(`http://` + host + `:8080/point-transactions/user`, { 
                     params: { userId: userId },
                     headers 
                 });

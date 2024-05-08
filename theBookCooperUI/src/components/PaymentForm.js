@@ -39,6 +39,7 @@ function PaymentForm() {
     const { user, isLoading } = useUser();
     const { userId } = useDetails();
     const [loading, setLoading] = useState(true);
+    const host = window.location.host;
 
     useEffect(() => {
         const loadStoreItem = async () => {
@@ -52,11 +53,11 @@ function PaymentForm() {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
                 //get store item data
-                const storeItemResponse = await axios.get(`/store-items/${storeId}`, { headers });
+                const storeItemResponse = await axios.get(`http://` + host + `:8080/store-items/${storeId}`, { headers });
                 setStoreItem(storeItemResponse.data);
 
                 //get user data
-                const userResponse = await axios.get(`/users/${userId}`, { headers });
+                const userResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
                 setUserInfo(userResponse.data);
             } catch (e) {
                 setStoreItem(e.message);
@@ -97,7 +98,7 @@ function PaymentForm() {
                 console.log("Price is " + storeItem.itemPrice * 100);
                 console.log("Payment id is " + id);
 
-                const response = await axios.post("/payment-request", {
+                const response = await axios.post(`http://` + host + `:8080/payment-request`, {
                     amount: storeItem.itemPrice * 100,
                     id: id,
                     userId: userId,

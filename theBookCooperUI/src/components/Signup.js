@@ -27,7 +27,7 @@ const Signup = () => {
             const token = await userCredential.user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
 
-            const response = await axios.post(`${host}/users/create`, {
+            const response = await axios.post(`http://` + host + `:8080/users/create`, {
                 userName: username,
                 email: email,
                 bBucksBalance: 0.0  // Optional, include if needed

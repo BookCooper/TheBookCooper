@@ -11,6 +11,7 @@ function ShowResults() {
     const [listings, setListings] = useState([]);
     const location = useLocation(); // Get location
     const query = new URLSearchParams(location.search).get('title'); // Get the title query parameter
+    const host = window.location.host;
 
     useEffect(() => {
         if (query) {
@@ -28,11 +29,11 @@ function ShowResults() {
         try {
             const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
-            const listingResponse = await axios.get(`/listings/search?title=${encodeURIComponent(input)}`, { headers });
+            const listingResponse = await axios.get(`http://` + host + `:8080/listings/search?title=${encodeURIComponent(input)}`, { headers });
 
             const activeListings = listingResponse.data.filter((listing) => listing.listingStatus === 'active');
             const booksData = await Promise.all(activeListings.map(async (listing) => {
-                const bookResponse = await axios.get(`/books/${listing.bookId}`, { headers });
+                const bookResponse = await axios.get(`http://` + host + `:8080/books/${listing.bookId}`, { headers });
                 return { ...listing, book: bookResponse.data };
             }));
 

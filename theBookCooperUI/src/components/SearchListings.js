@@ -6,11 +6,12 @@ import '../styles/Header.css';
 const SearchListings = ({ placeholder = "Search for a book" }) => {
     const [input, setInput] = useState("");
     const navigate = useNavigate();
+    const host = window.location.host;
 
     const handleSearch = (e) => {
         e.preventDefault();
         if (input.trim() !== "") {
-            navigate(`/search?title=${encodeURIComponent(input)}`);
+            navigate(`http://` + host + `:8080/search?title=${encodeURIComponent(input)}`);
         }
     };
 

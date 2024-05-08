@@ -40,7 +40,7 @@ const Login = () => {
             console.log("token is: " + token); 
 
             // Fetch user data using the token
-            const userResponse = await axios.get(`${host}/users/email/${email}`, { headers });
+            const userResponse = await axios.get(`http://` + host + `:8080/users/email/${email}`, { headers });
             console.log("API Response:", userResponse.data);
 
             // If the user data includes the userId, set it in the state

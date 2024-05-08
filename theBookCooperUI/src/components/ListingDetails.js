@@ -19,6 +19,7 @@ function ShowListing() {
     const { listingId } = useParams();
 
     const [transaction, setTransaction] = useState('');
+    const host = window.location.host;
 
     useEffect(() => {
         const loadListingDetails = async () => {
@@ -32,19 +33,19 @@ function ShowListing() {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
                 
                 // Get listing data
-                const listingResponse = await axios.get(`/listings/${listingId}`, { headers });
+                const listingResponse = await axios.get(`http://` + host + `:8080/listings/${listingId}`, { headers });
                 setListing(listingResponse.data);
                 
                 // Get book data from listing response
-                const bookResponse = await axios.get(`/books/${listingResponse.data.bookId}`, { headers });
+                const bookResponse = await axios.get(`http://` + host + `:8080/books/${listingResponse.data.bookId}`, { headers });
                 setBook(bookResponse.data);
                 
                 // Get seller
-                const sellerResponse = await axios.get(`/users/${listingResponse.data.userId}`, { headers });
+                const sellerResponse = await axios.get(`http://` + host + `:8080/users/${listingResponse.data.userId}`, { headers });
                 setSeller(sellerResponse.data);
 
                 // Get buyer
-                const buyerResponse = await axios.get(`/users/${userId}`, { headers });
+                const buyerResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
                 setBuyer(buyerResponse.data);
             } catch (error) {
                 setError("Error fetching data: " + error.message);
@@ -92,7 +93,7 @@ function ShowListing() {
             console.log(token)
 
             //get listing data
-            const response = await axios.post('/book-transactions/create', {
+            const response = await axios.post(`http://` + host + `:8080/book-transactions/create`, {
                 buyerId: userId,
                 sellerId: seller.userId,
                 listingId: listing.listingId,
@@ -103,7 +104,7 @@ function ShowListing() {
             console.log('Transaction created successfully:', response.data);
 
             //update the book's status/
-            const updateResponse = await axios.put(`/listings/update/${listingId}`, {
+            const updateResponse = await axios.put(`http://` + host + `:8080/listings/update/${listingId}`, {
                 userId: listing.userId,
                 bookId: listing.bookId,
                 price: listing.price,

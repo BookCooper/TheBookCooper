@@ -14,6 +14,7 @@ const ProfileListings = () => {
 
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState('');
+    const host = window.location.host;
 
     useEffect(() => {
         const loadListingDetails = async () => {
@@ -27,10 +28,10 @@ const ProfileListings = () => {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
                 
                 //can remove this, but can also use it to display B-Buck balance, etc.
-                const userResponse = await axios.get(`/users/${userId}`, { headers });
+                const userResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
                 setLoggedUser(userResponse.data);
 
-                const listingResponse = await axios.get(`/listings/user`, { 
+                const listingResponse = await axios.get(`http://` + host + `:8080/listings/user`, { 
                     params: { userId: userId },
                     headers 
                 });
