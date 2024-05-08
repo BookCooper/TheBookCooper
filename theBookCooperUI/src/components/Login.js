@@ -14,6 +14,8 @@ const Login = () => {
     const {user, isLoading} = useUser();
     const navigate = useNavigate();
 
+    const host = window.location.host;
+
     // Reset userId when component mounts
     useEffect(() => {
         setUserId(null);
@@ -38,7 +40,7 @@ const Login = () => {
             console.log("token is: " + token); 
 
             // Fetch user data using the token
-            const userResponse = await axios.get(`/users/email/${email}`, { headers });
+            const userResponse = await axios.get(`${host}/users/email/${email}`, { headers });
             console.log("API Response:", userResponse.data);
 
             // If the user data includes the userId, set it in the state
@@ -68,7 +70,7 @@ const Login = () => {
                 <form onSubmit={logIn} className="form-container">
                 <h1 className="login-label">Login</h1>
             <div>
-                <label htmlFor="email" className="email-label">Email</label>
+                <label htmlFor="email" className="email-label">Email</label> <br/>
                 <input
                     id="email"
                     className="email-box"
@@ -80,7 +82,7 @@ const Login = () => {
                 />
                 </div>
             <div>
-                <label htmlFor="password" className="password-label">Password</label>
+                <label htmlFor="password" className="password-label">Password</label><br/>
                 <input
                     id="password"
                     className="password-box"
@@ -94,8 +96,7 @@ const Login = () => {
                 {error && <p className="error-message">{error}</p>}
                 <button type="submit" className="login-page-button">Log In</button>
                 <div className="footer-links">
-                    <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
-                    <Link to="/signup" className="sign-up-text">Sign Up</Link>
+                    <Link to="/signup" className="sign-up-text">Don't have an account? Sign Up</Link>
                 </div>
                 </form>
             </div>

@@ -96,6 +96,7 @@ const ProfileHistory = () => {
                             <p>Transaction ID #{transaction.transactionId}</p>
                             <p>Bought for: {transaction.transactionPrice} B-Bucks</p>
                             <p>Date Purchased: {new Date(transaction.transactionDate).toLocaleDateString()}</p>
+                            <a href={`/listings/${transaction.listingId}`}> Click here to view the transaction! </a>
                             <hr/>
                         </div>
                     ))
@@ -111,6 +112,7 @@ const ProfileHistory = () => {
                             <p>Transaction ID #{transaction.transactionId}</p>
                             <p>Sold for: {transaction.transactionPrice}</p>
                             <p>Date Sold: {new Date(transaction.transactionDate).toLocaleDateString()}</p>
+                            <a href={`/listings/${transaction.listingId}`}> Click here to view the transaction! </a>
                             <hr/>
                         </div>
                     ))

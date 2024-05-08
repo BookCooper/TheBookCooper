@@ -5,9 +5,6 @@ import reportWebVitals from './reportWebVitals';
 
 
 import { App } from './App';
-import DashboardPage from "./pages/DashboardPage";
-import AboutPage from "./pages/AboutPage";
-import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PaymentPage from "./pages/PaymentPage";
@@ -52,11 +49,8 @@ root.render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/about" element={<AboutPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/payment/:storeId" element={<PaymentPage />} />
             <Route path="/search/" element={<SearchPage />} />
             <Route path="/listings/:listingId" element={<ListingDetailPage />} />

@@ -57,19 +57,46 @@
 
 /* Styling for Inputs and Button */
 
-.store-button, {
+.store-page-button {
     background: #0C8CE9;
-    padding: 3vh 4vw;
+    padding: 2vh 3vh;
     border-radius: 4vh;
     color: #FFFFFF;
     font-family: Arial, sans-serif;
     font-size: 1em;
-    border: 1px;
+    border: none;
     cursor: pointer;
     transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
 
-.store-button:hover, .look-up-button:hover, .my-book-button:hover {
+.store-page-button:hover {
     background: #007CBA; /* Darker shade for hover */
+}
+
+.FormGroup {
+    width: 60vw; /* Adjusted width as per your design */
+    background: #D9D9D9; /* Consistent background for the form */
+    color: black; /* Setting text color */
+}
+
+.FormRow {
+    width: 100%; /* Full width for the row containing the CardElement */
+    box-sizing: border-box; /* Include padding and border in the element's width */
+    background: inherit; /* Inherit from FormGroup for consistency */
+    color: black; /* Setting text color */
+}
+
+.CardElement {
+    width: 100%; /* Ensuring the CardElement itself takes full width */
+    background: inherit; /* Ensuring background consistency */
+    color: black; /* Setting text color */
+}
+
+.payment-form {
+    text-align: center;
+}
+
+.successful-payment {
+    text-align: center;
 }

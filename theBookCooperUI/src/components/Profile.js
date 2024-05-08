@@ -5,6 +5,7 @@ import useUser from "../hooks/useUser";
 import { useDetails } from "../hooks/useDetails";
 import axios from 'axios';
 
+import ProfileGeneral from './ProfileGeneral';
 import ProfileEdit from './ProfileEdit';
 import ProfileListings from './ProfileListings';
 import ProfileHistory from './ProfileHistory';
@@ -48,6 +49,7 @@ const Profile = () => {
     return (
         <div className="profile-container">
             <div className="sidebar">
+                <Link to="">Home</Link>
                 <Link to="edit">Edit Profile</Link>
                 <Link to="listings">My Listings</Link>
                 <Link to="history">My History</Link>
@@ -56,7 +58,7 @@ const Profile = () => {
             <div className="profile-content">
                 <h1 className = "profile-for">{loggedUser.userName}'s Profile</h1>
                 <Routes>
-                    <Route path="/" element={<div>Profile Overview</div>} />
+                    <Route path="/" element={<ProfileGeneral />} />
                     <Route path="edit" element={<ProfileEdit />} />
                     <Route path="listings" element={<ProfileListings />} />
                     <Route path="history" element={<ProfileHistory />} />
