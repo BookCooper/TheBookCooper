@@ -1,5 +1,9 @@
 FROM postgres
 
+ENV POSTGRES_DB=thebookcooper
+ENV POSTGRES_USER=BCdev
+ENV POSTGRES_PASSWORD=password
+
 # Copy the SQL files to the container
 COPY 0_setup.sql /docker-entrypoint-initdb.d/0_setup.sql
 COPY 1_init_db.sql /docker-entrypoint-initdb.d/1_init_db.sql
