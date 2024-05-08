@@ -13,6 +13,7 @@ const Signup = () => {
     const [error, setError] = useState('');
     const { userId, setUserId } = useDetails();
 
+    const host = window.location.host;
     const navigate = useNavigate();
 
     const signUp = async (e) => {
@@ -26,7 +27,7 @@ const Signup = () => {
             const token = await userCredential.user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
 
-            const response = await axios.post('/users/create', {
+            const response = await axios.post(`${host}/users/create`, {
                 userName: username,
                 email: email,
                 bBucksBalance: 0.0  // Optional, include if needed
@@ -52,7 +53,7 @@ const Signup = () => {
                         <label htmlFor="email" className="label-text">Email</label><br/>
                         <input
                             id="email"
-                            className="input-field"
+                            className="signup-input-field"
                             type="email"
                             placeholder="Your email address"
                             value={email}
@@ -64,7 +65,7 @@ const Signup = () => {
                         <label htmlFor="username" className="label-text">Username</label><br/>
                         <input
                             id="username"
-                            className="input-field"
+                            className="signup-input-field"
                             type="text"
                             placeholder="Your username"
                             value={username}
@@ -76,7 +77,7 @@ const Signup = () => {
                         <label htmlFor="password" className="label-text">Password</label><br/>
                         <input
                             id="password"
-                            className="input-field"
+                            className="signup-input-field"
                             type="password"
                             placeholder="Your password"
                             value={password}
@@ -88,7 +89,7 @@ const Signup = () => {
                         <label htmlFor="confirm-password" className="label-text">Confirm Password</label><br/>
                         <input
                             id="confirm-password"
-                            className="input-field"
+                            className="signup-input-field"
                             type="password"
                             placeholder="Confirm your password"
                             value={confirmPassword}

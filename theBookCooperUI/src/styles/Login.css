@@ -12,8 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 580px; /* Fixed width for control */
-  max-width: 960px; /* Maximum width the box can expand to */
+  width: 40vw; /* Fixed width for control */
   min-height: 65vh; /* Minimum height to maintain a responsive aspect */
   max-height: 85vh; /* Maximum height to prevent overflow of the viewport */
   background: #FFFFFF;

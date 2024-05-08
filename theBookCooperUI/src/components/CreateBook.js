@@ -16,6 +16,8 @@ function NewBook() {
     const [price, setPrice] = useState("");
     const [success, setSuccess] = useState(false);
 
+    const host = window.location.host;
+
     const newBook = async () => {
         if (!user) {
             console.error('No user logged in or token not retrieved.');
@@ -41,7 +43,7 @@ function NewBook() {
             console.log(bookData);
             setSuccess(true)
 
-            const response = await axios.post(`/books/create`, bookData, { headers });
+            const response = await axios.post(`${host}/books/create`, bookData, { headers });
             console.log('Book created successfully:', response.data);
         } catch (error) {
             console.error('Failed to create book:', error);
