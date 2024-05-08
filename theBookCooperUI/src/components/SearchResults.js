@@ -11,7 +11,7 @@ function ShowResults() {
     const [listings, setListings] = useState([]);
     const location = useLocation(); // Get location
     const query = new URLSearchParams(location.search).get('title'); // Get the title query parameter
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     useEffect(() => {
         if (query) {

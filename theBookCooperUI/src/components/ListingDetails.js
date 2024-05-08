@@ -19,7 +19,7 @@ function ShowListing() {
     const { listingId } = useParams();
 
     const [transaction, setTransaction] = useState('');
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     useEffect(() => {
         const loadListingDetails = async () => {

@@ -16,7 +16,7 @@ function NewBook() {
     const [price, setPrice] = useState("");
     const [success, setSuccess] = useState(false);
 
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     const newBook = async () => {
         if (!user) {

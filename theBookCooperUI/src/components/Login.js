@@ -14,7 +14,7 @@ const Login = () => {
     const {user, isLoading} = useUser();
     const navigate = useNavigate();
 
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     // Reset userId when component mounts
     useEffect(() => {
@@ -34,6 +34,10 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(getAuth(), email, password);
             const firebaseUser = userCredential.user;
 
+            console.log("host is: " + host);
+
+            const request = `http://` + host + `:8080/users/email/${email}`;
+
             // Get the token from the signed-in user
             const token = await firebaseUser.getIdToken();
             //const headers = { Authorization: `Bearer ${token}` };
@@ -41,7 +45,7 @@ const Login = () => {
             console.log("token is: " + token); 
 
             // Fetch user data using the token
-            const userResponse = await axios.get(`http://` + host + `:8080/users/email/${email}`, { headers });
+            const userResponse = await axios.get(request, { headers });
             console.log("API Response:", userResponse.data);
 
             // If the user data includes the userId, set it in the state

@@ -13,7 +13,7 @@ const Signup = () => {
     const [error, setError] = useState('');
     const { userId, setUserId } = useDetails();
 
-    const host = window.location.host;
+    const host = window.location.hostname;
     const navigate = useNavigate();
 
     const signUp = async (e) => {

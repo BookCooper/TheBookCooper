@@ -17,7 +17,7 @@ const ProfileHistory = () => {
 
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState('');
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     useEffect(() => {
         const loadListingDetails = async () => {

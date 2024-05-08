@@ -22,7 +22,7 @@ function NewListing() {
     const [createPerformed, setCreatePerformed] = useState(false); // State to track if listing create has been performed
 
     const { userId, setUserId } = useDetails();
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     const newListing = async () => {
         if (!user) {

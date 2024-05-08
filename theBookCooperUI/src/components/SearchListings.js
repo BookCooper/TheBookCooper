@@ -6,7 +6,7 @@ import '../styles/Header.css';
 const SearchListings = ({ placeholder = "Search for a book" }) => {
     const [input, setInput] = useState("");
     const navigate = useNavigate();
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     const handleSearch = (e) => {
         e.preventDefault();

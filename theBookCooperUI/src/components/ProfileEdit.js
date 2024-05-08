@@ -25,7 +25,7 @@ const ProfileEdit = () => {
 
     const [email, setEmail] = useState("");
     const [reauthSuccess, setReauthSuccess] = useState("");
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     useEffect(() => {
         const loadUserDetails = async () => {
