@@ -61,7 +61,9 @@ const ProfileListings = () => {
                         <div key={listing.listingId}>
                             <p>Listing ID: {listing.listingId}</p>
                             <p>Price: {listing.price} B-Bucks</p>
-                            <p>Status: {listing.listingStatus}</p>
+                            <a style={{ color: listing.listingStatus === 'active' ? 'green' : 'red' }}>
+                                <b>Status</b>: {listing.listingStatus}
+                            </a>
                             <p>Date Listed: {new Date(listing.listingDate).toLocaleDateString()}</p>
                             <a href={`/listings/${listing.listingId}`}> Click here to view your listings! </a>
                             <hr/>

@@ -9,7 +9,7 @@ const StoreItem = ({ bbucks, dollars, storeId }) => {
     const { user, isLoading } = useUser();
 
     return (
-        <button className = "store-button" onClick={() => navigate(`/payment/${storeId}`)}> {bbucks} B-Bucks - ${dollars}</button>
+        <button className = "store-page-button" onClick={() => navigate(`/payment/${storeId}`)}> {bbucks} B-Bucks - ${dollars}</button>
     );
 };
 

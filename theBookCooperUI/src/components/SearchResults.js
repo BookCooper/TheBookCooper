@@ -61,7 +61,8 @@ function ShowResults() {
                             <h3>{listing.book.title}</h3>
                         </a>
                         <p>Author: {listing.book.author}</p>
-                        <p>{listing.price} B-Bucks</p>
+                        <p>Price: {listing.price} B-Bucks</p>
+                        <p>Date Listed: {new Date(listing.listingDate).toLocaleDateString()}</p>
                         <hr/>
                         </div>
                     ))}

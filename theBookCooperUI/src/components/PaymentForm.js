@@ -4,14 +4,15 @@ import axios from "axios";
 import { useParams } from 'react-router-dom';
 import useUser from "../hooks/useUser";
 import { useDetails } from '../hooks/useDetails';
+import '../styles/Store.css';
 
 
 const CARD_OPTIONS = {
 	iconStyle: "solid",
 	style: {
 		base: {
-			iconColor: "#c4f0ff",
-			color: "#fff",
+			iconColor: "#000",
+			color: "#000",
 			fontWeight: 500,
 			fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
 			fontSize: "16px",
@@ -37,42 +38,35 @@ function PaymentForm() {
     const [ userInfo, setUserInfo ] = useState(null); 
     const { user, isLoading } = useUser();
     const { userId } = useDetails();
+    const [loading, setLoading] = useState(true);
 
-    /* get store item stuff*/
     useEffect(() => {
         const loadStoreItem = async () => {
             if (!user || !userId) {
                 setStoreItem('No user logged in.');
+                setLoading(false); // Stop loading as no user is logged in
                 return;
             }
             try {
                 const token = await user.getIdToken();
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
-                console.log(token)
 
                 //get store item data
                 const storeItemResponse = await axios.get(`/store-items/${storeId}`, { headers });
-                setStoreItem(storeItemResponse.data)
-
-                console.log("store item is: " + storeItem)
-                console.log(storeItemResponse.data)
-                console.log("store item id is: " + storeId)
+                setStoreItem(storeItemResponse.data);
 
                 //get user data
                 const userResponse = await axios.get(`/users/${userId}`, { headers });
-                console.log("user id is: " + userId)
-
                 setUserInfo(userResponse.data);
-                console.log("User response " + userResponse.data);
-
-                console.log(userInfo)
-                
             } catch (e) {
                 setStoreItem(e.message);
+            } finally {
+                setLoading(false); // Data has been fetched or failed
             }
         };
 
         if (user) {
+            setLoading(true); // Start loading when fetching starts
             loadStoreItem();
         }
     }, [storeId, userId, user]);
@@ -127,26 +121,33 @@ function PaymentForm() {
     }
 
 
-    return (
-        <>
-            {!success ?
-                <form onSubmit={handleSubmit}>
-                    <fieldset className = "FormGroup">
-                        <div className = "FormRow">
-                            <CardElement options={CARD_OPTIONS} />
+   return (
+        <div className="create-store-container">
+            <div className="create-store-white-box">
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    !success ? (
+                        <>
+                            <h2> Purchasing {storeItem.item} for ${storeItem.itemPrice} </h2>
+                            <form className="payment-form" onSubmit={handleSubmit}>
+                                <fieldset className = "FormGroup">
+                                    <div className = "FormRow">
+                                        <CardElement options={CARD_OPTIONS} />
+                                    </div>
+                                </fieldset>
+                                <br/><button className = "store-page-button" disabled={!storeItem}>Pay</button>
+                            </form>
+                        </>
+                    ) : (
+                        <div className = "successful-payment">
+                            <h2>You have just purchased {storeItem.item}</h2>
+                            <h3>New B-Bucks Balance is {userInfo.bbucksBalance + parseFloat(storeItem.item)}</h3>
                         </div>
-                    </fieldset>
-
-                    <button disabled={!storeItem}>Pay</button>
-                </form>
-            :
-                <div>
-                    <h2> You have just purchased {storeItem.item} </h2>   
-                    <h3> New B-Bucks Balance is {userInfo.bbucksBalance + parseFloat(storeItem.item)} </h3>
-                </div>
-            }
-        </>
-
+                    )
+                )}
+            </div>
+        </div>
     );
 }
 

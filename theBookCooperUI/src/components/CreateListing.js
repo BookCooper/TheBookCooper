@@ -21,9 +21,6 @@ function NewListing() {
     const [searchPerformed, setSearchPerformed] = useState(false); // State to track if search has been performed
     const [createPerformed, setCreatePerformed] = useState(false); // State to track if listing create has been performed
 
-    //listing id, user id, book id, listing status, book condition, price, listing date
-    //user input: book id, book condition, price
-
     const { userId, setUserId } = useDetails();
 
     const newListing = async () => {
