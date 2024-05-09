@@ -29,7 +29,6 @@ public class WebSecurityConfiguration {
         return http.build();
     }
     
-
     // This method provides a CORS configuration source needed to specify which CORS configurations to apply
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -45,4 +44,3 @@ public class WebSecurityConfiguration {
     }
     
 }
-
