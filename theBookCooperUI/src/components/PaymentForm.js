@@ -39,7 +39,7 @@ function PaymentForm() {
     const { user, isLoading } = useUser();
     const { userId } = useDetails();
     const [loading, setLoading] = useState(true);
-    const host = window.location.host;
+    const host = window.location.hostname;
 
     useEffect(() => {
         const loadStoreItem = async () => {
@@ -53,6 +53,7 @@ function PaymentForm() {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
                 //get store item data
+                //console.log("request is: " + "http://" + host + :8080/store-items/${storeId}"); 
                 const storeItemResponse = await axios.get(`http://` + host + `:8080/store-items/${storeId}`, { headers });
                 setStoreItem(storeItemResponse.data);
 

@@ -15,27 +15,27 @@ services:
       POSTGRES_PASSWORD: password
     restart: always
 
-#    app:
-#    build: .
-#    image: thebookcooperacr.azurecr.io/thebookcooper-app
-#    container_name: thebookcooper-app
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/thebookcooper
-#      SPRING_DATASOURCE_USERNAME: BCdev
-#      SPRING_DATASOURCE_PASSWORD: password
-#    expose:
-#      - 8080:8080
-#    ports:
-#      - 8080:8080
-#    depends_on:
-#      - db
-#
-#  ui:
-#    build:
-#      context: theBookCooperUI
-#    image: thebookcooperacr.azurecr.io/thebookcooper-ui
-#    container_name: thebookcooper-ui2
-#    ports:
-#      - 3000:3000
-#    depends_on:
-#      - app
+  app:
+    build: .
+    image: thebookcooperacr.azurecr.io/thebookcooper-app
+    container_name: thebookcooper-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/thebookcooper
+      SPRING_DATASOURCE_USERNAME: BCdev
+      SPRING_DATASOURCE_PASSWORD: password
+    expose:
+      - 8080:8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  ui:
+    build:
+      context: theBookCooperUI
+    image: thebookcooperacr.azurecr.io/thebookcooper-ui
+    container_name: thebookcooper-ui2
+    ports:
+      - 3000:3000
+    depends_on:
+      - app

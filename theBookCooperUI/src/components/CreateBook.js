@@ -17,6 +17,7 @@ function NewBook() {
     const [success, setSuccess] = useState(false);
 
     const host = window.location.hostname;
+    const today = new Date().toISOString().split('T')[0];
 
     const newBook = async () => {
         if (!user) {
@@ -83,6 +84,7 @@ function NewBook() {
                     value={publishDate}
                     onChange={e => setPublishDate(e.target.value)}
                     placeholder="Enter the publish date"
+                    max={today}  // Restrict future dates
                     className="input-field"
                 /><br/>
                 <a className = "label-text"> Condition: </a> <select
