@@ -41,18 +41,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">ListingsController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    75%
   </span>
   <span class="absValue">
-    (0/8)
+    (6/8)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    30.3%
   </span>
   <span class="absValue">
-    (0/89)
+    (27/89)
   </span>
 </td>
 </tr>
@@ -60,18 +60,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">ListingsController$1</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -79,18 +79,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">ListingsController$2</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -98,18 +98,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    80%
   </span>
   <span class="absValue">
-    (0/10)
+    (8/10)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    31.9%
   </span>
   <span class="absValue">
-    (0/91)
+    (29/91)
   </span>
 </td>
 </tr>
@@ -135,108 +135,127 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.util.Map;
 &nbsp;
 &nbsp;import com.thebookcooper.model.Book;
+&nbsp;import com.thebookcooper.model.User;
 &nbsp;import com.thebookcooper.model.Listing;
 &nbsp;import com.thebookcooper.dao.ListingsDAO;
 &nbsp;import com.thebookcooper.dao.BookInfoDAO;
+&nbsp;import com.thebookcooper.dao.UserDAO;
 &nbsp;import com.thebookcooper.dao.DatabaseConnectionManager;
 &nbsp;
 &nbsp;@RestController
-&nbsp;@CrossOrigin
+<b class="fc">&nbsp;@CrossOrigin</b>
 &nbsp;@RequestMapping(&quot;/listings&quot;)
-<b class="nc">&nbsp;public class ListingsController {</b>
+<b class="fc">&nbsp;public class ListingsController {</b>
 &nbsp;    
-<b class="nc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
-&nbsp;    
-&nbsp;    private Listing findListingById(long id) throws SQLException {
+&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);
+<b class="nc">&nbsp;    </b>
+<b class="nc">&nbsp;    private Listing findListingById(long id) throws SQLException {</b>
 <b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            ListingsDAO listingDAO = new ListingsDAO(connection);</b>
-<b class="nc">&nbsp;            return listingDAO.findById(id);</b>
-<b class="nc">&nbsp;        }</b>
+&nbsp;            return listingDAO.findById(id);
+&nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    @GetMapping(&quot;/count&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; countListings() {
+<b class="fc">&nbsp;    @GetMapping(&quot;/count&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; countListings() {</b>
 <b class="nc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;             Statement statement = connection.createStatement();</b>
 <b class="nc">&nbsp;             ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) FROM book_listings&quot;)) {</b>
-<b class="nc">&nbsp;            if (resultSet.next()) {</b>
+&nbsp;            if (resultSet.next()) {
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Number of listings: &quot; + resultSet.getInt(1), HttpStatus.OK);</b>
-&nbsp;            }
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No listings found&quot;, HttpStatus.NOT_FOUND);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving listing count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No listings found&quot;, HttpStatus.NOT_FOUND);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving listing count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;    
-&nbsp;    @GetMapping(&quot;/{id}&quot;)
+<b class="fc">&nbsp;    @GetMapping(&quot;/{id}&quot;)</b>
 &nbsp;    public ResponseEntity&lt;?&gt; getListingById(@PathVariable(&quot;id&quot;) long id) {
 <b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 &nbsp;
 <b class="nc">&nbsp;            Listing listing = findListingById(id);</b>
-&nbsp;
-<b class="nc">&nbsp;            if (listing != null) {</b>
+<b class="nc">&nbsp;</b>
+&nbsp;            if (listing != null) {
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(listing, HttpStatus.OK);</b>
 &nbsp;            } else {
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Listing not found&quot;, HttpStatus.NOT_FOUND);</b>
-&nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving listing&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Listing not found&quot;, HttpStatus.NOT_FOUND);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving listing&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    @GetMapping(&quot;/search&quot;)
+<b class="nc">&nbsp;    @GetMapping(&quot;/search&quot;)</b>
 &nbsp;    public ResponseEntity&lt;?&gt; searchListingsByBookTitle(@RequestParam String title) {
 <b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-&nbsp;
-<b class="nc">&nbsp;            BookInfoDAO bookInfoDAO = new BookInfoDAO(connection);</b>
-<b class="nc">&nbsp;            ListingsDAO listingsDAO = new ListingsDAO(connection);</b>
-&nbsp;            
-&nbsp;            // Find books by title
+<b class="nc">&nbsp;</b>
+&nbsp;            BookInfoDAO bookInfoDAO = new BookInfoDAO(connection);
+&nbsp;            ListingsDAO listingsDAO = new ListingsDAO(connection);
+<b class="nc">&nbsp;            </b>
+<b class="nc">&nbsp;            // Find books by title</b>
 <b class="nc">&nbsp;            List&lt;Book&gt; books = bookInfoDAO.findByTitle(title);</b>
-<b class="nc">&nbsp;            if (books.isEmpty()) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No books found matching the title&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;            if (books.isEmpty()) {
+&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No books found matching the title&quot;, HttpStatus.NOT_FOUND);
 &nbsp;            }
-&nbsp;            
-&nbsp;            // For each book, find its listings
+<b class="nc">&nbsp;            </b>
+<b class="nc">&nbsp;            // For each book, find its listings</b>
 <b class="nc">&nbsp;            List&lt;Listing&gt; listings = new ArrayList&lt;&gt;();</b>
 <b class="nc">&nbsp;            for (Book book : books) {</b>
 <b class="nc">&nbsp;                List&lt;Listing&gt; bookListings = listingsDAO.findByBookId(book.getBookId());</b>
-<b class="nc">&nbsp;                listings.addAll(bookListings);</b>
+&nbsp;                listings.addAll(bookListings);
 <b class="nc">&nbsp;            }</b>
-&nbsp;            
-<b class="nc">&nbsp;            if (listings.isEmpty()) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No listings found for books matching the title&quot;, HttpStatus.NOT_FOUND);</b>
-&nbsp;            }
-&nbsp;            
+<b class="nc">&nbsp;            </b>
+&nbsp;            if (listings.isEmpty()) {
+&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No listings found for books matching the title&quot;, HttpStatus.NOT_FOUND);
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            </b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(listings, HttpStatus.OK);</b>
 <b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error searching listings by book title&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error searching listings by book title&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
-&nbsp;    
-&nbsp;    @PostMapping(&quot;/create&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; createListing(@RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+&nbsp;
+<b class="fc">&nbsp;    @GetMapping(&quot;/user&quot;)</b>
+&nbsp;    public ResponseEntity&lt;?&gt; searchListingsByUserId(@RequestParam long userId) {
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;            ListingsDAO listingsDAO = new ListingsDAO(connection);</b>
+<b class="nc">&nbsp;            </b>
+&nbsp;            // For each book, find its listings
+<b class="nc">&nbsp;            List&lt;Listing&gt; userListings = listingsDAO.findByUserId(userId);</b>
+<b class="nc">&nbsp;            </b>
+<b class="nc">&nbsp;            // will return an empty list on failure</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(userListings, HttpStatus.OK);</b>
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error searching listings by user ID&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;    </b>
+<b class="nc">&nbsp;    @PostMapping(&quot;/create&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; createListing(@RequestBody String json) {</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        try {</b>
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
 <b class="nc">&nbsp;            Listing newListing = new Listing();</b>
 <b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;            ListingsDAO listDAO = new ListingsDAO(connection);</b>
+&nbsp;            ListingsDAO listDAO = new ListingsDAO(connection);
 &nbsp;
-<b class="nc">&nbsp;            newListing.setUserId(Long.parseLong(inputMap.get(&quot;userId&quot;).toString()));</b>
-<b class="nc">&nbsp;            newListing.setBookId(Long.parseLong(inputMap.get(&quot;bookId&quot;).toString()));</b>
-<b class="nc">&nbsp;            newListing.setListingStatus((String) inputMap.get(&quot;listingStatus&quot;));</b>
-<b class="nc">&nbsp;            newListing.setBookCondition((String) inputMap.get(&quot;bookCondition&quot;));</b>
-<b class="nc">&nbsp;            newListing.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));</b>
-<b class="nc">&nbsp;            newListing.setListingDate(new Timestamp(System.currentTimeMillis()));</b>
-&nbsp;            
-<b class="nc">&nbsp;            Listing createdListing = listDAO.create(newListing);</b>
+&nbsp;            newListing.setUserId(Long.parseLong(inputMap.get(&quot;userId&quot;).toString()));
+&nbsp;            newListing.setBookId(Long.parseLong(inputMap.get(&quot;bookId&quot;).toString()));
+&nbsp;            newListing.setListingStatus((String) inputMap.get(&quot;listingStatus&quot;));
+&nbsp;            newListing.setBookCondition((String) inputMap.get(&quot;bookCondition&quot;));
+<b class="fc">&nbsp;            newListing.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));</b>
+&nbsp;            newListing.setListingDate(new Timestamp(System.currentTimeMillis()));
+<b class="fc">&nbsp;            </b>
+<b class="fc">&nbsp;            Listing createdListing = listDAO.create(newListing);</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(createdListing, HttpStatus.CREATED);</b>
 <b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;            e.printStackTrace();
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
 <b class="nc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
@@ -244,47 +263,47 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } catch (NumberFormatException e) {</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid number format for userID or bookID&quot;, HttpStatus.BAD_REQUEST);</b>
 &nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;
-&nbsp;    @PutMapping(&quot;/update/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; updateListing(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    @PutMapping(&quot;/update/{id}&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; updateListing(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        try {</b>
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
 <b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;            ListingsDAO listDAO = new ListingsDAO(connection);</b>
-<b class="nc">&nbsp;            Listing updatedListing = findListingById(id);</b>
+&nbsp;            Listing updatedListing = findListingById(id);
 &nbsp;
-<b class="nc">&nbsp;            updatedListing.setUserId(Long.parseLong(inputMap.get(&quot;userId&quot;).toString()));</b>
-<b class="nc">&nbsp;            updatedListing.setBookId(Long.parseLong(inputMap.get(&quot;bookId&quot;).toString()));</b>
-<b class="nc">&nbsp;            updatedListing.setListingStatus((String) inputMap.get(&quot;listingStatus&quot;));</b>
-<b class="nc">&nbsp;            updatedListing.setBookCondition((String) inputMap.get(&quot;bookCondition&quot;));</b>
+&nbsp;            updatedListing.setUserId(Long.parseLong(inputMap.get(&quot;userId&quot;).toString()));
+&nbsp;            updatedListing.setBookId(Long.parseLong(inputMap.get(&quot;bookId&quot;).toString()));
+&nbsp;            updatedListing.setListingStatus((String) inputMap.get(&quot;listingStatus&quot;));
+<b class="fc">&nbsp;            updatedListing.setBookCondition((String) inputMap.get(&quot;bookCondition&quot;));</b>
 <b class="nc">&nbsp;            updatedListing.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));</b>
 <b class="nc">&nbsp;            updatedListing.setListingDate(new Timestamp(System.currentTimeMillis()));</b>
-&nbsp;
-<b class="nc">&nbsp;            Listing updated = listDAO.update(updatedListing);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(updated, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the listing&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-<b class="nc">&nbsp;        } catch (NumberFormatException e) {</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid number format for userID or bookID&quot;, HttpStatus.BAD_REQUEST);</b>
+<b class="nc">&nbsp;</b>
+<b class="fc">&nbsp;            Listing updated = listDAO.update(updatedListing);</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(updated, HttpStatus.OK);</b>
+<b class="fc">&nbsp;        } catch (JsonProcessingException e) {</b>
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the listing&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
+&nbsp;        } catch (NumberFormatException e) {
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid number format for userID or bookID&quot;, HttpStatus.BAD_REQUEST);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; deleteListing(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            ListingsDAO listDAO = new ListingsDAO(connection);</b>
-<b class="nc">&nbsp;            listDAO.delete(id);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Listing with id &quot; + id + &quot; has been deleted&quot;, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error deleting listing with id &quot; + id, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        try (Connection connection = dcm.getConnection()) {
+&nbsp;            ListingsDAO listDAO = new ListingsDAO(connection);
+&nbsp;            listDAO.delete(id);
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Listing with id &quot; + id + &quot; has been deleted&quot;, HttpStatus.OK);
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error deleting listing with id &quot; + id, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -311,7 +330,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

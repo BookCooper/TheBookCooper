@@ -1,0 +1,150 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > WebSecurityConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.thebookcooper.config</a>
+</div>
+
+<h1>Coverage Summary for Class: WebSecurityConfiguration (com.thebookcooper.config)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WebSecurityConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.config;
+&nbsp;
+&nbsp;import org.springframework.boot.web.servlet.FilterRegistrationBean;
+&nbsp;import org.springframework.context.annotation.Bean;
+&nbsp;import org.springframework.context.annotation.Configuration;
+&nbsp;import org.springframework.core.Ordered;
+&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+&nbsp;import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+&nbsp;import org.springframework.security.web.SecurityFilterChain;
+&nbsp;import org.springframework.web.cors.CorsConfiguration;
+&nbsp;import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+&nbsp;import org.springframework.web.cors.CorsConfigurationSource;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;@Configuration
+&nbsp;@EnableWebSecurity
+<b class="nc">&nbsp;public class WebSecurityConfiguration {</b>
+&nbsp;
+&nbsp;    // This method configures the security filter chain that specifies HTTP security configurations
+&nbsp;    @Bean
+&nbsp;    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+<b class="nc">&nbsp;        http</b>
+<b class="nc">&nbsp;            .cors(cors -&gt; cors.configurationSource(corsConfigurationSource()))</b>
+<b class="nc">&nbsp;            .csrf(csrf -&gt; csrf.disable())</b>
+<b class="nc">&nbsp;            .authorizeHttpRequests(authz -&gt; authz</b>
+<b class="nc">&nbsp;                .anyRequest().permitAll());</b>
+&nbsp;    
+<b class="nc">&nbsp;        return http.build();</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    // This method provides a CORS configuration source needed to specify which CORS configurations to apply
+&nbsp;    @Bean
+&nbsp;    public CorsConfigurationSource corsConfigurationSource() {
+<b class="nc">&nbsp;        CorsConfiguration configuration = new CorsConfiguration();</b>
+<b class="nc">&nbsp;        configuration.setAllowedOriginPatterns(Arrays.asList(&quot;*&quot;)); // This is more flexible and newer than setAllowedOrigins</b>
+<b class="nc">&nbsp;        configuration.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;));</b>
+<b class="nc">&nbsp;        configuration.setAllowedHeaders(Arrays.asList(&quot;*&quot;)); // Allow all headers</b>
+<b class="nc">&nbsp;        configuration.setAllowCredentials(true);</b>
+&nbsp;    
+<b class="nc">&nbsp;        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();</b>
+<b class="nc">&nbsp;        source.registerCorsConfiguration(&quot;/**&quot;, configuration);</b>
+<b class="nc">&nbsp;        return source;</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
+</div>
+</body>
+</html>

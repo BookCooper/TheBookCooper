@@ -41,18 +41,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">BookInfoController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    66.7%
   </span>
   <span class="absValue">
-    (0/9)
+    (6/9)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    17.1%
   </span>
   <span class="absValue">
-    (0/158)
+    (27/158)
   </span>
 </td>
 </tr>
@@ -60,18 +60,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">BookInfoController$1</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -79,18 +79,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">BookInfoController$2</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -98,18 +98,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    72.7%
   </span>
   <span class="absValue">
-    (0/11)
+    (8/11)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    18.1%
   </span>
   <span class="absValue">
-    (0/160)
+    (29/160)
   </span>
 </td>
 </tr>
@@ -144,6 +144,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.thebookcooper.dao.*;
 &nbsp;
 &nbsp;import java.time.LocalDate;
+&nbsp;import java.util.Random;
 &nbsp;
 &nbsp;//stuff for price
 &nbsp;import java.io.*;
@@ -152,232 +153,241 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;@RestController
 &nbsp;@CrossOrigin
-&nbsp;@RequestMapping(&quot;/books&quot;) // Base path
-<b class="nc">&nbsp;public class BookInfoController {</b>
+<b class="fc">&nbsp;@RequestMapping(&quot;/books&quot;) // Base path</b>
+&nbsp;public class BookInfoController {
 &nbsp;
 &nbsp;    private static final long COMPARE = 9780000000000L;
-&nbsp;
-<b class="nc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);
 &nbsp;    
 &nbsp;    // GET HTTP request to a specific url
 &nbsp;    // returns a json file as a string
 &nbsp;    public static String getHTML(String urlToRead) throws Exception {
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;        StringBuilder result = new StringBuilder();</b>
 <b class="nc">&nbsp;        URI uri = new URI(urlToRead);</b>
-<b class="nc">&nbsp;        URL url = uri.toURL();</b>
-&nbsp;
+&nbsp;        URL url = uri.toURL();
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;        HttpURLConnection conn = (HttpURLConnection) url.openConnection();</b>
-<b class="nc">&nbsp;        conn.setRequestMethod(&quot;GET&quot;);</b>
-&nbsp;
+&nbsp;        conn.setRequestMethod(&quot;GET&quot;);
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;        try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {</b>
 <b class="nc">&nbsp;            for (String line; (line = reader.readLine()) != null; ) {</b>
-<b class="nc">&nbsp;                result.append(line);</b>
-&nbsp;            }
+&nbsp;                result.append(line);
+<b class="nc">&nbsp;            }</b>
 <b class="nc">&nbsp;        }</b>
-<b class="nc">&nbsp;        return result.toString();</b>
+&nbsp;        return result.toString();
 &nbsp;    }
 &nbsp;    
 &nbsp;    // currently finds the price and ISBN number, but could maybe extend it to find author, publisher and everything else
 &nbsp;    // can possibly split this up into multiple function in the future
 &nbsp;    //      such as one for updating its price, updating isbn, etc., all seperately
 &nbsp;    private Book findISBNPrice(Book book) {
-&nbsp;        
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="nc">&nbsp;        </b>
+&nbsp;        ObjectMapper objectMapper = new ObjectMapper();
 &nbsp;        String req; 
-&nbsp;        
+<b class="nc">&nbsp;        </b>
 <b class="nc">&nbsp;        String title = book.getTitle(); </b>
-<b class="nc">&nbsp;        String author = book.getAuthor(); </b>
+&nbsp;        String author = book.getAuthor(); 
 &nbsp;
 &nbsp;        // if the isbn of the book is unknown try to find it given title using google books API
-&nbsp;        // if the isbn is &lt;= 978 with 10 zeros
-<b class="nc">&nbsp;        if(book.getISBN() &lt;= COMPARE) {</b>
+<b class="nc">&nbsp;        // if the isbn is &lt;= 978 with 10 zeros</b>
+&nbsp;        if(book.getISBN() &lt;= COMPARE) {
 &nbsp;            
-&nbsp;            try {
+<b class="nc">&nbsp;            try {</b>
 <b class="nc">&nbsp;                req = &quot;https://www.googleapis.com/books/v1/volumes?q=&quot; +</b>
 <b class="nc">&nbsp;                      &quot;intitle:&quot; + title.replaceAll(&quot; &quot;, &quot;+&quot;) +       // search by title of book replacing spaces with +</b>
-<b class="nc">&nbsp;                      &quot;+inauthor:&quot; + author.replaceAll(&quot; &quot;, &quot;+&quot;) +    // search by author of book replacing spcaces with +</b>
+&nbsp;                      &quot;+inauthor:&quot; + author.replaceAll(&quot; &quot;, &quot;+&quot;) +    // search by author of book replacing spcaces with +
 &nbsp;                      &quot;&amp;key=AIzaSyCxVGv72jNMy6IVrxHmml5_HLGXi8T0SpU&quot;; // api key (can we hide this on github? does it matter?)
-&nbsp;
-<b class="nc">&nbsp;                Map&lt;String, Object&gt; inputMap = objectMapper.readValue(getHTML(req), Map.class);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
+&nbsp;                Map&lt;String, Object&gt; inputMap = objectMapper.readValue(getHTML(req), Map.class);
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;                List&lt;Map&lt;String, Object&gt;&gt; items = (List&lt;Map&lt;String, Object&gt;&gt;) inputMap.get(&quot;items&quot;);</b>
 <b class="nc">&nbsp;                if (items != null &amp;&amp; !items.isEmpty()) {</b>
 <b class="nc">&nbsp;                    Map&lt;String, Object&gt; volumeInfo = (Map&lt;String, Object&gt;) items.get(0).get(&quot;volumeInfo&quot;);</b>
-<b class="nc">&nbsp;                    List&lt;Map&lt;String, String&gt;&gt; identifiers = (List&lt;Map&lt;String, String&gt;&gt;) volumeInfo.get(&quot;industryIdentifiers&quot;);</b>
-&nbsp;
+&nbsp;                    List&lt;Map&lt;String, String&gt;&gt; identifiers = (List&lt;Map&lt;String, String&gt;&gt;) volumeInfo.get(&quot;industryIdentifiers&quot;);
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;                    for (Map&lt;String, String&gt; identifier : identifiers) {</b>
 <b class="nc">&nbsp;                        if (&quot;ISBN_13&quot;.equals(identifier.get(&quot;type&quot;))) {</b>
 <b class="nc">&nbsp;                            long isbn = Long.parseLong(identifier.get(&quot;identifier&quot;));</b>
 <b class="nc">&nbsp;                            book.setISBN(isbn);</b>
-<b class="nc">&nbsp;                            break; </b>
-&nbsp;                        }
-<b class="nc">&nbsp;                    }</b>
+&nbsp;                            break; 
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    }
 &nbsp;                }
-&nbsp;            } 
-<b class="nc">&nbsp;            catch (Exception e) {</b>
-<b class="nc">&nbsp;                e.printStackTrace();</b>
-<b class="nc">&nbsp;            }</b>
-&nbsp;        }
-&nbsp;        
-&nbsp;        // get price if no price is given
+<b class="nc">&nbsp;                //if the value is still not found make it equal to a random number that&#39;s insignificant</b>
+<b class="nc">&nbsp;                if(book.getISBN() &lt;= COMPARE) {</b>
+<b class="nc">&nbsp;</b>
+&nbsp;                    Random random = new Random();
+&nbsp;                    
+&nbsp;                    // Generate a random 9-digit number. (100000000 is the smallest 9-digit number)
+<b class="nc">&nbsp;                    int randomNumber = 100000000 + random.nextInt(900000000);</b>
+&nbsp;                    book.setISBN(randomNumber);
+&nbsp;                }
+<b class="nc">&nbsp;            } </b>
+&nbsp;            catch (Exception e) {
+&nbsp;                e.printStackTrace();
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        // get price if no price is given</b>
 <b class="nc">&nbsp;        if(book.getPrice() == 0) {</b>
 &nbsp;        
 &nbsp;            // now that we have ISBN, find price using BooksRun API
-<b class="nc">&nbsp;            req = &quot;https://booksrun.com/api/v3/price/buy/&quot; + book.getISBN() + </b>
+&nbsp;            req = &quot;https://booksrun.com/api/v3/price/buy/&quot; + book.getISBN() + 
 &nbsp;                &quot;?key=0helymen654k0w3dk43z&quot;;
 &nbsp;
-&nbsp;            try {
-<b class="nc">&nbsp;                Map inputMap = objectMapper.readValue(getHTML(req), Map.class);</b>
+<b class="nc">&nbsp;            try {</b>
+&nbsp;                Map inputMap = objectMapper.readValue(getHTML(req), Map.class);
 <b class="nc">&nbsp;                Map result = (Map) inputMap.get(&quot;result&quot;);</b>
-<b class="nc">&nbsp;                Map offers = (Map) result.get(&quot;offers&quot;);</b>
+&nbsp;                Map offers = (Map) result.get(&quot;offers&quot;);
 <b class="nc">&nbsp;                Map booksrun = (Map) offers.get(&quot;booksrun&quot;);</b>
-&nbsp;
-&nbsp;                // can potentially add logic to make it so that if used doesn&#39;t exist
-&nbsp;                // then it&#39;ll set the price to the new price and vice versa
-&nbsp;
-&nbsp;                // Check if &quot;new&quot; price exists
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                // can potentially add logic to make it so that if used doesn&#39;t exist</b>
+<b class="nc">&nbsp;                // then it&#39;ll set the price to the new price and vice versa</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;                // Check if &quot;new&quot; price exists</b>
 <b class="nc">&nbsp;                if(book.getBookCondition().equals(&quot;new&quot;)) {</b>
 &nbsp;                    
 <b class="nc">&nbsp;                    Map newPrice = (Map) booksrun.get(&quot;new&quot;);</b>
-&nbsp;                    try {
-<b class="nc">&nbsp;                        double newPriceValue = (double) newPrice.get(&quot;price&quot;);</b>
+<b class="nc">&nbsp;                    try {</b>
+&nbsp;                        double newPriceValue = (double) newPrice.get(&quot;price&quot;);
 <b class="nc">&nbsp;                        book.setPrice(newPriceValue);</b>
 <b class="nc">&nbsp;                    } catch (NumberFormatException | ClassCastException e) {</b>
 <b class="nc">&nbsp;                        book.setPrice(0.0);</b>
 <b class="nc">&nbsp;                        throw new IllegalArgumentException(&quot;New price for book not found or invalid format&quot;);</b>
 <b class="nc">&nbsp;                    }</b>
 <b class="nc">&nbsp;                }</b>
-&nbsp;                // check if used price exists
-<b class="nc">&nbsp;                else if(book.getBookCondition().equals(&quot;used&quot;)){</b>
-<b class="nc">&nbsp;                    Map usedPrice = (Map) booksrun.get(&quot;used&quot;);</b>
-&nbsp;                    try {
+<b class="nc">&nbsp;                // check if used price exists</b>
+&nbsp;                else if(book.getBookCondition().equals(&quot;used&quot;)){
+&nbsp;                    Map usedPrice = (Map) booksrun.get(&quot;used&quot;);
+<b class="nc">&nbsp;                    try {</b>
 <b class="nc">&nbsp;                        double usedPriceValue = (double) usedPrice.get(&quot;price&quot;);</b>
-<b class="nc">&nbsp;                        book.setPrice(usedPriceValue);</b>
-<b class="nc">&nbsp;                    } catch (NumberFormatException | ClassCastException e) {</b>
+&nbsp;                        book.setPrice(usedPriceValue);
+&nbsp;                    } catch (NumberFormatException | ClassCastException e) {
 <b class="nc">&nbsp;                        book.setPrice(0.0);</b>
 <b class="nc">&nbsp;                        throw new IllegalArgumentException(&quot;Used price for book not found or invalid format&quot;);</b>
 <b class="nc">&nbsp;                    }</b>
-<b class="nc">&nbsp;                }</b>
+&nbsp;                }
 &nbsp;                // if neither &quot;new&quot; nor &quot;used&quot; price exists, set the price to 0.0
-&nbsp;                else {
-<b class="nc">&nbsp;                    book.setPrice(0.0);</b>
-<b class="nc">&nbsp;                    throw new IllegalArgumentException(&quot;Invalid book condition&quot;);</b>
+<b class="nc">&nbsp;                else {</b>
+&nbsp;                    book.setPrice(0.0);
+&nbsp;                    throw new IllegalArgumentException(&quot;Invalid book condition&quot;);
 &nbsp;                }
 &nbsp;            }
-<b class="nc">&nbsp;            catch (Exception e) {</b>
+<b class="fc">&nbsp;            catch (Exception e) {</b>
 <b class="nc">&nbsp;                e.printStackTrace();</b>
 <b class="nc">&nbsp;            }</b>
-&nbsp;        }
-&nbsp;        
-<b class="nc">&nbsp;        return book;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    @GetMapping(&quot;/count&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; countBooks() {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;             Statement statement = connection.createStatement();</b>
-<b class="nc">&nbsp;             ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) FROM book_info&quot;)) {</b>
-<b class="nc">&nbsp;            if (resultSet.next()) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Number of books: &quot; + resultSet.getInt(1), HttpStatus.OK);</b>
-&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        </b>
+&nbsp;        return book;
+<b class="nc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    @GetMapping(&quot;/count&quot;)</b>
+<b class="fc">&nbsp;    public ResponseEntity&lt;?&gt; countBooks() {</b>
+&nbsp;        try (Connection connection = dcm.getConnection();
+&nbsp;             Statement statement = connection.createStatement();
+&nbsp;             ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) FROM book_info&quot;)) {
+&nbsp;            if (resultSet.next()) {
+&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Number of books: &quot; + resultSet.getInt(1), HttpStatus.OK);
+<b class="fc">&nbsp;            }</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No books found&quot;, HttpStatus.NOT_FOUND);</b>
 <b class="nc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving book count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
-&nbsp;    }
+<b class="nc">&nbsp;    }</b>
 &nbsp;
-&nbsp;    @GetMapping(&quot;/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; getBookById(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            BookInfoDAO infoDAO = new BookInfoDAO(connection);</b>
-<b class="nc">&nbsp;            Book book = infoDAO.findById(id);</b>
-<b class="nc">&nbsp;            if (book != null) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(book, HttpStatus.OK);</b>
+<b class="fc">&nbsp;    @GetMapping(&quot;/{id}&quot;)</b>
+<b class="fc">&nbsp;    public ResponseEntity&lt;?&gt; getBookById(@PathVariable(&quot;id&quot;) long id) {</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+&nbsp;            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+&nbsp;            Book book = infoDAO.findById(id);
+&nbsp;            if (book != null) {
+&nbsp;                return new ResponseEntity&lt;&gt;(book, HttpStatus.OK);
 &nbsp;            } else {
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Book not found&quot;, HttpStatus.NOT_FOUND);</b>
-&nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving book&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-&nbsp;        }
-&nbsp;    }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;    }</b>
 &nbsp;
-&nbsp;    @GetMapping(&quot;/search&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; searchBooksByTitle(@RequestParam String title) {
-<b class="nc">&nbsp;        if (title == null || title.trim().isEmpty()) {</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Title is required&quot;, HttpStatus.BAD_REQUEST);</b>
-&nbsp;        }
-&nbsp;        
+<b class="nc">&nbsp;    @GetMapping(&quot;/search&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; searchBooksByTitle(@RequestParam String title) {</b>
+&nbsp;        if (title == null || title.trim().isEmpty()) {
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Title is required&quot;, HttpStatus.BAD_REQUEST);
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        </b>
 <b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            BookInfoDAO bookInfoDAO = new BookInfoDAO(connection);</b>
 <b class="nc">&nbsp;            List&lt;Book&gt; books = bookInfoDAO.findByTitle(title);</b>
-&nbsp;            
+<b class="nc">&nbsp;            </b>
 <b class="nc">&nbsp;            if (books.isEmpty()) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No books found matching the title&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No books found matching the title&quot;, HttpStatus.NOT_FOUND);
 &nbsp;            }
 &nbsp;            
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(books, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error accessing the database&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-<b class="nc">&nbsp;        } catch (Exception e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error processing the request&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-&nbsp;        }
+&nbsp;            return new ResponseEntity&lt;&gt;(books, HttpStatus.OK);
+&nbsp;        } catch (SQLException e) {
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error accessing the database&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
+<b class="fc">&nbsp;        } catch (Exception e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error processing the request&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @PostMapping(&quot;/create&quot;)
+<b class="nc">&nbsp;    @PostMapping(&quot;/create&quot;)</b>
 &nbsp;    public ResponseEntity&lt;?&gt; createBook(@RequestBody String json) {
 <b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
+<b class="nc">&nbsp;        try {</b>
 <b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
 <b class="nc">&nbsp;            Book newBook = new Book();</b>
 <b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;            BookInfoDAO bookDAO = new BookInfoDAO(connection);</b>
+&nbsp;            BookInfoDAO bookDAO = new BookInfoDAO(connection);
 &nbsp;
-&nbsp;            //get inputs from user and assign them to a new object
+<b class="nc">&nbsp;            //get inputs from user and assign them to a new object</b>
 <b class="nc">&nbsp;            newBook.setTitle((String) inputMap.get(&quot;title&quot;));</b>
-&nbsp;            //newBook.setPublishDate(Date.valueOf(LocalDate.now())); &lt;-- set the date to be the current day
+<b class="nc">&nbsp;            //newBook.setPublishDate(Date.valueOf(LocalDate.now())); &lt;-- set the date to be the current day</b>
 <b class="nc">&nbsp;            newBook.setPublishDate(Date.valueOf((String) inputMap.get(&quot;publishDate&quot;))); //date has to be of form &quot;YYYY-MM-DD&quot;</b>
 <b class="nc">&nbsp;            newBook.setAuthor((String) inputMap.get(&quot;author&quot;));</b>
-<b class="nc">&nbsp;            newBook.setGenre((String) inputMap.get(&quot;genre&quot;));</b>
+&nbsp;            newBook.setGenre((String) inputMap.get(&quot;genre&quot;));
 <b class="nc">&nbsp;            newBook.setBookCondition((String) inputMap.get(&quot;bookCondition&quot;));</b>
-<b class="nc">&nbsp;            newBook.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));</b>
+&nbsp;            newBook.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));
 &nbsp;
 &nbsp;            // Handle ISBN conversion from Integer or Long to Long
 <b class="nc">&nbsp;            Object isbnObject = inputMap.get(&quot;isbn&quot;);</b>
-<b class="nc">&nbsp;            if (isbnObject instanceof Integer) {</b>
-<b class="nc">&nbsp;                newBook.setISBN(((Integer) isbnObject).longValue()); // Convert Integer to Long</b>
+&nbsp;            if (isbnObject instanceof Integer) {
+&nbsp;                newBook.setISBN(((Integer) isbnObject).longValue()); // Convert Integer to Long
 <b class="nc">&nbsp;            } else if (isbnObject instanceof Long) {</b>
-<b class="nc">&nbsp;                newBook.setISBN((Long) isbnObject);</b>
-&nbsp;            } else {
+&nbsp;                newBook.setISBN((Long) isbnObject);
+<b class="nc">&nbsp;            } else {</b>
 <b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;ISBN must be a number&quot;);</b>
-&nbsp;            }
-&nbsp;            
-&nbsp;            // update the book with isbn and price if not given
-<b class="nc">&nbsp;            Book updatedBook = findISBNPrice(newBook);</b>
-&nbsp;
-&nbsp;            //calls create function from dao/BookInfoDAO to insert listing
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;            </b>
+<b class="fc">&nbsp;            // update the book with isbn and price if not given</b>
+<b class="fc">&nbsp;            Book updatedBook = findISBNPrice(newBook);</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;            //calls create function from dao/BookInfoDAO to insert listing</b>
 <b class="nc">&nbsp;            Book createdBook = bookDAO.create(updatedBook);</b>
 &nbsp;
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(createdBook, HttpStatus.CREATED);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create the book&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-<b class="nc">&nbsp;        } catch (IllegalArgumentException e) {</b>
+&nbsp;            return new ResponseEntity&lt;&gt;(createdBook, HttpStatus.CREATED);
+&nbsp;        } catch (JsonProcessingException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+&nbsp;            e.printStackTrace();
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create the book&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (IllegalArgumentException e) {</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.BAD_REQUEST);</b>
-&nbsp;        }
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @PutMapping(&quot;/update/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; updateBook(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
+<b class="nc">&nbsp;    @PutMapping(&quot;/update/{id}&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; updateBook(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {</b>
+&nbsp;        ObjectMapper objectMapper = new ObjectMapper();
+<b class="nc">&nbsp;        try {</b>
 <b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
 <b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;            BookInfoDAO infoDAO = new BookInfoDAO(connection);</b>
@@ -386,12 +396,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            //get inputs from user and assign them to a new object
 <b class="nc">&nbsp;            updatedBook.setBookId(id);</b>
 <b class="nc">&nbsp;            updatedBook.setTitle((String) inputMap.get(&quot;title&quot;));</b>
-&nbsp;            //updatedBook.setPublishDate(Date.valueOf(LocalDate.now())); &lt;-- set the date to be the current day
+<b class="nc">&nbsp;            //updatedBook.setPublishDate(Date.valueOf(LocalDate.now())); &lt;-- set the date to be the current day</b>
 <b class="nc">&nbsp;            updatedBook.setPublishDate(Date.valueOf((String) inputMap.get(&quot;publishDate&quot;))); //date has to be of form &quot;YYYY-MM-DD&quot;</b>
 <b class="nc">&nbsp;            updatedBook.setAuthor((String) inputMap.get(&quot;author&quot;));</b>
-<b class="nc">&nbsp;            updatedBook.setGenre((String) inputMap.get(&quot;genre&quot;));</b>
+&nbsp;            updatedBook.setGenre((String) inputMap.get(&quot;genre&quot;));
 <b class="nc">&nbsp;            updatedBook.setBookCondition((String) inputMap.get(&quot;bookCondition&quot;));</b>
-<b class="nc">&nbsp;            updatedBook.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));</b>
+&nbsp;            updatedBook.setPrice(Double.parseDouble(inputMap.get(&quot;price&quot;).toString()));
 &nbsp;
 &nbsp;            // Handle ISBN conversion from Integer or Long to Long
 <b class="nc">&nbsp;            Object isbnObject = inputMap.get(&quot;isbn&quot;);</b>
@@ -399,33 +409,33 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;                updatedBook.setISBN(((Integer) isbnObject).longValue()); // Convert Integer to Long</b>
 <b class="nc">&nbsp;            } else if (isbnObject instanceof Long) {</b>
 <b class="nc">&nbsp;                updatedBook.setISBN((Long) isbnObject);</b>
-&nbsp;            } else {
-<b class="nc">&nbsp;                throw new IllegalArgumentException(&quot;ISBN must be a number&quot;);</b>
-&nbsp;            }
-&nbsp;            
-&nbsp;            //calls create function from dao/BookInfoDAO to insert listing
-<b class="nc">&nbsp;            Book book = infoDAO.update(updatedBook);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(book, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            } else {</b>
+<b class="fc">&nbsp;                throw new IllegalArgumentException(&quot;ISBN must be a number&quot;);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="nc">&nbsp;            </b>
+<b class="nc">&nbsp;            //calls create function from dao/BookInfoDAO to insert listing</b>
+&nbsp;            Book book = infoDAO.update(updatedBook);
+&nbsp;            return new ResponseEntity&lt;&gt;(book, HttpStatus.OK);
+&nbsp;        } catch (JsonProcessingException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the book&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 <b class="nc">&nbsp;        } catch (IllegalArgumentException e) {</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.BAD_REQUEST);</b>
-&nbsp;        }
-&nbsp;    }
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.BAD_REQUEST);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; deleteBook(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            BookInfoDAO infoDAO = new BookInfoDAO(connection);</b>
-<b class="nc">&nbsp;            infoDAO.delete(id);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Book with ID &quot; + id + &quot; deleted successfully&quot;, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the book&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        try (Connection connection = dcm.getConnection()) {
+&nbsp;            BookInfoDAO infoDAO = new BookInfoDAO(connection);
+&nbsp;            infoDAO.delete(id);
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Book with ID &quot; + id + &quot; deleted successfully&quot;, HttpStatus.OK);
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the book&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -452,7 +462,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

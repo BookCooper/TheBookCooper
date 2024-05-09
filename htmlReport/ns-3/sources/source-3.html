@@ -41,18 +41,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">BookTagController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/6)
+    (6/6)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    45.8%
   </span>
   <span class="absValue">
-    (0/59)
+    (27/59)
   </span>
 </td>
 </tr>
@@ -60,18 +60,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">BookTagController$1</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -79,18 +79,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">BookTagController$2</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -98,18 +98,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/8)
+    (8/8)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    47.5%
   </span>
   <span class="absValue">
-    (0/61)
+    (29/61)
   </span>
 </td>
 </tr>
@@ -141,13 +141,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@RestController
 &nbsp;@CrossOrigin
 &nbsp;@RequestMapping(&quot;/booktags&quot;) // Base path 
-<b class="nc">&nbsp;public class BookTagController {</b>
+<b class="fc">&nbsp;public class BookTagController {</b>
 &nbsp;
-<b class="nc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
+<b class="fc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
 &nbsp;
 &nbsp;    @GetMapping(&quot;/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; getBookTagById(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            BookTagDAO tagDAO = new BookTagDAO(connection);</b>
 <b class="nc">&nbsp;            BookTag tag = tagDAO.findById(id);</b>
 <b class="nc">&nbsp;            if (tag != null) {</b>
@@ -155,15 +155,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            } else {
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Book tag not found&quot;, HttpStatus.NOT_FOUND);</b>
 &nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @GetMapping(&quot;/count&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; countBookTags() {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;             Statement statement = connection.createStatement();</b>
 <b class="nc">&nbsp;             ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) AS total FROM book_tags&quot;)) {</b>
 <b class="nc">&nbsp;            if (resultSet.next()) {</b>
@@ -172,19 +172,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            } else {
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;No book tags found&quot;, HttpStatus.NOT_FOUND);</b>
 &nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving book tag count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving book tag count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @PostMapping(&quot;/create&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; createBookTag(@RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
 &nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            BookTag newTag = new BookTag();</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+<b class="fc">&nbsp;            BookTag newTag = new BookTag();</b>
+<b class="fc">&nbsp;            Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;            BookTagDAO tagDAO = new BookTagDAO(connection);</b>
 &nbsp;
 <b class="nc">&nbsp;            newTag.setTagName((String) inputMap.get(&quot;tagName&quot;));</b>
@@ -195,18 +195,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } catch (JsonProcessingException | NumberFormatException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input or bookId format&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create the book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create the book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @PutMapping(&quot;/update/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; updateBookTag(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
 &nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+<b class="fc">&nbsp;            Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;            BookTagDAO tagDAO = new BookTagDAO(connection);</b>
 &nbsp;
 <b class="nc">&nbsp;            BookTag updatedTag = new BookTag();</b>
@@ -219,21 +219,21 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } catch (JsonProcessingException | NumberFormatException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input or bookId format&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; deleteBookTag(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            BookTagDAO tagDAO = new BookTagDAO(connection);</b>
 <b class="nc">&nbsp;            tagDAO.delete(id);</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Book tag with ID &quot; + id + &quot; deleted successfully&quot;, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the book tag&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -260,7 +260,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

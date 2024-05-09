@@ -25,12 +25,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 <h1>Coverage Summary for Class: BookInfoDAO (com.thebookcooper.dao)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -47,9 +44,44 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (6/6)
   </span>
 </td>
+<td class="coverageStat">
+  <span class="percent">
+    83.5%
+  </span>
+  <span class="absValue">
+    (71/85)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$8JLfLVwg</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$CSsfRysc</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$Gi3EQjqU</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$hvOjgXhZ</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$Oc2unbkC</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$OxUChNCU</td>
+  </tr>
+  <tr>
+    <td class="name">BookInfoDAO$MockitoMock$2062878750$auxiliary$PaiSX7zX</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -60,14 +92,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    82.9%
+    83.5%
   </span>
   <span class="absValue">
-    (68/82)
+    (71/85)
   </span>
 </td>
 </tr>
-
 </table>
 
 <br/>
@@ -123,7 +154,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            throw new RuntimeException(e);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        }</b>
 <b class="fc">&nbsp;        return book;</b>
 &nbsp;    }
 &nbsp;
@@ -147,7 +178,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {</b>
 <b class="fc">&nbsp;                if (generatedKeys.next()) {</b>
 <b class="fc">&nbsp;                    dto.setBookId(generatedKeys.getLong(1));</b>
-<b class="fc">&nbsp;                } else {</b>
+&nbsp;                } else {
 <b class="nc">&nbsp;                    throw new SQLException(&quot;Creating book failed, no ID obtained.&quot;);</b>
 &nbsp;                }
 <b class="fc">&nbsp;            }</b>
@@ -195,7 +226,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            throw new RuntimeException(e);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
 &nbsp;        public List&lt;Book&gt; findByTitle(String title) {
@@ -214,11 +245,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                book.setBookCondition(rs.getString(&quot;book_condition&quot;));</b>
 <b class="fc">&nbsp;                book.setPrice(rs.getDouble(&quot;price&quot;));</b>
 <b class="fc">&nbsp;                books.add(book);</b>
-&nbsp;            }
+<b class="fc">&nbsp;            }</b>
 <b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            throw new RuntimeException(e);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        }</b>
 <b class="fc">&nbsp;        return books;</b>
 &nbsp;    }
 &nbsp;}
@@ -245,7 +276,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

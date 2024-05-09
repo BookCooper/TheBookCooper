@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > StoreItemController</title>
+  <title>Coverage Report > PointTransactionController</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.thebookcooper.controller</a>
 </div>
 
-<h1>Coverage Summary for Class: StoreItemController (com.thebookcooper.controller)</h1>
+<h1>Coverage Summary for Class: PointTransactionController (com.thebookcooper.controller)</h1>
 
 <table class="coverageStats">
 
@@ -38,59 +38,59 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">StoreItemController</td>
+  <td class="name">PointTransactionController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/5)
+    (6/6)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    34.2%
   </span>
   <span class="absValue">
-    (0/53)
+    (26/76)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">StoreItemController$1</td>
+    <td class="name">PointTransactionController$1</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
   <tr>
-    <td class="name">StoreItemController$2</td>
+    <td class="name">PointTransactionController$2</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -98,18 +98,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/7)
+    (8/8)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    35.9%
   </span>
   <span class="absValue">
-    (0/55)
+    (28/78)
   </span>
 </td>
 </tr>
@@ -125,103 +125,167 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.fasterxml.jackson.core.JsonProcessingException;
 &nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
 &nbsp;import com.fasterxml.jackson.core.type.TypeReference;
-&nbsp;import org.springframework.http.HttpStatus;
-&nbsp;import org.springframework.http.ResponseEntity;
 &nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.http.HttpStatus;
 &nbsp;
 &nbsp;import java.sql.Connection;
 &nbsp;import java.sql.ResultSet;
 &nbsp;import java.sql.SQLException;
 &nbsp;import java.sql.Statement;
 &nbsp;import java.util.Map;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
 &nbsp;
-&nbsp;import com.thebookcooper.model.StoreItem;
-&nbsp;import com.thebookcooper.dao.StoreItemDAO;
+&nbsp;import com.thebookcooper.model.PointTransaction;
+&nbsp;import com.thebookcooper.dao.PointTransactionDAO;
+&nbsp;import com.thebookcooper.dao.UserDAO;
+&nbsp;import com.thebookcooper.model.User;
 &nbsp;import com.thebookcooper.dao.DatabaseConnectionManager;
 &nbsp;
 &nbsp;@RestController
-&nbsp;@CrossOrigin
-&nbsp;@RequestMapping(&quot;/store-items&quot;)
-<b class="nc">&nbsp;public class StoreItemController {</b>
+<b class="fc">&nbsp;@CrossOrigin</b>
+&nbsp;@RequestMapping(&quot;/point-transactions&quot;) // Base path for point transactions
+<b class="fc">&nbsp;public class PointTransactionController {</b>
 &nbsp;
-<b class="nc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
+&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);
 &nbsp;
-&nbsp;    @PostMapping(&quot;/create&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; createStoreItem(@RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            StoreItem newItem = new StoreItem();</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
-&nbsp;
-<b class="nc">&nbsp;            newItem.setItem((String) inputMap.get(&quot;item&quot;));</b>
-<b class="nc">&nbsp;            newItem.setItemPrice(new java.math.BigDecimal(inputMap.get(&quot;item_price&quot;).toString()));</b>
-<b class="nc">&nbsp;            newItem.setSpecialOffer((String) inputMap.get(&quot;special_offer&quot;));</b>
-<b class="nc">&nbsp;            newItem.setItemDescription((String) inputMap.get(&quot;item_description&quot;));</b>
-&nbsp;
-<b class="nc">&nbsp;            StoreItem createdItem = itemDAO.create(newItem);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(createdItem, HttpStatus.CREATED);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;    @GetMapping(&quot;/count&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; countPointTransactions() {</b>
+<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
+<b class="nc">&nbsp;            Statement statement = connection.createStatement();</b>
+<b class="nc">&nbsp;            ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) FROM point_transactions&quot;)) {</b>
+<b class="nc">&nbsp;            if (resultSet.next()) {</b>
+&nbsp;                int count = resultSet.getInt(1);
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Number of point transactions: &quot; + count, HttpStatus.OK);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No point transactions found&quot;, HttpStatus.NOT_FOUND);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving point transaction count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    @GetMapping(&quot;/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; getStoreItemById(@PathVariable(&quot;id&quot;) long id) {
+<b class="fc">&nbsp;    @GetMapping(&quot;/{id}&quot;)</b>
+<b class="nc">&nbsp;    public ResponseEntity&lt;?&gt; getPointTransactionById(@PathVariable(&quot;id&quot;) long id) {</b>
 <b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
-<b class="nc">&nbsp;            StoreItem item = itemDAO.findById(id);</b>
-<b class="nc">&nbsp;            if (item != null) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(item, HttpStatus.OK);</b>
+<b class="nc">&nbsp;            PointTransactionDAO transactionDAO = new PointTransactionDAO(connection);</b>
+<b class="nc">&nbsp;            PointTransaction transaction = transactionDAO.findById(id);</b>
+&nbsp;            if (transaction != null) {
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(transaction, HttpStatus.OK);</b>
 &nbsp;            } else {
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Store item not found&quot;, HttpStatus.NOT_FOUND);</b>
-&nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Point transaction not found&quot;, HttpStatus.NOT_FOUND);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving point transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    @PutMapping(&quot;/update/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; updateStoreItem(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
 &nbsp;
-<b class="nc">&nbsp;            StoreItem itemToUpdate = new StoreItem();</b>
-<b class="nc">&nbsp;            itemToUpdate.setStoreId(id);</b>
-<b class="nc">&nbsp;            itemToUpdate.setItem((String) inputMap.get(&quot;item&quot;));</b>
-<b class="nc">&nbsp;            itemToUpdate.setItemPrice(new java.math.BigDecimal(inputMap.get(&quot;item_price&quot;).toString()));</b>
-<b class="nc">&nbsp;            itemToUpdate.setSpecialOffer((String) inputMap.get(&quot;special_offer&quot;));</b>
-<b class="nc">&nbsp;            itemToUpdate.setItemDescription((String) inputMap.get(&quot;item_description&quot;));</b>
+&nbsp;    //filter transactions by seller
+<b class="fc">&nbsp;    @GetMapping(&quot;/user&quot;)</b>
+&nbsp;    public ResponseEntity&lt;?&gt; searchTransactionByUser(@RequestParam long userId) {
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;            PointTransactionDAO ptDAO = new PointTransactionDAO(connection);</b>
+<b class="nc">&nbsp;            List&lt;PointTransaction&gt; userTransactions = new ArrayList&lt;&gt;();</b>
 &nbsp;
-<b class="nc">&nbsp;            StoreItem updatedItem = itemDAO.update(itemToUpdate);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(updatedItem, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
+<b class="nc">&nbsp;            userTransactions = ptDAO.findByUserId(userId);</b>
+<b class="nc">&nbsp;            </b>
+<b class="nc">&nbsp;            //will just return empty list on failure</b>
+&nbsp;            return new ResponseEntity&lt;&gt;(userTransactions, HttpStatus.OK);
+&nbsp;        } catch (SQLException e) {
 <b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error searching point transactions by user ID&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    </b>
+<b class="nc">&nbsp;    //should probably reference store-item to buy the B-Buck package</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    @PostMapping(&quot;/create&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; createPointTransaction(@RequestBody String json) {
+&nbsp;        ObjectMapper objectMapper = new ObjectMapper();
+<b class="nc">&nbsp;        try {</b>
+<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+&nbsp;            Connection connection = dcm.getConnection();
+&nbsp;            PointTransactionDAO transactionDAO = new PointTransactionDAO(connection);
+<b class="nc">&nbsp;            UserDAO userDAO = new UserDAO(connection);</b>
+<b class="nc">&nbsp;    </b>
+<b class="nc">&nbsp;            long userId = Long.parseLong(inputMap.get(&quot;userId&quot;).toString());</b>
+<b class="nc">&nbsp;            String transactionType = (String) inputMap.get(&quot;transactionType&quot;);</b>
+<b class="nc">&nbsp;            java.math.BigDecimal amount = new java.math.BigDecimal(inputMap.get(&quot;amount&quot;).toString());</b>
+<b class="nc">&nbsp;    </b>
+&nbsp;            // Fetch the latest balance for the user
+<b class="nc">&nbsp;            User user = userDAO.findById(userId);</b>
+<b class="nc">&nbsp;            java.math.BigDecimal currentBalance = java.math.BigDecimal.valueOf(user.getBBucksBalance());</b>
+<b class="nc">&nbsp;    </b>
+<b class="nc">&nbsp;            // Calculate the new balance based on the transaction type</b>
+<b class="nc">&nbsp;            if (&quot;Purchase&quot;.equals(transactionType)) {</b>
+<b class="fc">&nbsp;                currentBalance = currentBalance.subtract(amount);</b>
+<b class="fc">&nbsp;            } else if (&quot;Deposit&quot;.equals(transactionType)) {</b>
+<b class="fc">&nbsp;                currentBalance = currentBalance.add(amount);</b>
+&nbsp;            }
+&nbsp;    
+&nbsp;            // Update the user&#39;s balance in the User table
+&nbsp;            user.setBBucksBalance(currentBalance.doubleValue());
+&nbsp;            userDAO.update(user);
+<b class="fc">&nbsp;    </b>
+&nbsp;            // Create the point transaction with the updated balance
+<b class="fc">&nbsp;            PointTransaction newTransaction = new PointTransaction();</b>
+<b class="fc">&nbsp;            newTransaction.setUserId(userId);</b>
+<b class="nc">&nbsp;            newTransaction.setTransactionType(transactionType);</b>
+&nbsp;            newTransaction.setAmount(amount);
+<b class="nc">&nbsp;            newTransaction.setCurrentBalance(currentBalance);</b>
+<b class="nc">&nbsp;            newTransaction.setTransactionDate(new java.sql.Timestamp(System.currentTimeMillis()));</b>
+<b class="nc">&nbsp;    </b>
+<b class="nc">&nbsp;            PointTransaction createdTransaction = transactionDAO.create(newTransaction);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(createdTransaction, HttpStatus.CREATED);</b>
+<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
+&nbsp;            e.printStackTrace();
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
 <b class="nc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create the point transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    @PutMapping(&quot;/update/{id}&quot;)</b>
+&nbsp;    public ResponseEntity&lt;?&gt; updatePointTransaction(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
+&nbsp;        ObjectMapper objectMapper = new ObjectMapper();
+&nbsp;        try {
+&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});
+&nbsp;            Connection connection = dcm.getConnection();
+<b class="fc">&nbsp;            PointTransactionDAO transactionDAO = new PointTransactionDAO(connection);</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            PointTransaction transactionToUpdate = new PointTransaction();</b>
+<b class="nc">&nbsp;            transactionToUpdate.setBbTransactionId(id);</b>
+<b class="fc">&nbsp;            transactionToUpdate.setUserId(Long.parseLong(inputMap.get(&quot;userId&quot;).toString()));</b>
+<b class="fc">&nbsp;            transactionToUpdate.setTransactionType((String) inputMap.get(&quot;transactionType&quot;));</b>
+<b class="fc">&nbsp;            transactionToUpdate.setAmount(new java.math.BigDecimal(inputMap.get(&quot;amount&quot;).toString()));</b>
+&nbsp;            transactionToUpdate.setCurrentBalance(new java.math.BigDecimal(inputMap.get(&quot;currentBalance&quot;).toString()));
+&nbsp;
+&nbsp;            PointTransaction updatedTransaction = transactionDAO.update(transactionToUpdate);
+&nbsp;            return new ResponseEntity&lt;&gt;(updatedTransaction, HttpStatus.OK);
+&nbsp;        } catch (JsonProcessingException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the point transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; deleteStoreItem(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
-<b class="nc">&nbsp;            itemDAO.delete(id);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Store item deleted successfully&quot;, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;    public ResponseEntity&lt;?&gt; deletePointTransaction(@PathVariable(&quot;id&quot;) long id) {
+&nbsp;        try (Connection connection = dcm.getConnection()) {
+&nbsp;            PointTransactionDAO transactionDAO = new PointTransactionDAO(connection);
+&nbsp;            transactionDAO.delete(id);
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Point transaction with ID &quot; + id + &quot; deleted successfully&quot;, HttpStatus.OK);
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the point transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -248,7 +312,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

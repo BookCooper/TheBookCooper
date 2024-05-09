@@ -25,12 +25,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 <h1>Coverage Summary for Class: BookTransactionDAO (com.thebookcooper.dao)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -47,9 +44,41 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (5/5)
   </span>
 </td>
+<td class="coverageStat">
+  <span class="percent">
+    79.7%
+  </span>
+  <span class="absValue">
+    (47/59)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$1JL16huC</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$akJ76WyL</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$AoYQ6JSg</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$HYcDDBVx</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$nQLZmXqa</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$YzdMED5A</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -60,14 +89,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    79.3%
+    79.7%
   </span>
   <span class="absValue">
-    (46/58)
+    (47/59)
   </span>
 </td>
 </tr>
-
 </table>
 
 <br/>
@@ -81,17 +109,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import com.thebookcooper.util.DataAccessObject;
 &nbsp;
 &nbsp;import java.sql.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
 &nbsp;
 &nbsp;public class BookTransactionDAO extends DataAccessObject&lt;BookTransaction&gt; {
 &nbsp;    private static final String INSERT = &quot;INSERT INTO book_transactions (buyer_id, seller_id, listing_id, transaction_price, transaction_status) VALUES (?, ?, ?, ?, ?)&quot;;
 &nbsp;    private static final String GET_ONE = &quot;SELECT * FROM book_transactions WHERE transaction_id=?&quot;;
 &nbsp;    private static final String UPDATE = &quot;UPDATE book_transactions SET buyer_id=?, seller_id=?, listing_id=?, transaction_price=?, transaction_status=? WHERE transaction_id=?&quot;;
-&nbsp;    private static final String DELETE = &quot;DELETE FROM book_transactions WHERE transaction_id=?&quot;;
+<b class="fc">&nbsp;    private static final String DELETE = &quot;DELETE FROM book_transactions WHERE transaction_id=?&quot;;</b>
 &nbsp;
-<b class="fc">&nbsp;    public BookTransactionDAO(Connection connection) { super(connection); }</b>
+&nbsp;    public BookTransactionDAO(Connection connection) { super(connection); }
 &nbsp;
-&nbsp;    @Override
-&nbsp;    public BookTransaction findById(long id) {
+<b class="fc">&nbsp;    @Override</b>
+<b class="fc">&nbsp;    public BookTransaction findById(long id) {</b>
 <b class="fc">&nbsp;        BookTransaction transaction = new BookTransaction();</b>
 <b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE)) {</b>
 <b class="fc">&nbsp;            statement.setLong(1, id);</b>
@@ -102,77 +132,132 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                transaction.setSellerId(rs.getLong(&quot;seller_id&quot;));</b>
 <b class="fc">&nbsp;                transaction.setTransactionDate(rs.getTimestamp(&quot;transaction_date&quot;));</b>
 <b class="fc">&nbsp;                transaction.setListingId(rs.getLong(&quot;listing_id&quot;));</b>
-<b class="fc">&nbsp;                transaction.setTransactionPrice(rs.getDouble(&quot;transaction_price&quot;));</b>
+&nbsp;                transaction.setTransactionPrice(rs.getDouble(&quot;transaction_price&quot;));
 <b class="fc">&nbsp;                transaction.setTransactionStatus(rs.getString(&quot;transaction_status&quot;));</b>
-&nbsp;            }
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        }
+&nbsp;        return transaction;
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    // find transactions by buyer id</b>
+<b class="fc">&nbsp;    public List&lt;BookTransaction&gt; findByBuyerId(long userId) {</b>
+<b class="fc">&nbsp;        List&lt;BookTransaction&gt; transactions = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        String sql = &quot;SELECT * FROM book_transactions WHERE buyer_id=?&quot;;</b>
+<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {</b>
+<b class="fc">&nbsp;            statement.setLong(1, userId);</b>
+&nbsp;            ResultSet rs = statement.executeQuery();
+<b class="fc">&nbsp;            while (rs.next()) {</b>
+<b class="fc">&nbsp;                BookTransaction transaction = new BookTransaction();</b>
+<b class="nc">&nbsp;                </b>
+&nbsp;                transaction.setTransactionId(rs.getLong(&quot;transaction_id&quot;));
+&nbsp;                transaction.setBuyerId(rs.getLong(&quot;buyer_id&quot;));
+<b class="fc">&nbsp;                transaction.setSellerId(rs.getLong(&quot;seller_id&quot;));</b>
+<b class="fc">&nbsp;                transaction.setTransactionDate(rs.getTimestamp(&quot;transaction_date&quot;));</b>
+<b class="fc">&nbsp;                transaction.setListingId(rs.getLong(&quot;listing_id&quot;));</b>
+&nbsp;                transaction.setTransactionPrice(rs.getDouble(&quot;transaction_price&quot;));
+<b class="nc">&nbsp;                transaction.setTransactionStatus(rs.getString(&quot;transaction_status&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;                transactions.add(transaction);</b>
+<b class="fc">&nbsp;            }</b>
 <b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            throw new RuntimeException(e);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        return transaction;</b>
+&nbsp;        return transactions;
 &nbsp;    }
+&nbsp;    
+&nbsp;    // find transactions by seller id
+<b class="fc">&nbsp;    public List&lt;BookTransaction&gt; findBySellerId(long userId) {</b>
+<b class="fc">&nbsp;        List&lt;BookTransaction&gt; transactions = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        String sql = &quot;SELECT * FROM book_transactions WHERE seller_id=?&quot;;</b>
+<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {</b>
+<b class="fc">&nbsp;            statement.setLong(1, userId);</b>
+<b class="fc">&nbsp;            ResultSet rs = statement.executeQuery();</b>
+<b class="fc">&nbsp;            while (rs.next()) {</b>
+&nbsp;                BookTransaction transaction = new BookTransaction();
+<b class="fc">&nbsp;                </b>
+<b class="fc">&nbsp;                transaction.setTransactionId(rs.getLong(&quot;transaction_id&quot;));</b>
+<b class="nc">&nbsp;                transaction.setBuyerId(rs.getLong(&quot;buyer_id&quot;));</b>
+&nbsp;                transaction.setSellerId(rs.getLong(&quot;seller_id&quot;));
+<b class="fc">&nbsp;                transaction.setTransactionDate(rs.getTimestamp(&quot;transaction_date&quot;));</b>
+<b class="fc">&nbsp;                transaction.setListingId(rs.getLong(&quot;listing_id&quot;));</b>
+<b class="nc">&nbsp;                transaction.setTransactionPrice(rs.getDouble(&quot;transaction_price&quot;));</b>
+<b class="nc">&nbsp;                transaction.setTransactionStatus(rs.getString(&quot;transaction_status&quot;));</b>
 &nbsp;
+&nbsp;                transactions.add(transaction);
+&nbsp;            }
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+<b class="fc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;        return transactions;
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
 &nbsp;    @Override
-&nbsp;    public BookTransaction create(BookTransaction dto) {
-<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {</b>
-<b class="fc">&nbsp;            statement.setLong(1, dto.getBuyerId());</b>
+<b class="fc">&nbsp;    public BookTransaction create(BookTransaction dto) {</b>
+<b class="nc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {</b>
+<b class="nc">&nbsp;            statement.setLong(1, dto.getBuyerId());</b>
 <b class="fc">&nbsp;            statement.setLong(2, dto.getSellerId());</b>
-<b class="fc">&nbsp;            statement.setLong(3, dto.getListingId());</b>
-<b class="fc">&nbsp;            statement.setDouble(4, dto.getTransactionPrice());</b>
-<b class="fc">&nbsp;            statement.setString(5, dto.getTransactionStatus());</b>
+&nbsp;            statement.setLong(3, dto.getListingId());
+&nbsp;            statement.setDouble(4, dto.getTransactionPrice());
+&nbsp;            statement.setString(5, dto.getTransactionStatus());
 &nbsp;
-<b class="fc">&nbsp;            int affectedRows = statement.executeUpdate();</b>
-<b class="fc">&nbsp;            if (affectedRows == 0) {</b>
-<b class="nc">&nbsp;                throw new SQLException(&quot;Creating transaction failed, no rows affected.&quot;);</b>
+&nbsp;            int affectedRows = statement.executeUpdate();
+&nbsp;            if (affectedRows == 0) {
+&nbsp;                throw new SQLException(&quot;Creating transaction failed, no rows affected.&quot;);
 &nbsp;            }
 &nbsp;
-<b class="fc">&nbsp;            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {</b>
-<b class="fc">&nbsp;                if (generatedKeys.next()) {</b>
-<b class="fc">&nbsp;                    dto.setTransactionId(generatedKeys.getLong(1));</b>
-<b class="fc">&nbsp;                } else {</b>
-<b class="nc">&nbsp;                    throw new SQLException(&quot;Creating transaction failed, no ID obtained.&quot;);</b>
+&nbsp;            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+&nbsp;                if (generatedKeys.next()) {
+&nbsp;                    dto.setTransactionId(generatedKeys.getLong(1));
+&nbsp;                } else {
+&nbsp;                    throw new SQLException(&quot;Creating transaction failed, no ID obtained.&quot;);
 &nbsp;                }
-<b class="fc">&nbsp;            }</b>
-<b class="fc">&nbsp;            return dto;</b>
-<b class="fc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;            }
+&nbsp;            return dto;
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            throw new RuntimeException(e);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public BookTransaction update(BookTransaction dto) {
-<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE)) {</b>
-<b class="fc">&nbsp;            statement.setLong(1, dto.getBuyerId());</b>
-<b class="fc">&nbsp;            statement.setLong(2, dto.getSellerId());</b>
-<b class="fc">&nbsp;            statement.setLong(3, dto.getListingId());</b>
-<b class="fc">&nbsp;            statement.setDouble(4, dto.getTransactionPrice());</b>
-<b class="fc">&nbsp;            statement.setString(5, dto.getTransactionStatus());</b>
-<b class="fc">&nbsp;            statement.setLong(6, dto.getTransactionId());</b>
+&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(UPDATE)) {
+&nbsp;            statement.setLong(1, dto.getBuyerId());
+&nbsp;            statement.setLong(2, dto.getSellerId());
+&nbsp;            statement.setLong(3, dto.getListingId());
+&nbsp;            statement.setDouble(4, dto.getTransactionPrice());
+&nbsp;            statement.setString(5, dto.getTransactionStatus());
+&nbsp;            statement.setLong(6, dto.getTransactionId());
 &nbsp;
-<b class="fc">&nbsp;            int affectedRows = statement.executeUpdate();</b>
-<b class="fc">&nbsp;            if (affectedRows == 0) {</b>
-<b class="nc">&nbsp;                throw new SQLException(&quot;Updating transaction failed, no rows affected.&quot;);</b>
+&nbsp;            int affectedRows = statement.executeUpdate();
+&nbsp;            if (affectedRows == 0) {
+&nbsp;                throw new SQLException(&quot;Updating transaction failed, no rows affected.&quot;);
 &nbsp;            }
-<b class="fc">&nbsp;            return dto;</b>
-<b class="fc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;            return dto;
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            throw new RuntimeException(e);
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @Override
 &nbsp;    public void delete(long id) {
-<b class="fc">&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(DELETE)) {</b>
-<b class="fc">&nbsp;            statement.setLong(1, id);</b>
+&nbsp;        try (PreparedStatement statement = this.connection.prepareStatement(DELETE)) {
+&nbsp;            statement.setLong(1, id);
 &nbsp;
-<b class="fc">&nbsp;            int affectedRows = statement.executeUpdate();</b>
-<b class="fc">&nbsp;            if (affectedRows == 0) {</b>
-<b class="nc">&nbsp;                throw new SQLException(&quot;Deleting transaction failed, no rows affected.&quot;);</b>
+&nbsp;            int affectedRows = statement.executeUpdate();
+&nbsp;            if (affectedRows == 0) {
+&nbsp;                throw new SQLException(&quot;Deleting transaction failed, no rows affected.&quot;);
 &nbsp;            }
-<b class="fc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+&nbsp;        } catch (SQLException e) {
+&nbsp;            e.printStackTrace();
+&nbsp;            throw new RuntimeException(e);
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -199,7 +284,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>
