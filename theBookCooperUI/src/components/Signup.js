@@ -99,7 +99,7 @@ const Signup = () => {
                         />
                     </div>
                     {error && <p className="error-message">{error}</p>}
-                    <button type="submit" className="signup-page-button">Sign Up</button>
+                    <button type="submit" disabled={userId} className="signup-page-button">Sign Up</button>
                     <div className="footer-links">
                         <Link to="/login" className="login-text">Already have an account? Log in here.</Link>
                     </div>

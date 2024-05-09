@@ -13,6 +13,7 @@ function ShowListing() {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setLoading] = useState(false);
+    const [isTransactionInProgress, setIsTransactionInProgress] = useState(false);
 
     const { user } = useUser();
     const { userId } = useDetails();
@@ -67,24 +68,35 @@ function ShowListing() {
     }
 
     //has transaction id, buyer id, seller id, transaction date, listing id, transaction price, transaction status
+
     const newTransaction = async () => {
+        if (isTransactionInProgress) return; // Prevents the function from running if already in progress
+
+        setIsTransactionInProgress(true); // Disable the button by setting the in-progress state
 
         if (!user) {
             setTransaction('No user logged in.');
+            alert('Please log in to continue');
+            setIsTransactionInProgress(false); // Re-enable the button as transaction didn't proceed
             return;
         }
 
         if(userId === seller.userId) {
             setTransaction("Cannot buy your own book!");
             console.log("Cannot buy your own book!");
+            setIsTransactionInProgress(false);
+            alert('You cannot buy your own book!');
             return;
         }
 
         if(buyer.bbucksBalance < listing.price) {
             setTransaction("Insufficient funds!");
             console.log("Insufficient funds!");
+            alert('Insufficient funds!');
+            setIsTransactionInProgress(false);
             return;
         }
+
 
         try {
             const token = await user.getIdToken();
@@ -112,7 +124,10 @@ function ShowListing() {
                 listingStatus: "completed"
             }, { headers });
 
-            setSuccess(true)
+            setSuccess(true);
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
 
         } catch (error) {
             setTransaction("UNAUTHORIZED " + error.message);
@@ -156,9 +171,9 @@ function ShowListing() {
                 </div>
                 
                 <br/><br/>
-                {success ? <a>You successfully Bought the book!</a> : <a>{transaction}</a>}
+                {success ? <a>You successfully Bought the book! Refreshing the page in 3 seconds...</a> : <a>{transaction}</a>}
                 <br/>
-                <button className = "buy-book-button" onClick={newTransaction} disabled={success || listing.listingStatus !== "active" || buyer.bbucksBalance < listing.price}>Buy Book</button> <br/>
+                <button className = "buy-book-button" onClick={newTransaction} disabled={success || listing.listingStatus !== "active" || buyer.bbucksBalance < listing.price || isTransactionInProgress}>Buy Book</button> <br/>
             </div>
         </div>
     );

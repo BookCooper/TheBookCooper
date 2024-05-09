@@ -45,6 +45,7 @@ function PaymentForm() {
         const loadStoreItem = async () => {
             if (!user || !userId) {
                 setStoreItem('No user logged in.');
+                alert('Please log in to continue');
                 setLoading(false); // Stop loading as no user is logged in
                 return;
             }
@@ -53,7 +54,6 @@ function PaymentForm() {
                 const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
                 //get store item data
-                //console.log("request is: " + "http://" + host + :8080/store-items/${storeId}"); 
                 const storeItemResponse = await axios.get(`http://` + host + `:8080/store-items/${storeId}`, { headers });
                 setStoreItem(storeItemResponse.data);
 
