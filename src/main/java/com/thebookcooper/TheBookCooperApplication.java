@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 
+//@ComponentScan(basePackages = "com.thebookcooper")
 @SpringBootApplication
 public class TheBookCooperApplication {
     public static void main(String[] args) {

@@ -15,11 +15,11 @@ const Testimonial = ({ quote, author }) => (
       author: "Alex Liu, Junior",
     },
     {
-      quote: "Thanks to TheBookCooper, I traded a textbook with a peer",
+      quote: "Thanks to TheBookCooper, I traded a textbook with a peer. Like a boss.",
       author: "Aidan Cusa, Sophmore",
     },
     {
-      quote: "I can't recommend TheBookCooper enough. The real-time notifications are a game-changer. I always stay ahead now!",
+      quote: "I can't recommend TheBookCooper enough. Their search feature is so clean! I love the white and gray boxes so much!",
       author: "Chris Hong, Alumni",
     },
   ];

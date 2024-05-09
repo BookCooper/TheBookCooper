@@ -1,4 +1,4 @@
-import '../styles/LandingPage.css';
+import '../styles/CreateBook.css';
 import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
@@ -15,6 +15,9 @@ function NewBook() {
     const [isbn, setIsbn] = useState("");
     const [price, setPrice] = useState("");
     const [success, setSuccess] = useState(false);
+
+    const host = window.location.hostname;
+    const today = new Date().toISOString().split('T')[0];
 
     const newBook = async () => {
         if (!user) {
@@ -41,7 +44,7 @@ function NewBook() {
             console.log(bookData);
             setSuccess(true)
 
-            const response = await axios.post(`/books/create`, bookData, { headers });
+            const response = await axios.post(`http://` + host + `:8080/books/create`, bookData, { headers });
             console.log('Book created successfully:', response.data);
         } catch (error) {
             console.error('Failed to create book:', error);
@@ -51,60 +54,73 @@ function NewBook() {
     };
 
     return (
-        <>
-            <a> Title: </a> <input
-                type="text"
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                placeholder="Enter the book's title"
-            /><br/>
-            <a> Author: </a> <input
-                type="text"
-                value={author}
-                onChange={e => setAuthor(e.target.value)}
-                placeholder="Enter the book's author"
-            /><br/>
-            <a> Genre: </a> <input
-                type="text"
-                value={genre}
-                onChange={e => setGenre(e.target.value)}
-                placeholder="Enter the book's genre"
-            /><br/>
-            <a> Publish Date: </a> <input
-                type="text"
-                value={publishDate}
-                onChange={e => setPublishDate(e.target.value)}
-                placeholder="Enter the publish date"
-            /> <a> (Of the form YYYY-MM-DD) </a> <br/>
-            <a> Condition: </a> <input
-                type="text"
-                value={bookCondition}
-                onChange={e => setBookCondition(e.target.value)}
-                placeholder="Enter the book's condition"
-            /><br/>
-            <a> ISBN: </a> <input
-                type="text"
-                value={isbn}
-                onChange={e => setIsbn(e.target.value)}
-                placeholder="Enter the book's ISBN (optional)"
-            /><br/>
-            <a> Price: </a> <input
-                type="text"
-                value={price}
-                onChange={e => setPrice(e.target.value)}
-                placeholder="Enter the book's price (leave empty for autocompletion)"
-            /><br/>
+        <div className = "create-book-container">
+            <div className = "create-book-white-box">
+                <br/> <b> <a className = "create-book-label"> Create a Book </a> </b>
+                <br/>
+                <a className = "label-text"> Title: </a> <input
+                    type="text"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    placeholder="Enter the book's title"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Author: </a> <input
+                    type="text"
+                    value={author}
+                    onChange={e => setAuthor(e.target.value)}
+                    placeholder="Enter the book's author"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Genre: </a> <input
+                    type="text"
+                    value={genre}
+                    onChange={e => setGenre(e.target.value)}
+                    placeholder="Enter the book's genre"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Publish Date: </a> <input
+                    type="date"
+                    value={publishDate}
+                    onChange={e => setPublishDate(e.target.value)}
+                    placeholder="Enter the publish date"
+                    max={today}  // Restrict future dates
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Condition: </a> <select
+                    value={bookCondition}
+                    onChange={e => setBookCondition(e.target.value)}
+                    placeholder="Select the book's condition"
+                    className="input-field"
+                    >
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                </select><br/>
+                <a className = "label-text"> ISBN: </a> <input
+                    type="number"
+                    value={isbn}
+                    onChange={e => setIsbn(e.target.value)}
+                    placeholder="Enter the book's ISBN (leave empty for autocompletion)"
+                    className="input-field"
+                /><br/>
+                <a className = "label-text"> Recommended Price (B-Bucks): </a> <input
+                    type="number"
+                    value={price}
+                    onChange={e => setPrice(e.target.value)}
+                    placeholder="Enter the book's price (leave empty for autocompletion)"
+                    className="input-field"
+                /><br/>
 
-            <button onClick={newBook} disabled={isLoading || !user || !title || !author || !bookCondition || success}>Create Book</button>
+                <button className = "create-book-button" onClick={newBook} disabled={isLoading || !user || !title || !author || !bookCondition || success}>Create Book</button>
 
-            <br/> <br/>
+                <br/> <br/>
 
-            {success ? <a> You have created a book! </a>
-                     : <a> </a>
-            }
-            <br/>
-
-        </>
+                {success ? <a> You have created a book! </a>
+                         : <a> </a>
+                }
+                <br/>
+            </div>
+        </div>
     );
 }
 

@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.sql.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.thebookcooper.model.BookTransaction;
 import com.thebookcooper.model.PointTransaction;
 import com.thebookcooper.model.User;
@@ -60,6 +63,45 @@ public class BookTransactionController {
             return new ResponseEntity<>("Error retrieving transaction count", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /*in the future can probably make this less redundant but it works for now*/
+    
+    //filter transactions by buyer
+    @GetMapping("/buyer")
+    public ResponseEntity<?> searchTransactionByBuyer(@RequestParam long buyerId) {
+        try (Connection connection = dcm.getConnection()) {
+
+            BookTransactionDAO btDAO = new BookTransactionDAO(connection);
+            List<BookTransaction> userTransactions = new ArrayList<>();
+            
+            userTransactions = btDAO.findByBuyerId(buyerId);
+
+            //will just return empty list on failure
+            return new ResponseEntity<>(userTransactions, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error searching transactions by user ID", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    //filter transactions by seller
+    @GetMapping("/seller")
+    public ResponseEntity<?> searchTransactionBySeller(@RequestParam long sellerId) {
+        try (Connection connection = dcm.getConnection()) {
+
+            BookTransactionDAO btDAO = new BookTransactionDAO(connection);
+            List<BookTransaction> userTransactions = new ArrayList<>();
+
+            userTransactions = btDAO.findBySellerId(sellerId);
+            
+            //will just return empty list on failure
+            return new ResponseEntity<>(userTransactions, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error searching transactions by user ID", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<?> createTransaction(@RequestBody String json) {

@@ -122,32 +122,53 @@ public class ListingsDAO extends DataAccessObject<Listing> {
     }
 
     public List<Listing> findByBookId(long bookId) {
-    List<Listing> listings = new ArrayList<>();
-    String sql = "SELECT * FROM book_listings WHERE book_id=?";
-    try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-        statement.setLong(1, bookId);
-        ResultSet rs = statement.executeQuery();
-        while (rs.next()) {
-            Listing listing = new Listing();
-            // Populate the listing object from the ResultSet
-            listing.setListingId(rs.getLong("listing_id"));
-            listing.setUserId(rs.getLong("user_id"));
-            listing.setBookId(rs.getLong("book_id"));
-            listing.setListingStatus(rs.getString("listing_status"));
-            listing.setBookCondition(rs.getString("book_condition"));
-            listing.setPrice(rs.getDouble("price"));
-            listing.setListingDate(rs.getTimestamp("listing_date"));
-            listings.add(listing);
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT * FROM book_listings WHERE book_id=?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setLong(1, bookId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Listing listing = new Listing();
+                listing.setListingId(rs.getLong("listing_id"));
+                listing.setUserId(rs.getLong("user_id"));
+                listing.setBookId(rs.getLong("book_id"));
+                listing.setListingStatus(rs.getString("listing_status"));
+                listing.setBookCondition(rs.getString("book_condition"));
+                listing.setPrice(rs.getDouble("price"));
+                listing.setListingDate(rs.getTimestamp("listing_date"));
+                listings.add(listing);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        throw new RuntimeException(e);
+        return listings;
     }
-    return listings;
-}
 
+    public List<Listing> findByUserId(long userId) {
+        List<Listing> listings = new ArrayList<>();
+        String sql = "SELECT * FROM book_listings WHERE user_id=?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setLong(1, userId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Listing listing = new Listing();
+                listing.setListingId(rs.getLong("listing_id"));
+                listing.setUserId(rs.getLong("user_id"));
+                listing.setBookId(rs.getLong("book_id"));
+                listing.setListingStatus(rs.getString("listing_status"));
+                listing.setBookCondition(rs.getString("book_condition"));
+                listing.setPrice(rs.getDouble("price"));
+                listing.setListingDate(rs.getTimestamp("listing_date"));
 
-
+                listings.add(listing);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return listings;
+    }
 }
 
 

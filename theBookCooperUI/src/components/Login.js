@@ -14,6 +14,8 @@ const Login = () => {
     const {user, isLoading} = useUser();
     const navigate = useNavigate();
 
+    const host = window.location.hostname;
+
     // Reset userId when component mounts
     useEffect(() => {
         setUserId(null);
@@ -32,12 +34,18 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(getAuth(), email, password);
             const firebaseUser = userCredential.user;
 
+            console.log("host is: " + host);
+
+            const request = `http://` + host + `:8080/users/email/${email}`;
+
             // Get the token from the signed-in user
             const token = await firebaseUser.getIdToken();
-            const headers = { Authorization: `Bearer ${token}` };
+            //const headers = { Authorization: `Bearer ${token}` };
+            const headers = token ? {Authorization: `Bearer ${token}`, "Access-Control-Allow-Origin": "*"} : {};
+            console.log("token is: " + token); 
 
             // Fetch user data using the token
-            const userResponse = await axios.get(`/users/email/${email}`, { headers });
+            const userResponse = await axios.get(request, { headers });
             console.log("API Response:", userResponse.data);
 
             // If the user data includes the userId, set it in the state
@@ -47,52 +55,11 @@ const Login = () => {
                 navigate('/'); // Navigate only after userId is set
             }
 
-             /*   try {
-                    const token = await user.getIdToken();
-                    const headers = { Authorization: `Bearer ${token}` };
-                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
-                    console.log("API Response:", userResponse.data);
-                    
-                    if (userResponse.data && userResponse.data.userId) {
-                        console.log("Setting userID:", userResponse.data.userId);
-                        setUserId(userResponse.data.userId);
-                    }
-                } catch (e) {
-                    console.error("Error fetching user data:", e);
-                    setError(e.toString());
-                }
-            }*/
-
         } catch (e) {
             console.error("Login error:", e);
             setError(e.message);
         }
     };
-
-    // Fetch user data after successful login
-    /*useEffect(() => {
-        const fetchUserData = async () => {
-            if (user) {
-                try {
-                    const token = await user.getIdToken();
-                    const headers = { Authorization: `Bearer ${token}` };
-                    const userResponse = await axios.get(`/users/email/${email}`, { headers });
-                    console.log("API Response:", userResponse.data);
-                    
-                    if (userResponse.data && userResponse.data.userId) {
-                        console.log("Setting userID:", userResponse.data.userId);
-                        setUserId(userResponse.data.userId);
-                    }
-                } catch (e) {
-                    console.error("Error fetching user data:", e);
-                    setError(e.toString());
-                }
-            }
-        };
-        if (user) {
-            fetchUserData();
-        }
-    }, [email]);*/
 
     useEffect(() => {
         if (userId) {
@@ -108,7 +75,7 @@ const Login = () => {
                 <form onSubmit={logIn} className="form-container">
                 <h1 className="login-label">Login</h1>
             <div>
-                <label htmlFor="email" className="email-label">Email</label>
+                <label htmlFor="email" className="email-label">Email</label> <br/>
                 <input
                     id="email"
                     className="email-box"
@@ -120,7 +87,7 @@ const Login = () => {
                 />
                 </div>
             <div>
-                <label htmlFor="password" className="password-label">Password</label>
+                <label htmlFor="password" className="password-label">Password</label><br/>
                 <input
                     id="password"
                     className="password-box"
@@ -134,8 +101,7 @@ const Login = () => {
                 {error && <p className="error-message">{error}</p>}
                 <button type="submit" className="login-page-button">Log In</button>
                 <div className="footer-links">
-                    <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
-                    <Link to="/signup" className="sign-up-text">Sign Up</Link>
+                    <Link to="/signup" className="sign-up-text">Don't have an account? Sign Up</Link>
                 </div>
                 </form>
             </div>

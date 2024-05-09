@@ -18,7 +18,7 @@
 # start app
 #CMD npm start
 
-FROM node:16.13.1-alpine as build
+FROM node:18-alpine as build
 RUN npm install -g serve # A simple webserver
 
 WORKDIR /usr/src/app

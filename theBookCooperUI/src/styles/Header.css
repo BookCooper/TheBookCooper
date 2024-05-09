@@ -1,0 +1,83 @@
+/* Header.css */
+
+@import "./Boilerplate.css";
+
+header {
+    background-color: #002F56;
+    color: #fff;
+    width: 100%;
+    max-height: 15vh;
+    line-height: 3vh;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 3em;
+    flex-wrap: nowrap;
+}
+
+.login-button, .signup-button, .profile-button, .contact-button, .about-button, .store-button {
+    background-color: #0C8CE9;
+    color: #fff;
+    text-decoration: none;
+    padding: 1vh 2vw;
+    border-radius: 100px;
+    font-size: 0.85vw;
+    min-width: fit-content;
+    min-height: fit-content;
+    margin-right: 0px;
+}
+
+.login-button:hover, .signup-button:hover, .profile-button:hover, .contact-button:hover, .about-button:hover, .store-button:hover {
+    background-color: #025ABB;
+    cursor:pointer;
+}
+
+.search-and-buttons-container, .not-logged-in-buttons {
+    display: flex; /* This will align the children divs side by side */
+    align-items: center; /* This will center them vertically */
+    justify-content: space-between; /* This will put some space between them */
+    margin-left: auto;
+    gap: 2em;
+}
+
+header h1 {
+    font-size: 5.5vh;
+    margin-left: 0.5em;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0; /* Reset any default margin */
+}
+
+
+.search-box {
+    width: 15vw; /* Full width for larger screens */
+    background: #D9D9D9;
+    border-radius: 3vh;
+    padding: 1vh 3vh;
+    border: none;
+    display: flex; /* Add this to center the input field */
+    font-size: 0.75vh;
+}
+
+.search-input {
+    width: 100%; /* Take full width of the parent .search-box */
+    border: none;
+    outline: none; /* Remove the outline to keep the design clean */
+    font-size: 2vh;
+    background: transparent; /* Make the background transparent */
+    margin: 0; /* Remove any default margins */
+    margin-left: 10px;
+}
+
+header img {
+    cursor: pointer;
+    max-width: 12vh;
+    margin-left: 3%;
+}
+

@@ -13,9 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.thebookcooper.model.Book;
+import com.thebookcooper.model.User;
 import com.thebookcooper.model.Listing;
 import com.thebookcooper.dao.ListingsDAO;
 import com.thebookcooper.dao.BookInfoDAO;
+import com.thebookcooper.dao.UserDAO;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 
 @RestController
@@ -92,6 +94,23 @@ public class ListingsController {
         } catch (SQLException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Error searching listings by book title", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> searchListingsByUserId(@RequestParam long userId) {
+        try (Connection connection = dcm.getConnection()) {
+
+            ListingsDAO listingsDAO = new ListingsDAO(connection);
+            
+            // For each book, find its listings
+            List<Listing> userListings = listingsDAO.findByUserId(userId);
+            
+            // will return an empty list on failure
+            return new ResponseEntity<>(userListings, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error searching listings by user ID", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     

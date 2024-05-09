@@ -1,9 +1,9 @@
 import React from 'react';
-import '../styles/LandingPage.css';
+import '../styles/Header.css';
 import Logout from './Logout.js';
-import Search from './Search.js'
 import { useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import SearchListings from "./SearchListings.js"
 
 const Header = () => {
 
@@ -13,19 +13,20 @@ const Header = () => {
     return (
         <header>
             
-            <img src="/new_logo.png" alt="New Logo" style={{cursor: 'pointer', width: "115px"}} onClick={() => navigate('/')} />
+            <img src="/new_logo.png" alt="New Logo" onClick={() => navigate('/')} />
             <h1 style={{cursor:'pointer'}} onClick={() => navigate('/')}>TheBookCooper</h1>
 
             {user
-                ?
-                    <div className = "header-buttons">
-                        <button className="search-button" onClick={() => navigate('/search')}>Search</button>
+                ?   
+                    <div className="search-and-buttons-container">
+                        <SearchListings />
                         <button className="contact-button" onClick={() => navigate('/create-listing')}>Create Listing</button>
-                        <button className="search-button" onClick={() => navigate('/store')}>Store</button>
+                        <button className="store-button" onClick={() => navigate('/store')}>Store</button>
+                        <button className="profile-button" onClick={() => navigate('/profile')}>Profile</button>
                         <Logout />
                     </div>
                 :
-                    <div className = "header-buttons">
+                    <div className = "not-logged-in-buttons">
                         <button className="signup-button" onClick={() => navigate('/signup')}>Sign Up</button>
                         <Logout />
                     </div>

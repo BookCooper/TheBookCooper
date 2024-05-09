@@ -1,0 +1,66 @@
+/* Payment.css */
+
+@import "./Boilerplate.css";
+
+.profile-container {
+    display: flex;
+}
+
+.sidebar {
+    /* flex: 1 1 1vw; /* grow, shrink, and base width */
+    background-color: #0C8CE9;
+    color: white;
+    padding: 20px;
+    width: 15vw;
+    min-height: 100vh;
+}
+
+.sidebar a, .sidebar-text {
+    font-family: Arial, sans-serif;
+    display: block;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-wrap: pretty;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #34495E;
+}
+
+.profile-for {
+    text-align: center;
+    color: white;
+}
+
+
+.profile-content {
+    flex: 3;
+    padding: 20px;
+}
+
+.general-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #025ABB;
+}
+
+.general-profile-white-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60vw; /* Fixed width for control */
+    height: 40vh; /* Fixed width for control */
+    background: #FFFFFF;
+    border-radius: 55px;
+    padding: 20px;
+    margin: auto; /* Centers the box if the viewport is wider than max-width */
+    margin-top: 4vh;
+}
+
+
+.profile-img {
+    height: 50%;
+}

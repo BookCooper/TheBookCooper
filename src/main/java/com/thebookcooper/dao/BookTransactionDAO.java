@@ -4,6 +4,8 @@ import com.thebookcooper.model.BookTransaction;
 import com.thebookcooper.util.DataAccessObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookTransactionDAO extends DataAccessObject<BookTransaction> {
     private static final String INSERT = "INSERT INTO book_transactions (buyer_id, seller_id, listing_id, transaction_price, transaction_status) VALUES (?, ?, ?, ?, ?)";
@@ -34,6 +36,61 @@ public class BookTransactionDAO extends DataAccessObject<BookTransaction> {
         }
         return transaction;
     }
+
+    // find transactions by buyer id
+    public List<BookTransaction> findByBuyerId(long userId) {
+        List<BookTransaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM book_transactions WHERE buyer_id=?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setLong(1, userId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                BookTransaction transaction = new BookTransaction();
+                
+                transaction.setTransactionId(rs.getLong("transaction_id"));
+                transaction.setBuyerId(rs.getLong("buyer_id"));
+                transaction.setSellerId(rs.getLong("seller_id"));
+                transaction.setTransactionDate(rs.getTimestamp("transaction_date"));
+                transaction.setListingId(rs.getLong("listing_id"));
+                transaction.setTransactionPrice(rs.getDouble("transaction_price"));
+                transaction.setTransactionStatus(rs.getString("transaction_status"));
+
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return transactions;
+    }
+    
+    // find transactions by seller id
+    public List<BookTransaction> findBySellerId(long userId) {
+        List<BookTransaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM book_transactions WHERE seller_id=?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setLong(1, userId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                BookTransaction transaction = new BookTransaction();
+                
+                transaction.setTransactionId(rs.getLong("transaction_id"));
+                transaction.setBuyerId(rs.getLong("buyer_id"));
+                transaction.setSellerId(rs.getLong("seller_id"));
+                transaction.setTransactionDate(rs.getTimestamp("transaction_date"));
+                transaction.setListingId(rs.getLong("listing_id"));
+                transaction.setTransactionPrice(rs.getDouble("transaction_price"));
+                transaction.setTransactionStatus(rs.getString("transaction_status"));
+
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return transactions;
+    }
+
 
     @Override
     public BookTransaction create(BookTransaction dto) {

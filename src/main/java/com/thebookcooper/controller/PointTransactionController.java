@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.thebookcooper.model.PointTransaction;
 import com.thebookcooper.dao.PointTransactionDAO;
@@ -57,6 +59,26 @@ public class PointTransactionController {
             return new ResponseEntity<>("Error retrieving point transaction", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    //filter transactions by seller
+    @GetMapping("/user")
+    public ResponseEntity<?> searchTransactionByUser(@RequestParam long userId) {
+        try (Connection connection = dcm.getConnection()) {
+
+            PointTransactionDAO ptDAO = new PointTransactionDAO(connection);
+            List<PointTransaction> userTransactions = new ArrayList<>();
+
+            userTransactions = ptDAO.findByUserId(userId);
+            
+            //will just return empty list on failure
+            return new ResponseEntity<>(userTransactions, HttpStatus.OK);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error searching point transactions by user ID", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     
     //should probably reference store-item to buy the B-Buck package
 

@@ -25,7 +25,7 @@ const ContentRow = () => {
                                 <img src={Landing2} alt="Trade Posts"/>
                         </div>
                         <div className="text-section">
-                                <h2>MAKE TRADE POSTS</h2>
+                                <h2>LIST YOUR BOOKS</h2>
                                 <h3>Missed out on the textbook you wanted? TheBookCooper lets you get textbooks from fellow cooper students...</h3>
                         </div>
                 </div>
@@ -49,8 +49,8 @@ const ContentRow = () => {
                             <img src={Landing4} alt="Get Notified Instantly"/>
                     </div>
                     <div className="text-section">
-                            <h2>GET NOTIFIED INSTANTLY</h2>
-                            <h3>Never miss an opportunity with TheBookCooper's real-time notifications. Whether a new listing drops or your listing gets sold</h3>
+                            <h2>BUY NEW AND USED BOOKS</h2>
+                            <h3>Need a new book to read? Use our site to get your next read of the week!</h3>
                     </div>
                 </div>
             </section>
