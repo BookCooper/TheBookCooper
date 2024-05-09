@@ -41,18 +41,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">BookTransactionController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/6)
+    (6/6)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    26.3%
   </span>
   <span class="absValue">
-    (0/99)
+    (26/99)
   </span>
 </td>
 </tr>
@@ -79,18 +79,18 @@ Current scope:     <a href="../../index.html">all classes</a>
     <td class="name">BookTransactionController$2</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -98,18 +98,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    87.5%
   </span>
   <span class="absValue">
-    (0/8)
+    (7/8)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    26.7%
   </span>
   <span class="absValue">
-    (0/101)
+    (27/101)
   </span>
 </td>
 </tr>
@@ -148,13 +148,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@RestController
 &nbsp;@CrossOrigin
 &nbsp;@RequestMapping(&quot;/book-transactions&quot;) // Base path for transactions
-<b class="nc">&nbsp;public class BookTransactionController {</b>
+<b class="fc">&nbsp;public class BookTransactionController {</b>
 &nbsp;
-<b class="nc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
+<b class="fc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
 &nbsp;
 &nbsp;    @GetMapping(&quot;/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; getTransactionById(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            BookTransactionDAO transactionDAO = new BookTransactionDAO(connection);</b>
 <b class="nc">&nbsp;            BookTransaction transaction = transactionDAO.findById(id);</b>
 <b class="nc">&nbsp;            if (transaction != null) {</b>
@@ -162,32 +162,32 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;            } else {
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Transaction not found&quot;, HttpStatus.NOT_FOUND);</b>
 &nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @GetMapping(&quot;/count&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; countTransactions() {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;             Statement statement = connection.createStatement();</b>
 <b class="nc">&nbsp;             ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) FROM book_transactions&quot;)) {</b>
 <b class="nc">&nbsp;            if (resultSet.next()) {</b>
 <b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Number of transactions: &quot; + resultSet.getInt(1), HttpStatus.OK);</b>
 &nbsp;            }
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No transactions found&quot;, HttpStatus.NOT_FOUND);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving transaction count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving transaction count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @PostMapping(&quot;/create&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; createTransaction(@RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
 &nbsp;        ResponseEntity&lt;?&gt; responseEntity;
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
 &nbsp;            
 <b class="nc">&nbsp;            BookTransactionDAO transactionDAO = new BookTransactionDAO(connection);</b>
@@ -254,22 +254,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;            responseBody.put(&quot;user&quot;, buyer);</b>
 <b class="nc">&nbsp;            responseBody.put(&quot;pointTransaction&quot;, createdPointTransaction);</b>
 <b class="nc">&nbsp;            responseEntity = new ResponseEntity&lt;&gt;(responseBody, HttpStatus.CREATED);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException | SQLException | NumberFormatException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            responseEntity = new ResponseEntity&lt;&gt;(&quot;Failed to process the transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (JsonProcessingException | SQLException | NumberFormatException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            responseEntity = new ResponseEntity&lt;&gt;(&quot;Failed to process the transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 <b class="nc">&nbsp;        }</b>
-<b class="nc">&nbsp;        return responseEntity;</b>
+<b class="fc">&nbsp;        return responseEntity;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @PutMapping(&quot;/update/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; updateTransaction(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
 &nbsp;        try {
 &nbsp;
 &nbsp;            //want to get the transaction of the specific id rather than just overwrite it
 &nbsp;
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+<b class="fc">&nbsp;            Connection connection = dcm.getConnection();</b>
 <b class="nc">&nbsp;            BookTransactionDAO transactionDAO = new BookTransactionDAO(connection);</b>
 &nbsp;
 <b class="nc">&nbsp;            BookTransaction updatedTransaction = new BookTransaction();</b>
@@ -286,9 +286,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 <b class="nc">&nbsp;        } catch (NumberFormatException e) {</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid number format&quot;, HttpStatus.BAD_REQUEST);</b>
 &nbsp;        }
@@ -296,13 +296,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
 &nbsp;    public ResponseEntity&lt;?&gt; deleteTransaction(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
 <b class="nc">&nbsp;            BookTransactionDAO transactionDAO = new BookTransactionDAO(connection);</b>
 <b class="nc">&nbsp;            transactionDAO.delete(id);</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Transaction with ID &quot; + id + &quot; deleted successfully&quot;, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete the transaction&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -329,7 +329,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-08 20:53</div>
 </div>
 </body>
 </html>

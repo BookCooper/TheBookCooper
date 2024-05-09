@@ -25,12 +25,9 @@ Current scope:     <a href="../../index.html">all classes</a>
 <h1>Coverage Summary for Class: BookTransactionDAO (com.thebookcooper.dao)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -47,9 +44,41 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (5/5)
   </span>
 </td>
+<td class="coverageStat">
+  <span class="percent">
+    79.7%
+  </span>
+  <span class="absValue">
+    (47/59)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$1JL16huC</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$akJ76WyL</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$AoYQ6JSg</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$HYcDDBVx</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$nQLZmXqa</td>
+  </tr>
+  <tr>
+    <td class="name">BookTransactionDAO$MockitoMock$435928040$auxiliary$YzdMED5A</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -60,14 +89,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    79.3%
+    79.7%
   </span>
   <span class="absValue">
-    (46/58)
+    (47/59)
   </span>
 </td>
 </tr>
-
 </table>
 
 <br/>
@@ -108,7 +136,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            throw new RuntimeException(e);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        }</b>
 <b class="fc">&nbsp;        return transaction;</b>
 &nbsp;    }
 &nbsp;
@@ -129,7 +157,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {</b>
 <b class="fc">&nbsp;                if (generatedKeys.next()) {</b>
 <b class="fc">&nbsp;                    dto.setTransactionId(generatedKeys.getLong(1));</b>
-<b class="fc">&nbsp;                } else {</b>
+&nbsp;                } else {
 <b class="nc">&nbsp;                    throw new SQLException(&quot;Creating transaction failed, no ID obtained.&quot;);</b>
 &nbsp;                }
 <b class="fc">&nbsp;            }</b>
@@ -173,7 +201,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        } catch (SQLException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            throw new RuntimeException(e);</b>
-&nbsp;        }
+<b class="fc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -199,7 +227,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-08 20:53</div>
 </div>
 </body>
 </html>

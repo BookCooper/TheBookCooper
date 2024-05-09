@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > UserController</title>
+  <title>Coverage Report > StoreItemController</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.thebookcooper.controller</a>
 </div>
 
-<h1>Coverage Summary for Class: UserController (com.thebookcooper.controller)</h1>
+<h1>Coverage Summary for Class: StoreItemController (com.thebookcooper.controller)</h1>
 
 <table class="coverageStats">
 
@@ -38,59 +38,59 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">UserController</td>
+  <td class="name">StoreItemController</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/8)
+    (5/5)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    43.4%
   </span>
   <span class="absValue">
-    (0/78)
+    (23/53)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">UserController$1</td>
+    <td class="name">StoreItemController$1</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
   <tr>
-    <td class="name">UserController$2</td>
+    <td class="name">StoreItemController$2</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
   </tr>
@@ -98,18 +98,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/10)
+    (7/7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    45.5%
   </span>
   <span class="absValue">
-    (0/80)
+    (25/55)
   </span>
 </td>
 </tr>
@@ -129,136 +129,99 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import org.springframework.http.ResponseEntity;
 &nbsp;import org.springframework.web.bind.annotation.*;
 &nbsp;
-&nbsp;import java.sql.*;
+&nbsp;import java.sql.Connection;
+&nbsp;import java.sql.ResultSet;
+&nbsp;import java.sql.SQLException;
+&nbsp;import java.sql.Statement;
 &nbsp;import java.util.Map;
 &nbsp;
-&nbsp;import com.thebookcooper.model.User;
-&nbsp;import com.thebookcooper.dao.UserDAO;
+&nbsp;import com.thebookcooper.model.StoreItem;
+&nbsp;import com.thebookcooper.dao.StoreItemDAO;
 &nbsp;import com.thebookcooper.dao.DatabaseConnectionManager;
 &nbsp;
 &nbsp;@RestController
 &nbsp;@CrossOrigin
-&nbsp;@RequestMapping(&quot;/users&quot;) // Base path
-<b class="nc">&nbsp;public class UserController {</b>
+&nbsp;@RequestMapping(&quot;/store-items&quot;)
+<b class="fc">&nbsp;public class StoreItemController {</b>
 &nbsp;
-<b class="nc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
+<b class="fc">&nbsp;    private final DatabaseConnectionManager dcm = new DatabaseConnectionManager(&quot;db&quot;, 5432, &quot;thebookcooper&quot;, &quot;BCdev&quot;, &quot;password&quot;);</b>
 &nbsp;
-&nbsp;    private User findUserById(long id) throws SQLException {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            UserDAO userDAO = new UserDAO(connection);</b>
-<b class="nc">&nbsp;            return userDAO.findById(id);</b>
-<b class="nc">&nbsp;        }</b>
-&nbsp;    }
+&nbsp;    @PostMapping(&quot;/create&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; createStoreItem(@RequestBody String json) {
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+<b class="fc">&nbsp;            StoreItem newItem = new StoreItem();</b>
+<b class="fc">&nbsp;            Connection connection = dcm.getConnection();</b>
+<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
 &nbsp;
-&nbsp;    @GetMapping(&quot;/count&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; countUsers() {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;             Statement statement = connection.createStatement();</b>
-<b class="nc">&nbsp;             ResultSet resultSet = statement.executeQuery(&quot;SELECT COUNT(*) FROM users&quot;)) {</b>
-<b class="nc">&nbsp;            if (resultSet.next()) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Number of users: &quot; + resultSet.getInt(1), HttpStatus.OK);</b>
-&nbsp;            }
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No users found&quot;, HttpStatus.NOT_FOUND);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            newItem.setItem((String) inputMap.get(&quot;item&quot;));</b>
+<b class="nc">&nbsp;            newItem.setItemPrice(new java.math.BigDecimal(inputMap.get(&quot;item_price&quot;).toString()));</b>
+<b class="nc">&nbsp;            newItem.setSpecialOffer((String) inputMap.get(&quot;special_offer&quot;));</b>
+<b class="nc">&nbsp;            newItem.setItemDescription((String) inputMap.get(&quot;item_description&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;            StoreItem createdItem = itemDAO.create(newItem);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(createdItem, HttpStatus.CREATED);</b>
+<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving user count&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @GetMapping(&quot;/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; getUserById(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            User user = findUserById(id);</b>
-<b class="nc">&nbsp;            if (user != null) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(user, HttpStatus.OK);</b>
+&nbsp;    public ResponseEntity&lt;?&gt; getStoreItemById(@PathVariable(&quot;id&quot;) long id) {
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
+<b class="nc">&nbsp;            StoreItem item = itemDAO.findById(id);</b>
+<b class="nc">&nbsp;            if (item != null) {</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(item, HttpStatus.OK);</b>
 &nbsp;            } else {
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;User not found&quot;, HttpStatus.NOT_FOUND);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;Store item not found&quot;, HttpStatus.NOT_FOUND);</b>
 &nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving user&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    @GetMapping(&quot;/email/{email}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; getUserById(@PathVariable(&quot;email&quot;) String email) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            UserDAO userDAO = new UserDAO(connection);</b>
-<b class="nc">&nbsp;            User user = userDAO.findByEmail(email);</b>
-<b class="nc">&nbsp;            if (user != null) {</b>
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(user, HttpStatus.OK);</b>
-&nbsp;            } else {
-<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(&quot;User not found&quot;, HttpStatus.NOT_FOUND);</b>
-&nbsp;            }
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving user&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-&nbsp;        }
-&nbsp;    }
-&nbsp;    @PostMapping(&quot;/create&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; createUser(@RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
-&nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            User newUser = new User();</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;            UserDAO userDAO = new UserDAO(connection);</b>
-&nbsp;
-<b class="nc">&nbsp;            newUser.setUserName((String) inputMap.get(&quot;userName&quot;));</b>
-<b class="nc">&nbsp;            newUser.setEmail((String) inputMap.get(&quot;email&quot;));</b>
-<b class="nc">&nbsp;            newUser.setBBucksBalance(Double.parseDouble(inputMap.get(&quot;bBucksBalance&quot;).toString()));</b>
-<b class="nc">&nbsp;            newUser.setCreationDate(new Timestamp(System.currentTimeMillis()));</b>
-<b class="nc">&nbsp;            newUser.setLastLogin(new Timestamp(System.currentTimeMillis()));</b>
-&nbsp;            
-<b class="nc">&nbsp;            User createdUser = userDAO.create(newUser);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(createdUser, HttpStatus.CREATED);</b>
-<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to create the user&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-<b class="nc">&nbsp;        } catch (NumberFormatException e) {</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid number format for bBucksBalance&quot;, HttpStatus.BAD_REQUEST);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error retrieving store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @PutMapping(&quot;/update/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; updateUser(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
-<b class="nc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
+&nbsp;    public ResponseEntity&lt;?&gt; updateStoreItem(@PathVariable(&quot;id&quot;) long id, @RequestBody String json) {
+<b class="fc">&nbsp;        ObjectMapper objectMapper = new ObjectMapper();</b>
 &nbsp;        try {
-<b class="nc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
-<b class="nc">&nbsp;            Connection connection = dcm.getConnection();</b>
-<b class="nc">&nbsp;            UserDAO userDAO = new UserDAO(connection);</b>
+<b class="fc">&nbsp;            Map&lt;String, Object&gt; inputMap = objectMapper.readValue(json, new TypeReference&lt;Map&lt;String, Object&gt;&gt;() {});</b>
+<b class="fc">&nbsp;            Connection connection = dcm.getConnection();</b>
+<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
 &nbsp;
-<b class="nc">&nbsp;            User updatedUser = findUserById(id);</b>
-<b class="nc">&nbsp;            updatedUser.setUserName((String) inputMap.get(&quot;userName&quot;));</b>
-<b class="nc">&nbsp;            updatedUser.setEmail((String) inputMap.get(&quot;email&quot;));</b>
-<b class="nc">&nbsp;            updatedUser.setBBucksBalance(Double.parseDouble(inputMap.get(&quot;bBucksBalance&quot;).toString()));</b>
-<b class="nc">&nbsp;            updatedUser.setLastLogin(new Timestamp(System.currentTimeMillis()));</b>
-&nbsp;            
-<b class="nc">&nbsp;            User user = userDAO.update(updatedUser);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(user, HttpStatus.OK);</b>
+<b class="nc">&nbsp;            StoreItem itemToUpdate = new StoreItem();</b>
+<b class="nc">&nbsp;            itemToUpdate.setStoreId(id);</b>
+<b class="nc">&nbsp;            itemToUpdate.setItem((String) inputMap.get(&quot;item&quot;));</b>
+<b class="nc">&nbsp;            itemToUpdate.setItemPrice(new java.math.BigDecimal(inputMap.get(&quot;item_price&quot;).toString()));</b>
+<b class="nc">&nbsp;            itemToUpdate.setSpecialOffer((String) inputMap.get(&quot;special_offer&quot;));</b>
+<b class="nc">&nbsp;            itemToUpdate.setItemDescription((String) inputMap.get(&quot;item_description&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;            StoreItem updatedItem = itemDAO.update(itemToUpdate);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(updatedItem, HttpStatus.OK);</b>
 <b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
 <b class="nc">&nbsp;            e.printStackTrace();</b>
 <b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid JSON input&quot;, HttpStatus.BAD_REQUEST);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update the user&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
-<b class="nc">&nbsp;        } catch (NumberFormatException e) {</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Invalid number format for bBucksBalance&quot;, HttpStatus.BAD_REQUEST);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to update store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/delete/{id}&quot;)
-&nbsp;    public ResponseEntity&lt;?&gt; deleteUser(@PathVariable(&quot;id&quot;) long id) {
-<b class="nc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
-<b class="nc">&nbsp;            UserDAO userDAO = new UserDAO(connection);</b>
-<b class="nc">&nbsp;            userDAO.delete(id);</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;User with id &quot; + id + &quot; has been deleted&quot;, HttpStatus.OK);</b>
-<b class="nc">&nbsp;        } catch (SQLException e) {</b>
-<b class="nc">&nbsp;            e.printStackTrace();</b>
-<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Error deleting user with id &quot; + id, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;    public ResponseEntity&lt;?&gt; deleteStoreItem(@PathVariable(&quot;id&quot;) long id) {
+<b class="fc">&nbsp;        try (Connection connection = dcm.getConnection()) {</b>
+<b class="nc">&nbsp;            StoreItemDAO itemDAO = new StoreItemDAO(connection);</b>
+<b class="nc">&nbsp;            itemDAO.delete(id);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Store item deleted successfully&quot;, HttpStatus.OK);</b>
+<b class="fc">&nbsp;        } catch (SQLException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Failed to delete store item&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
@@ -285,7 +248,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-08 20:53</div>
 </div>
 </body>
 </html>
