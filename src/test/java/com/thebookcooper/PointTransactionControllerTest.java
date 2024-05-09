@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.ArgumentMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thebookcooper.model.BookTransaction;
-import com.thebookcooper.dao.BookTransactionDAO;
-import com.thebookcooper.controller.BookTransactionController;
+import com.thebookcooper.model.PointTransaction;
+import com.thebookcooper.dao.PointTransactionDAO;
+import com.thebookcooper.controller.PointTransactionController;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,74 +25,74 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @ExtendWith(SpringExtension.class)
-public class BookTransactionControllerTest {
+public class PointTransactionControllerTest {
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    private BookTransactionDAO bookTransactionDAO;
+    private PointTransactionDAO pointTransactionDAO;
 
     @Mock
     private DatabaseConnectionManager dcm;
 
     @InjectMocks
-    private BookTransactionController bookTransactionController;
+    private PointTransactionController pointTransactionController;
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(bookTransactionController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(pointTransactionController).build();
     }
 
     @Test
-    public void testGetTransactionByIdDatabaseError() throws Exception {
+    public void testCountPointTransactionsDatabaseError() throws Exception {
+        when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
+
+        mockMvc.perform(get("/point-transactions/count"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string(containsString("Error retrieving point transaction count")));
+    }
+
+    @Test
+    public void testGetPointTransactionByIdDatabaseError() throws Exception {
         long transactionId = 1L;
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(get("/book-transactions/{id}", transactionId))
+        mockMvc.perform(get("/point-transactions/{id}", transactionId))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Error retrieving transaction")));
+                .andExpect(content().string(containsString("Error retrieving point transaction")));
     }
 
     @Test
-    public void testCountTransactionsDatabaseError() throws Exception {
+    public void testCreatePointTransactionDatabaseError() throws Exception {
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(get("/book-transactions/count"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Error retrieving transaction count")));
-    }
-
-    @Test
-    public void testCreateTransactionDatabaseError() throws Exception {
-        when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
-
-        mockMvc.perform(post("/book-transactions/create")
+        mockMvc.perform(post("/point-transactions/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"buyerId\":1,\"sellerId\":2,\"transactionPrice\":15.0,\"transactionStatus\":\"Completed\"}"))
+                        .content("{\"userId\":1,\"transactionType\":\"Deposit\",\"amount\":100}"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Failed to process the transaction")));
+                .andExpect(content().string(containsString("Failed to create the point transaction")));
     }
 
     @Test
-    public void testUpdateTransactionDatabaseError() throws Exception {
+    public void testUpdatePointTransactionDatabaseError() throws Exception {
         long transactionId = 1L;
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(put("/book-transactions/update/{id}", transactionId)
+        mockMvc.perform(put("/point-transactions/update/{id}", transactionId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"buyerId\":1,\"sellerId\":2,\"transactionPrice\":15.0,\"transactionStatus\":\"Completed\"}"))
+                        .content("{\"userId\":1,\"transactionType\":\"Purchase\",\"amount\":50,\"currentBalance\":450}"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Failed to update the transaction")));
+                .andExpect(content().string(containsString("Failed to update the point transaction")));
     }
 
     @Test
-    public void testDeleteTransactionDatabaseError() throws Exception {
+    public void testDeletePointTransactionDatabaseError() throws Exception {
         long transactionId = 1L;
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(delete("/book-transactions/delete/{id}", transactionId))
+        mockMvc.perform(delete("/point-transactions/delete/{id}", transactionId))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Failed to delete the transaction")));
+                .andExpect(content().string(containsString("Failed to delete the point transaction")));
     }
 }

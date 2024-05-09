@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.ArgumentMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thebookcooper.model.BookTransaction;
-import com.thebookcooper.dao.BookTransactionDAO;
-import com.thebookcooper.controller.BookTransactionController;
+import com.thebookcooper.model.Listing;
+import com.thebookcooper.dao.ListingsDAO;
+import com.thebookcooper.controller.ListingsController;
 import com.thebookcooper.dao.DatabaseConnectionManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,74 +25,74 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @ExtendWith(SpringExtension.class)
-public class BookTransactionControllerTest {
+public class ListingsControllerTest {
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    private BookTransactionDAO bookTransactionDAO;
+    private ListingsDAO listingsDAO;
 
     @Mock
     private DatabaseConnectionManager dcm;
 
     @InjectMocks
-    private BookTransactionController bookTransactionController;
+    private ListingsController listingsController;
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(bookTransactionController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(listingsController).build();
     }
 
     @Test
-    public void testGetTransactionByIdDatabaseError() throws Exception {
-        long transactionId = 1L;
+    public void testCountListingsDatabaseError() throws Exception {
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(get("/book-transactions/{id}", transactionId))
+        mockMvc.perform(get("/listings/count"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Error retrieving transaction")));
+                .andExpect(content().string(containsString("Error retrieving listing count")));
     }
 
     @Test
-    public void testCountTransactionsDatabaseError() throws Exception {
+    public void testGetListingByIdDatabaseError() throws Exception {
+        long listingId = 1L;
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(get("/book-transactions/count"))
+        mockMvc.perform(get("/listings/{id}", listingId))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Error retrieving transaction count")));
+                .andExpect(content().string(containsString("Error retrieving listing")));
     }
 
     @Test
-    public void testCreateTransactionDatabaseError() throws Exception {
+    public void testCreateListingDatabaseError() throws Exception {
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(post("/book-transactions/create")
+        mockMvc.perform(post("/listings/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"buyerId\":1,\"sellerId\":2,\"transactionPrice\":15.0,\"transactionStatus\":\"Completed\"}"))
+                        .content("{\"userId\":1,\"bookId\":2,\"listingStatus\":\"Available\",\"bookCondition\":\"New\",\"price\":15.50}"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Failed to process the transaction")));
+                .andExpect(content().string(containsString("Failed to create the listing")));
     }
 
     @Test
-    public void testUpdateTransactionDatabaseError() throws Exception {
-        long transactionId = 1L;
+    public void testUpdateListingDatabaseError() throws Exception {
+        long listingId = 1L;
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(put("/book-transactions/update/{id}", transactionId)
+        mockMvc.perform(put("/listings/update/{id}", listingId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"buyerId\":1,\"sellerId\":2,\"transactionPrice\":15.0,\"transactionStatus\":\"Completed\"}"))
+                        .content("{\"userId\":1,\"bookId\":2,\"listingStatus\":\"Available\",\"bookCondition\":\"New\",\"price\":15.50}"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Failed to update the transaction")));
+                .andExpect(content().string(containsString("Failed to update the listing")));
     }
 
     @Test
-    public void testDeleteTransactionDatabaseError() throws Exception {
-        long transactionId = 1L;
+    public void testDeleteListingDatabaseError() throws Exception {
+        long listingId = 1L;
         when(dcm.getConnection()).thenThrow(new SQLException("Database connection failed"));
 
-        mockMvc.perform(delete("/book-transactions/delete/{id}", transactionId))
+        mockMvc.perform(delete("/listings/delete/{id}", listingId))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(containsString("Failed to delete the transaction")));
+                .andExpect(content().string(containsString("Error deleting listing with id")));
     }
 }
