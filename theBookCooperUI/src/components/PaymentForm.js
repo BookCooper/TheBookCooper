@@ -40,15 +40,42 @@ function PaymentForm() {
     const host = window.location.hostname;
 
     useEffect(() => {
+
+        const loadStoreItem = async () => {
+            if (!user || !userId) {
+                setStoreItem('No user logged in.');
+                alert('Please log in to continue');
+                setLoading(false); // Stop loading as no user is logged in
+                return;
+            }
+            try {
+                const token = await user.getIdToken();
+                const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+                //get store item data
+                const storeItemResponse = await axios.get(`http://` + host + `:8080/store-items/${storeId}`, { headers });
+                setStoreItem(storeItemResponse.data);
+
+                //get user data
+                const userResponse = await axios.get(`http://` + host + `:8080/users/${userId}`, { headers });
+                setUserInfo(userResponse.data);
+            } catch (e) {
+                setStoreItem(e.message);
+            } finally {
+                setLoading(false); // Data has been fetched or failed
+            }
+        };
+
         if (user) {
             setLoading(true);
             loadStoreItem();
         }
     }, [storeId, userId, user]);
 
-    const loadStoreItem = async () => {
-        // Loading store item logic
-    };
+    useEffect(() => {
+        console.log("Current userID:", userId);  // Check the value of userId whenever the effect runs
+    }, [user, userId, storeId]);  // Adjust dependencies as needed
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

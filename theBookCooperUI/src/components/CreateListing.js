@@ -80,6 +80,7 @@ function NewListing() {
         setCreatePerformed(true);
         try {
             const token = await user.getIdToken();
+            console.log(token);
             const headers = { Authorization: `Bearer ${token}` };
             const listingData = {
                 userId,
@@ -89,11 +90,11 @@ function NewListing() {
                 price: parseFloat(price)
             };
 
-            const response = await axios.post(`http://${host}:8080/listings/create`, listingData, { headers });
+            const response = await axios.post(`http://` + host + `:8080/listings/create`, listingData, { headers });
             console.log('Listing created successfully:', response.data);
             setTimeout(() => {
                 navigate(`/listings/${response.data.listingId}`);
-            }, 5000);
+            }, 500);
         } catch (error) {
             console.error('Failed to create listing:', error);
             setError('Failed to create listing. Please try again.');
@@ -134,6 +135,9 @@ function NewListing() {
         } catch (error) {
             console.error('Failed to fetch books:', error);
             setError('Failed to search for books. Please try again.');
+            setBooks([]);
+            setFound(false);
+            setSearchPerformed(true);
         }
     };
 
@@ -192,7 +196,7 @@ function NewListing() {
                 /><br/>
                 {createPerformed && (
                     <div>
-                        <a>You have listed the book! Redirecting you to your listing in 5 seconds...</a>
+                        <a>You have listed the book! Redirecting you to your listing soon...</a>
                     </div>
                 )}
                 {error && <p className="error-message">{error}</p>}
