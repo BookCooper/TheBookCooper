@@ -40,7 +40,6 @@ function PaymentForm() {
     const host = window.location.hostname;
 
     useEffect(() => {
-
         const loadStoreItem = async () => {
             if (!user || !userId) {
                 setStoreItem('No user logged in.');
@@ -67,7 +66,7 @@ function PaymentForm() {
         };
 
         if (user) {
-            setLoading(true);
+            setLoading(true); // Start loading when fetching starts
             loadStoreItem();
         }
     }, [storeId, userId, user]);
@@ -78,8 +77,13 @@ function PaymentForm() {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
 
+        e.preventDefault();
+        setLoading(true); // Start loading
+        const {error, paymentMethod} = await stripe.createPaymentMethod({
+            type: "card",
+            card: elements.getElement(CardElement)
+        })
         // Show confirmation dialog
         if (!confirming) {
             setConfirming(true);
@@ -87,25 +91,21 @@ function PaymentForm() {
         }
 
         setConfirming(false);
-        setLoading(true); // Start loading
-
-        const {error, paymentMethod} = await stripe.createPaymentMethod({
-            type: "card",
-            card: elements.getElement(CardElement)
-        });
 
         if (!error) {
             const id = paymentMethod.id;
             const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
 
-            const response = await axios.post(`http://${host}:8080/payment-request`, {
+            const response = await axios.post(`http://` + host + `:8080/payment-request`, {
                 amount: storeItem.itemPrice * 100,
-                id,
-                userId
+                id: id,
+                userId: userId,
+                pointAmount: pointAmount
             }, { headers });
 
             if (response.data.success) {
+                console.log("Successful payment"); 
                 setSuccess(true);
             } else {
                 console.error("Payment failed: ", response.data.message);
@@ -123,36 +123,27 @@ function PaymentForm() {
                     <p>Loading...</p>
                 ) : (
                     !success ? (
-                        <>
-                            <h2>Purchasing {storeItem && storeItem.item} for ${storeItem && storeItem.itemPrice}</h2>
-                            {confirming && (
-                                <div>
-                                    <p>Are you sure you want to make this payment?</p>
-                                    <button onClick={handleSubmit}>Yes, Confirm</button>
-                                    <button onClick={() => setConfirming(false)}>Cancel</button>
-                                </div>
-                            )}
-                            {!confirming && (
-                                <form className="payment-form" onSubmit={handleSubmit}>
-                                    <fieldset className="FormGroup">
-                                        <div className="FormRow">
-                                            <CardElement options={CARD_OPTIONS} />
-                                        </div>
-                                    </fieldset>
-                                    <br/><button className="store-page-button" disabled={!storeItem || loading}>Pay</button>
-                                </form>
-                            )}
-                        </>
-                    ) : (
-                        <div className="successful-payment">
-                            <h2>You have just purchased {storeItem.item}</h2>
-                            <h3>New B-Bucks Balance is {userInfo.bbucksBalance + parseFloat(storeItem.item)}</h3>
-                        </div>
-                    )
-                )}
-            </div>
+                        <form className="payment-form" onSubmit={handleSubmit}>
+                        <h2>Purchasing {storeItem && storeItem.item} for ${storeItem && storeItem.itemPrice}</h2>
+                        <fieldset className="FormGroup">
+                            <div className="FormRow">
+                                <CardElement options={CARD_OPTIONS} />
+                            </div>
+                        </fieldset>
+                        <br/>
+                        <button className="store-page-button" disabled={!storeItem || loading}>Pay</button>
+                    </form>
+                ) : (
+                    <div className="successful-payment">
+                        <h2>You have just purchased {storeItem.item}</h2>
+                        <h3>New B-Bucks Balance is {userInfo.bbucksBalance + parseFloat(storeItem.item)}</h3>
+                    </div>
+                )
+            )}
         </div>
-    );
+    </div>
+);
 }
+
 
 export default PaymentForm;
