@@ -96,6 +96,8 @@ function PaymentForm() {
             const id = paymentMethod.id;
             const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
+            const pointAmount = parseFloat(storeItem.item);
+
 
             const response = await axios.post(`http://` + host + `:8080/payment-request`, {
                 amount: storeItem.itemPrice * 100,
