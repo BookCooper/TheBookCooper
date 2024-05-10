@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > StoreItemDTO</title>
+  <title>Coverage Report > BookDTO</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,14 +22,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.thebookcooper.util</a>
 </div>
 
-<h1>Coverage Summary for Class: StoreItemDTO (com.thebookcooper.util)</h1>
+<h1>Coverage Summary for Class: BookDTO (com.thebookcooper.util)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">StoreItemDTO</td>
+  <td class="name">BookDTO</td>
 </tr>
 
 </table>
@@ -41,15 +41,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.util;
 &nbsp;
-&nbsp;import java.math.BigDecimal;
+&nbsp;public interface BookDTO {
 &nbsp;
-&nbsp;public interface StoreItemDTO {
-&nbsp;    
-&nbsp;    long getStoreId();
-&nbsp;    String getItem();
-&nbsp;    BigDecimal getItemPrice();
-&nbsp;    String getSpecialOffer();
-&nbsp;    String getItemDescription();
+&nbsp;    long getBookId();
+&nbsp;    String getTitle();
+&nbsp;    long getISBN();
+&nbsp;    String getAuthor();
+&nbsp;    String getGenre();
+&nbsp;    String getBookCondition();
+&nbsp;    double getPrice();
 &nbsp;}
 </code>
 </pre>
@@ -74,7 +74,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

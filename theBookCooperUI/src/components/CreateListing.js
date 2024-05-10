@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import useUser from "../hooks/useUser";
 import axios from 'axios';
 import { useDetails } from '../hooks/useDetails';
+import { useNavigate } from 'react-router-dom';
 
 function NewListing() {
     const { user, isLoading } = useUser();
@@ -23,12 +24,22 @@ function NewListing() {
 
     const { userId, setUserId } = useDetails();
     const host = window.location.hostname;
+    const navigate = useNavigate();
 
     const newListing = async () => {
         if (!user) {
             console.error('No user logged in or token not retrieved.');
+            alert('Please log in to continue');
             return;
         }
+
+        const validatedPrice = price ? parseFloat(price) : 0;
+        if (validatedPrice < 0 || validatedPrice > 1000000) {
+            console.error('Listing price cannot be negative or greater than 1,000,000.');
+            alert('Listing price cannot be negative or greater than 1,000,000.');
+            return;
+        }
+
 
         setLoading(true);
         try {
@@ -48,6 +59,12 @@ function NewListing() {
             console.log('Listing created successfully:', response.data);
             setSuccess(true);
             setCreatePerformed(true);
+
+            // Set a timer to redirect after 5 seconds
+            setTimeout(() => {
+                navigate(`/listings/${response.data.listingId}`);
+            }, 5000);
+
         } catch (error) {
             console.error('Failed to create book:', error);
             setCreatePerformed(true);
@@ -127,14 +144,6 @@ function NewListing() {
                 <a href="/create-book"> Can't find your book? Click here to create one! </a> 
 
                 <br/>
-                {/*
-                <a> Book ID: </a> <input
-                    type="text"
-                    value={bookId}
-                    className="input-field"
-                    onChange={e => setBookId(e.target.value)}
-                    placeholder="Enter the book's ID"
-                /><br/>  */}
                 <a className="label-text"> Condition </a> <select
                     value={bookCondition}
                     className="select-field"
@@ -144,21 +153,22 @@ function NewListing() {
                     <option value="" disabled selected> Select the Condition </option>
                     <option value="new">New</option>
                     <option value="used">Used</option>
-                </select> 
-                <a className="label-text"> Price (B-Bucks) </a> <input
+                </select>
+                <a className = "label-text"> Listing Price (B-Bucks): </a> <input
                     type="number"
                     value={price}
-                    className="input-field"
+                    min={0}  // Restrict future dates
                     onChange={e => setPrice(e.target.value)}
-                    placeholder="Enter the book's price"
-                /><br/> <br/>
+                    placeholder="Enter the book's price (Enter 0 for autocompletion)"
+                    className="input-field"
+                /><br/>
 
                 {createPerformed && ( found
-                    ? <a> You have listed the book! </a>
+                    ? <a> You have listed the book! Redirecting you to your listing in 5 seconds... </a>
                     : <a> There was an error trying to list your book. Please try again </a>
                 )}
 
-                <button onClick={newListing} className = "create-listing-button" disabled={isLoading || !user || !bookId || !bookCondition || !price}>Create Listing</button><br/><br/>
+                <button onClick={newListing} className = "create-listing-button" disabled={isLoading || !user || !bookId || !bookCondition || !price || (createPerformed && found)}>Create Listing</button><br/><br/>
             </div>
         </div>
     );

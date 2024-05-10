@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > BookTagDTO</title>
+  <title>Coverage Report > PointTransactionDTO</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,14 +22,14 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.thebookcooper.util</a>
 </div>
 
-<h1>Coverage Summary for Class: BookTagDTO (com.thebookcooper.util)</h1>
+<h1>Coverage Summary for Class: PointTransactionDTO (com.thebookcooper.util)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">BookTagDTO</td>
+  <td class="name">PointTransactionDTO</td>
 </tr>
 
 </table>
@@ -41,10 +41,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.util;
 &nbsp;
-&nbsp;public interface BookTagDTO {
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.sql.Timestamp;
 &nbsp;
-&nbsp;    long getBookId();
-&nbsp;    long getTagId();
+&nbsp;public interface PointTransactionDTO {
+&nbsp;    
+&nbsp;    long getBbTransactionId();
+&nbsp;    long getUserId();
+&nbsp;    String getTransactionType();
+&nbsp;    BigDecimal getAmount();
+&nbsp;    Timestamp getTransactionDate();
+&nbsp;    BigDecimal getCurrentBalance();
 &nbsp;}
 </code>
 </pre>
@@ -69,7 +76,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > WebSecurityConfiguration</title>
+  <title>Coverage Report > StripeConfig</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">com.thebookcooper.config</a>
 </div>
 
-<h1>Coverage Summary for Class: WebSecurityConfiguration (com.thebookcooper.config)</h1>
+<h1>Coverage Summary for Class: StripeConfig (com.thebookcooper.config)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">WebSecurityConfiguration</td>
+  <td class="name">StripeConfig</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/2)
+    (0/3)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/4)
+    (0/8)
   </span>
 </td>
 </tr>
@@ -77,76 +77,33 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.thebookcooper.config;
 &nbsp;
-&nbsp;import org.springframework.context.annotation.Bean;
-&nbsp;import org.springframework.context.annotation.Configuration;
-&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-&nbsp;import org.springframework.security.web.SecurityFilterChain;
-&nbsp;
-&nbsp;import static org.springframework.security.config.Customizer.withDefaults;
-&nbsp;
-&nbsp;@Configuration
-<b class="nc">&nbsp;public class WebSecurityConfiguration {</b>
-&nbsp;
-&nbsp;    @Bean
-&nbsp;    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-<b class="nc">&nbsp;        http.authorizeHttpRequests((authz) -&gt; authz.anyRequest().authenticated()).httpBasic(withDefaults());</b>
-<b class="nc">&nbsp;        http.oauth2ResourceServer().jwt();</b>
-<b class="nc">&nbsp;        return http.build();</b>
-&nbsp;    }
-&nbsp;}
-&nbsp;
-&nbsp;/*
-&nbsp;package com.thebookcooper.config;
-&nbsp;
+&nbsp;import com.stripe.Stripe;
 &nbsp;import org.springframework.beans.factory.annotation.Value;
-&nbsp;import org.springframework.context.annotation.Bean;
 &nbsp;import org.springframework.context.annotation.Configuration;
-&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-&nbsp;import org.springframework.security.oauth2.jwt.JwtDecoder;
-&nbsp;import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-&nbsp;import org.springframework.security.web.SecurityFilterChain;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
 &nbsp;
-&nbsp;import org.springframework.web.servlet.config.annotation.CorsRegistry;
-&nbsp;import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+&nbsp;import javax.annotation.PostConstruct;
 &nbsp;
 &nbsp;@Configuration
-&nbsp;public class WebSecurityConfiguration {
+<b class="nc">&nbsp;public class StripeConfig {</b>
 &nbsp;
-&nbsp;    // Inject the JWK Set URI from your application.properties or application.yml
-&nbsp;    @Value(&quot;${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}&quot;)
-&nbsp;    private String jwkSetUri;
+<b class="nc">&nbsp;    private static final Logger logger = LoggerFactory.getLogger(StripeConfig.class);</b>
 &nbsp;
-&nbsp;    @Bean
-&nbsp;    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-&nbsp;        http
-&nbsp;            // Configure HTTP basic authentication (if needed)
-&nbsp;            .authorizeHttpRequests(authz -&gt; authz
-&nbsp;                .anyRequest().authenticated() // All other requests require authentication
-&nbsp;            )
-&nbsp;            .httpBasic()
-&nbsp;            // Configure OAuth2 resource server JWT validation
-&nbsp;            .and()
-&nbsp;            .oauth2ResourceServer(oauth2 -&gt; oauth2.jwt());
+&nbsp;    @Value(&quot;${stripe.api.key}&quot;)
+<b class="nc">&nbsp;    private String apiKey = &quot;sk_test_51OuJjmRsi5TzF2bO6Nl9vuAtj14MBULCgzqF5aZskWQjgrnzUhI6zH6dvRkKLlcJpuF49eTtSRuyUkarqHWymzHe00w5U4jq42&quot;;</b>
 &nbsp;
-&nbsp;        return http.build();
-&nbsp;    }
-&nbsp;
-&nbsp;    // Define a JwtDecoder bean using the JWK Set URI
-&nbsp;    @Bean
-&nbsp;    public JwtDecoder jwtDecoder() {
-&nbsp;        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
-&nbsp;    }
-&nbsp;
-&nbsp;    @Configuration
-&nbsp;    public class WebConfig implements WebMvcConfigurer {
-&nbsp;        @Override
-&nbsp;        public void addCorsMappings(CorsRegistry registry) {
-&nbsp;            registry.addMapping(&quot;/**&quot;)
-&nbsp;                .allowedOrigins(&quot;http://localhost:3000&quot;);
+&nbsp;    @PostConstruct
+&nbsp;    public void setup() {
+<b class="nc">&nbsp;        if (apiKey == null) {</b>
+<b class="nc">&nbsp;            logger.error(&quot;Stripe API key is not set. Please check your environment variables.&quot;);</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Stripe API key is not set.&quot;);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            Stripe.apiKey = apiKey;</b>
+<b class="nc">&nbsp;            logger.info(&quot;Stripe API key has been initialized successfully.&quot;);</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;}
-&nbsp;*/
 </code>
 </pre>
 </div>
@@ -170,7 +127,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2024-04-15 19:31</div>
+    <div style="float:right;">generated on 2024-05-09 17:19</div>
 </div>
 </body>
 </html>

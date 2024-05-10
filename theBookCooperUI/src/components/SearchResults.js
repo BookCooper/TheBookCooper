@@ -50,7 +50,7 @@ function ShowResults() {
         
         <div className = "create-results-container">
             <div className = "create-results-white-box">
-                <SearchListings initialValue={query} /> <br/> <br/>
+                {/*<SearchListings initialValue={query} /> <br/> <br/>*/}
                 <a className = "label-text"> Search Results for: {query} </a> <br/>
                 {loading ? (
                     <p>Loading...</p>
