@@ -56,18 +56,6 @@ Welcome to the Book Cooper demo! This demo showcases the process of creating boo
 
 ### Create a user that just finished OS and wants to sell textbook
 
-#### 0. Admin Creates a Store Item (Created in the Backend)
-
-```json
-{
-  "item": "1000 B-Bucks",
-  "item_price": 10.00,
-  "special_offer": "Bonus B-Bucks with every purchase!",
-  "item_description": "Get 1000 B-Bucks for only $10. Use B-Bucks to buy books!"
-}
-```
-
-
 #### 1. Sign up a user
 
 User signs up with the following information:
