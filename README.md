@@ -44,6 +44,8 @@ We established comprehensive testing protocols, including unit tests, integratio
 
 # The Book Cooper Demo
 
+https://youtu.be/7GZMKT_HGFI
+
 Welcome to the Book Cooper demo! This demo showcases the process of creating books and users, searching for textbooks, and simulating the purchase of textbooks using a virtual currency called B-Bucks. Follow the steps below to get started.
 
 ## Application Set Up
