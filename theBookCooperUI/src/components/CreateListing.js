@@ -123,7 +123,7 @@ function NewListing() {
         try {
             const token = await user.getIdToken();
             const headers = { Authorization: `Bearer ${token}` };
-            const response = await axios.get(`http://${host}:8080/books/search?title=${encodeURIComponent(query)}`, { headers });
+            const response = await axios.get(`http://` + host + `:8080/books/search?title=${encodeURIComponent(input)}`, { headers });
             if (response.data.length > 0) {
                 setBooks(response.data);
                 setFound(true);
